@@ -39,7 +39,7 @@ tidy_schedule <- function(seasons_id, tz=Sys.timezone(), keep_id=FALSE) {
       games[, teams.home.team.id:=NA_integer_]
     }
 
-    games[, .(
+    games[gameType%in%c("R", "P"), .(
       season_id = season,
       game_id = gamePk,
       game_type = gameType,
