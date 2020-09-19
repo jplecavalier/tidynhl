@@ -1,10 +1,4 @@
-library(data.table)
-library(jsonlite)
-library(httr)
-library(magrittr)
-library(stringr)
-library(tidynhl)
-
+# Input
 teams_id_range <- 1:59
 
 # Get teams_info
@@ -48,5 +42,3 @@ teams_info[, franchise.teamName:=NULL]
 
 # Set key
 setkey(teams_info, team_id)
-
-usethis::use_data(teams_info, overwrite=TRUE, internal=TRUE)
