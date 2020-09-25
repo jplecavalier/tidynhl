@@ -56,7 +56,7 @@ tidy_schedule <- function(seasons_id, tz=Sys.timezone(), keep_id=FALSE) {
   games[teams_info, home_team:=team_abbreviation, on=c(team_home_id="team_id")]
 
   if (!keep_id) {
-    games[, colnames(games)[which(str_detect(colnames(games), "_id$"))]:=NULL]
+    games[, colnames(games)[grep("_id$", colnames(games))]:=NULL]
   }
 
   games[]
