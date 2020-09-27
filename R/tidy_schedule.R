@@ -1,4 +1,4 @@
-#' Get a tidy dataset of the NHL schedule including final score of completed games
+#' Get a tidy dataset of the NHL schedule
 #'
 #' The function `tidy_schedule()` is meant to be a user-friendly way of getting the NHL schedule, including the final score of completed games.
 #'
