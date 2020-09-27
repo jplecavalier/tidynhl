@@ -11,6 +11,8 @@
 #'   attached in the active session.
 #'
 #' @examples
+#' library(data.table)
+#'
 #' # Get the schedule of the 2019-2020 season and playoffs
 #' tidy_schedule("20192020")
 #'
