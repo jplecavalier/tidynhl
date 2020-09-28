@@ -6,7 +6,16 @@
 \alias{tidynhl-package}
 \title{tidynhl: An Easy Way to Extract NHL Eata in a Tidy Format}
 \description{
+\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+
 A user-friendly package which aims at facilitating data extraction through the NHL API in a ready-to-use format.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/jplecavalier/tidynhl}
+}
+
 }
 \author{
 \strong{Maintainer}: J.P. Le Cavalier \email{jplecavalier@me.com} (\href{https://orcid.org/0000-0001-5904-2641}{ORCID})

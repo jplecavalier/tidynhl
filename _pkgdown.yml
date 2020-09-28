@@ -1,0 +1,20 @@
+template:
+  params:
+    bootswatch: paper
+
+development:
+  mode: auto
+
+authors:
+  J.P. Le Cavalier:
+    href: https://jplecavalier.rbind.io
+
+home:
+  strip_header: true
+
+reference:
+- title: Tidy datasets
+  desc: >
+    All `tidynhl` functions that will return a ready-to-use dataset.
+  contents:
+  - starts_with("tidy_")
