@@ -9,7 +9,7 @@ Authors@R:
            comment = c(ORCID = "0000-0001-5904-2641"))
 Description: A user-friendly package which aims at facilitating data extraction through the NHL API in a ready-to-use format.
 License: GPL-3
-URL: https://github.com/jplecavalier/tidynhl
+URL: https://jplecavalier.github.io/tidynhl, https://github.com/jplecavalier/tidynhl
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

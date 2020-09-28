@@ -1,6 +1,7 @@
 template:
   params:
     bootswatch: paper
+    ganalytics: UA-126179665-2
 
 development:
   mode: auto
