@@ -7,12 +7,12 @@
 tidy_draft(drafts_year, keep_id = FALSE, return_datatable = NULL)
 }
 \arguments{
+\item{drafts_year}{Integer vector indicating which entry drafts will be returned. The first NHL entry draft was held in 1963.}
+
 \item{keep_id}{\emph{(optional)} Logical indicating if the IDs of different dimensions should be returned. Default to \code{FALSE}.}
 
 \item{return_datatable}{\emph{(optional)} Logical indicating whether or not a data.table should be returned. Default to \code{TRUE} if the \code{data.table} package is
 attached in the active session.}
-
-\item{draft_year}{Integer vector indicating which entry drafts will be returned. The first NHL entry draft was held in 1963.}
 }
 \description{
 The function \code{tidy_draft()} is meant to be a user-friendly way of getting data about the NHL entry drafts.

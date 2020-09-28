@@ -4,7 +4,7 @@
 \name{tidynhl-package}
 \alias{tidynhl}
 \alias{tidynhl-package}
-\title{tidynhl: An Easy Way to Extract NHL Eata in a Tidy Format}
+\title{tidynhl: An Easy Way to Extract NHL Data in a Tidy Format}
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
@@ -13,6 +13,7 @@ A user-friendly package which aims at facilitating data extraction through the N
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://jplecavalier.github.io/tidynhl}
   \item \url{https://github.com/jplecavalier/tidynhl}
 }
 

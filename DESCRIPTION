@@ -1,5 +1,5 @@
 Package: tidynhl
-Title: An Easy Way to Extract NHL Eata in a Tidy Format
+Title: An Easy Way to Extract NHL Data in a Tidy Format
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "J.P.",
