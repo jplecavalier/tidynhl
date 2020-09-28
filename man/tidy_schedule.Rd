@@ -2,7 +2,7 @@
 % Please edit documentation in R/tidy_schedule.R
 \name{tidy_schedule}
 \alias{tidy_schedule}
-\title{Get a tidy dataset of the NHL schedule including final score of completed games}
+\title{Get a tidy dataset of the NHL schedule}
 \usage{
 tidy_schedule(
   seasons_id,
@@ -32,15 +32,15 @@ The function \code{tidy_schedule()} is meant to be a user-friendly way of gettin
 }
 \examples{
 # Get the schedule of the 2019-2020 season and playoffs
-tidy_schedule("20192020")
+head(tidy_schedule("20192020"))
 
 # Get the regular season schedule of both the 2018-2019 and 2019-2020 seasons,
 # keeping the IDs and indicating game datetime with Los Angeles local time
-tidy_schedule(
+head(tidy_schedule(
   seasons_id = c("20182019", "20192020"),
   playoffs   = FALSE,
   tz         = "America/Los_Angeles",
   keep_id    = TRUE
-)
+))
 
 }

@@ -11,19 +11,17 @@
 #'   attached in the active session.
 #'
 #' @examples
-#' library(data.table)
-#'
 #' # Get the schedule of the 2019-2020 season and playoffs
-#' tidy_schedule("20192020")
+#' head(tidy_schedule("20192020"))
 #'
 #' # Get the regular season schedule of both the 2018-2019 and 2019-2020 seasons,
 #' # keeping the IDs and indicating game datetime with Los Angeles local time
-#' tidy_schedule(
+#' head(tidy_schedule(
 #'   seasons_id = c("20182019", "20192020"),
 #'   playoffs   = FALSE,
 #'   tz         = "America/Los_Angeles",
 #'   keep_id    = TRUE
-#' )
+#' ))
 #'
 #' @export
 tidy_schedule <- function(seasons_id, season=TRUE, playoffs=TRUE, tz=Sys.timezone(), keep_id=FALSE, return_datatable=NULL) {

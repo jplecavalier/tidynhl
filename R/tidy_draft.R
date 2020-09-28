@@ -7,6 +7,16 @@
 #' @param return_datatable *(optional)* Logical indicating whether or not a data.table should be returned. Default to `TRUE` if the `data.table` package is
 #'   attached in the active session.
 #'
+#' @examples
+#' # Get the 2019 NHL entry draft
+#' head(tidy_draft(2019L))
+#'
+#' # Get both the 2018 and 2019 NHL entry drafts, keeping  the ID
+#' head(tidy_draft(
+#'   drafts_year = 2018:2019,
+#'   keep_id     = TRUE
+#' ))
+#'
 #' @export
 tidy_draft <- function(drafts_year, keep_id=FALSE, return_datatable=NULL) {
 
