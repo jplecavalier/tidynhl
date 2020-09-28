@@ -70,12 +70,9 @@ tidy_draft <- function(drafts_year, keep_id=FALSE, return_datatable=NULL) {
   }))
 
   drafts[teams_info, team_abbreviation:=team_abbreviation, on=.(team_id)]
+  drafts[prospects_info, player_id:=player_id, on=.(prospect_id)]
 
-  # TO DO: Add the link between prospects and players in tidynhl:::prospects_info and merge it with drafts
-  # drafts[, player_id:=NA_integer_]
-
-  setcolorder(drafts, c("draft_year", "draft_round", "draft_pick", "draft_overall", "team_id", "team_abbreviation", "prospect_id", "prospect_fullname"))
-  # setcolorder(drafts, c("draft_year", "draft_round", "draft_pick", "draft_overall", "team_id", "team_abbreviation", "prospect_id", "prospect_fullname", "player_id"))
+  setcolorder(drafts, c("draft_year", "draft_round", "draft_pick", "draft_overall", "team_id", "team_abbreviation", "prospect_id", "prospect_fullname", "player_id"))
 
   if (!keep_id) {
     drafts[, colnames(drafts)[grep("_id$", colnames(drafts))]:=NULL]
