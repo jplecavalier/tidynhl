@@ -1,5 +1,5 @@
 # Get drafts
-drafts <- tidy_draft(1963:2019, keep_id=TRUE)
+drafts <- tidy_draft(1963:2020, keep_id=TRUE)
 
 # Get prospects_info
 prospects_info <- rbindlist(lapply(drafts[!is.na(prospect_id), unique(prospect_id)], function(id) {
