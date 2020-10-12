@@ -22,5 +22,7 @@ prospects_info <- rbindlist(lapply(drafts[!is.na(prospect_id), unique(prospect_i
 }))
 rm(drafts)
 
+prospects_info <- prospects_info[!is.na(player_id)]
+
 # Set key
 setkey(prospects_info, prospect_id)

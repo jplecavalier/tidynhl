@@ -17,5 +17,26 @@ setnames(seasons_info, "conferencesInUse", "season_conferences")
 setnames(seasons_info, "divisionsInUse", "season_divisions")
 setnames(seasons_info, "wildCardInUse", "season_wildcards")
 
+# Get players_id by season
+seasons_info[, players_id:=lapply(season_id, function(season_id) {
+
+  schedule <- tidy_schedule(season_id, keep_id=TRUE)
+
+  sort(unique(unlist(lapply(schedule[, game_id], function(game_id) {
+
+    Sys.sleep(runif(1, 1, 2))
+
+    url <- paste0(tidynhl:::api_url, "game/", game_id, "/boxscore")
+    teams <- fromJSON(content(GET(url), "text"), flatten=TRUE)$teams %>%
+      tidynhl:::create_data_table()
+
+    lapply(teams, function(team) {
+      setdiff(c(team$skaters, team$goalies), team$scratches)
+    })
+
+  }))))
+
+})]
+
 # Set key
 setkey(seasons_info, season_id)
