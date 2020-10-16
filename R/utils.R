@@ -25,3 +25,25 @@ create_data_table <- function(data) {
   }
 
 }
+
+convert_toi <- function(toi) {
+  sapply(strsplit(toi, ":"), function(x) {
+    if (is.na(x[1])) {
+      NA_real_
+    } else {
+      as.integer(x[1])+as.integer(x[2])/60L
+    }
+  })
+}
+
+season_years <- function(season_id) {
+  ifelse(
+    test = is.na(season_id),
+    yes = NA_character_,
+    no = paste0(
+      stringr::str_sub(c(season_id, NA_character_), 1L, 4L),
+      "-",
+      stringr::str_sub(c(season_id, NA_character_), -2L, -1L)
+    )
+  )
+}

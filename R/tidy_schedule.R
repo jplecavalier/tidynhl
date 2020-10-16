@@ -3,7 +3,7 @@
 #' The function `tidy_schedule()` is meant to be a user-friendly way of getting the NHL schedule, including the final score of completed games.
 #'
 #' @param seasons_id Character vector of the seasons ID for which the schedule will be returned. The required format is 'xxxxyyyy'.
-#' @param season *(optional)* Logical indicating if the season schedule should be returned. Default to `TRUE`.
+#' @param regular *(optional)* Logical indicating if the regular season schedule should be returned. Default to `TRUE`.
 #' @param playoffs *(optional)* Logical indicating if the playoffs schedule should be returned. Default to `TRUE`.
 #' @param tz *(optional)* Character specifying the timezone that should be used for datetime. Default to the user system timezone.
 #' @param keep_id *(optional)* Logical indicating if the IDs of different dimensions should be returned. Default to `FALSE`.
@@ -11,7 +11,7 @@
 #'   attached in the active session.
 #'
 #' @examples
-#' # Get the schedule of the 2019-2020 season and playoffs
+#' # Get the schedule of the 2019-2020 regular season and playoffs
 #' head(tidy_schedule("20192020"))
 #'
 #' # Get the regular season schedule of both the 2018-2019 and 2019-2020 seasons,
@@ -24,7 +24,7 @@
 #' ))
 #'
 #' @export
-tidy_schedule <- function(seasons_id, season=TRUE, playoffs=TRUE, tz=Sys.timezone(), keep_id=FALSE, return_datatable=NULL) {
+tidy_schedule <- function(seasons_id, regular=TRUE, playoffs=TRUE, tz=Sys.timezone(), keep_id=FALSE, return_datatable=NULL) {
 
   check_seasons_id <- seasons_id%in%seasons_info[, season_id]
   if (sum(!check_seasons_id)>0) {
@@ -89,10 +89,11 @@ tidy_schedule <- function(seasons_id, season=TRUE, playoffs=TRUE, tz=Sys.timezon
 
     games[gameType%in%c("R", "P"), .(
       season_id = season,
+      season_years = season_years(season),
       game_id = gamePk,
-      game_type = gameType,
+      game_type = ifelse(gameType=="R", "regular", "playoffs"),
       game_datetime = suppressMessages(lubridate::as_datetime(gameDate, tz=tz)),
-      game_status = status.detailedState,
+      game_status = tolower(status.detailedState),
       venue_name = venue.name,
       away_id = teams.away.team.id,
       home_id = teams.home.team.id,
@@ -107,22 +108,22 @@ tidy_schedule <- function(seasons_id, season=TRUE, playoffs=TRUE, tz=Sys.timezon
   games[teams_info, away_team:=team_abbreviation, on=c(away_id="team_id")]
   games[teams_info, home_team:=team_abbreviation, on=c(home_id="team_id")]
 
-  games[game_status!="Final", `:=`(
+  games[game_status!="final", `:=`(
     away_score = NA_integer_,
     home_score = NA_integer_,
     game_nbot = NA_integer_,
     game_shootout = NA
   )]
 
-  setcolorder(games, c("season_id", "game_id", "game_type", "game_datetime", "game_status", "venue_name", "away_id", "away_team", "away_score", "home_score",
-                       "home_team", "home_id", "game_nbot", "game_shootout"))
+  setcolorder(games, c("season_id", "season_years", "game_id", "game_type", "game_datetime", "game_status", "venue_name", "away_id", "away_team", "away_score",
+                       "home_score", "home_team", "home_id", "game_nbot", "game_shootout"))
 
-  if (!season) {
-    games <- games[game_type!="R"]
+  if (!regular) {
+    games <- games[game_type!="regular"]
   }
 
   if (!playoffs) {
-    games <- games[game_type!="P"]
+    games <- games[game_type!="playoffs"]
   }
 
   if (!keep_id) {

@@ -6,7 +6,7 @@
 \usage{
 tidy_schedule(
   seasons_id,
-  season = TRUE,
+  regular = TRUE,
   playoffs = TRUE,
   tz = Sys.timezone(),
   keep_id = FALSE,
@@ -16,7 +16,7 @@ tidy_schedule(
 \arguments{
 \item{seasons_id}{Character vector of the seasons ID for which the schedule will be returned. The required format is 'xxxxyyyy'.}
 
-\item{season}{\emph{(optional)} Logical indicating if the season schedule should be returned. Default to \code{TRUE}.}
+\item{regular}{\emph{(optional)} Logical indicating if the regular season schedule should be returned. Default to \code{TRUE}.}
 
 \item{playoffs}{\emph{(optional)} Logical indicating if the playoffs schedule should be returned. Default to \code{TRUE}.}
 
@@ -31,7 +31,7 @@ attached in the active session.}
 The function \code{tidy_schedule()} is meant to be a user-friendly way of getting the NHL schedule, including the final score of completed games.
 }
 \examples{
-# Get the schedule of the 2019-2020 season and playoffs
+# Get the schedule of the 2019-2020 regular season and playoffs
 head(tidy_schedule("20192020"))
 
 # Get the regular season schedule of both the 2018-2019 and 2019-2020 seasons,
