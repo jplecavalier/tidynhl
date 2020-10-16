@@ -11,7 +11,7 @@
 #' # Get the 2019 NHL entry draft
 #' head(tidy_draft(2019L))
 #'
-#' # Get both the 2018 and 2019 NHL entry drafts, keeping  the ID
+#' # Get both the 2018 and 2019 NHL entry drafts, keeping  the IDs
 #' head(tidy_draft(
 #'   drafts_year = 2018:2019,
 #'   keep_id     = TRUE
