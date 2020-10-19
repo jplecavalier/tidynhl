@@ -90,8 +90,8 @@ tidy_schedule <- function(seasons_id, regular=TRUE, playoffs=TRUE, tz=Sys.timezo
     games[gameType%in%c("R", "P"), .(
       season_id = season,
       season_years = season_years(season),
+      season_type = ifelse(stringr::str_sub(gamePk, 5L, 6L)=="02", "regular", "playoffs"),
       game_id = gamePk,
-      game_type = ifelse(stringr::str_sub(gamePk, 5L, 6L)=="02", "regular", "playoffs"),
       game_datetime = suppressMessages(lubridate::as_datetime(gameDate, tz=tz)),
       game_status = tolower(status.detailedState),
       venue_name = venue.name,
@@ -115,15 +115,15 @@ tidy_schedule <- function(seasons_id, regular=TRUE, playoffs=TRUE, tz=Sys.timezo
     game_shootout = NA
   )]
 
-  setcolorder(games, c("season_id", "season_years", "game_id", "game_type", "game_datetime", "game_status", "venue_name", "away_id", "away_team", "away_score",
-                       "home_score", "home_team", "home_id", "game_nbot", "game_shootout"))
+  setcolorder(games, c("season_id", "season_years", "season_type", "game_id", "game_datetime", "game_status", "venue_name", "away_id", "away_team",
+                       "away_score", "home_score", "home_team", "home_id", "game_nbot", "game_shootout"))
 
   if (!regular) {
-    games <- games[game_type!="regular"]
+    games <- games[season_type!="regular"]
   }
 
   if (!playoffs) {
-    games <- games[game_type!="playoffs"]
+    games <- games[season_type!="playoffs"]
   }
 
   if (!keep_id) {
