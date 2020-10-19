@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get a tidy dataset of players' game logs — tidy_players_gamelogs • tidynhl</title>
+<title>Get a tidy dataset of NHL players game logs — tidy_players_gamelogs • tidynhl</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Get a tidy dataset of players' game logs — tidy_players_gamelogs" />
-<meta property="og:description" content="The function tidy_players_gamelogs() is meant to be a user-friendly way of getting the career NHL game logs of selected players." />
+<meta property="og:title" content="Get a tidy dataset of NHL players game logs — tidy_players_gamelogs" />
+<meta property="og:description" content="The function tidy_players_gamelogs() is meant to be a user-friendly way of getting the NHL game logs of selected players." />
 <meta property="og:image" content="https://jplecavalier.github.io/tidynhl/logo.png" />
 
 
@@ -126,19 +126,21 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get a tidy dataset of players' game logs</h1>
+    <h1>Get a tidy dataset of NHL players game logs</h1>
     <small class="dont-index">Source: <a href='https://github.com/jplecavalier/tidynhl/blob/master/R/tidy_players_gamelogs.R'><code>R/tidy_players_gamelogs.R</code></a></small>
     <div class="hidden name"><code>tidy_players_gamelogs.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The function <code>tidy_players_gamelogs()</code> is meant to be a user-friendly way of getting the career NHL game logs of selected players.</p>
+    <p>The function <code>tidy_players_gamelogs()</code> is meant to be a user-friendly way of getting the NHL game logs of selected players.</p>
     </div>
 
     <pre class="usage"><span class='fu'>tidy_players_gamelogs</span><span class='op'>(</span>
   <span class='va'>players_id</span>,
+  seasons_id <span class='op'>=</span> <span class='cn'>NULL</span>,
   regular <span class='op'>=</span> <span class='cn'>TRUE</span>,
   playoffs <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  tz <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/timezones.html'>Sys.timezone</a></span><span class='op'>(</span><span class='op'>)</span>,
   keep_id <span class='op'>=</span> <span class='cn'>FALSE</span>,
   return_datatable <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
@@ -148,7 +150,12 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>players_id</th>
-      <td><p>Integer vector indicating which players' game logs will be returned.</p></td>
+      <td><p>Integer vector indicating the NHL ID of players for whom the game logs will be returned.</p></td>
+    </tr>
+    <tr>
+      <th>seasons_id</th>
+      <td><p><em>(optional)</em> Character vector indicating the season for which the game logs will be returned. The required format for each character is
+'xxxxyyyy'. Default to <code>NULL</code> which will return the full career game logs for each player.</p></td>
     </tr>
     <tr>
       <th>regular</th>
@@ -157,6 +164,10 @@
     <tr>
       <th>playoffs</th>
       <td><p><em>(optional)</em> Logical indicating if the playoffs schedule should be returned. Default to <code>TRUE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>tz</th>
+      <td><p><em>(optional)</em> Character specifying the timezone that should be used for datetime. Default to the user system timezone.</p></td>
     </tr>
     <tr>
       <th>keep_id</th>
@@ -170,6 +181,505 @@ attached in the active session.</p></td>
     </table>
 
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># Get the NHL career game logs of Vincent Lecavalier</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'>tidy_players_gamelogs</span><span class='op'>(</span><span class='fl'>8467329L</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;          player_name season_years season_type       game_datetime
+#&gt; 1 Vincent Lecavalier      1998-99     regular 1998-10-09 19:30:00
+#&gt; 2 Vincent Lecavalier      1998-99     regular 1998-10-10 19:00:00
+#&gt; 3 Vincent Lecavalier      1998-99     regular 1998-10-14 19:00:00
+#&gt; 4 Vincent Lecavalier      1998-99     regular 1998-10-16 19:00:00
+#&gt; 5 Vincent Lecavalier      1998-99     regular 1998-10-18 19:00:00
+#&gt; 6 Vincent Lecavalier      1998-99     regular 1998-10-21 19:00:00
+#&gt;                   venue_name team_status team_abbreviation team_score
+#&gt; 1 National Car Rental Center        away               TBL          1
+#&gt; 2        Greensboro Coliseum        away               TBL          4
+#&gt; 3                 Ice Palace        home               TBL          0
+#&gt; 4                 Ice Palace        home               TBL          2
+#&gt; 5                 Ice Palace        home               TBL          1
+#&gt; 6                 Ice Palace        home               TBL          5
+#&gt;   opponent_score opponent_abbreviation game_status game_nbot game_shootout
+#&gt; 1              4                   FLA       final         0         FALSE
+#&gt; 2              4                   CAR       final         1         FALSE
+#&gt; 3              2                   NYI       final         0         FALSE
+#&gt; 4              5                   PHI       final         0         FALSE
+#&gt; 5              4                   WSH       final         0         FALSE
+#&gt; 6              0                   PIT       final         0         FALSE
+#&gt;   skater_games skater_goals skater_assists skater_points skater_plusminus
+#&gt; 1            1            0              0             0               -2
+#&gt; 2            1            0              0             0                0
+#&gt; 3            1            0              0             0               -1
+#&gt; 4            1            0              0             0               -1
+#&gt; 5            1            0              0             0                0
+#&gt; 6            1            0              1             1                0
+#&gt;   skater_pim skater_toi skater_shifts skater_gwg skater_otg skater_shots
+#&gt; 1          0  15.383333            18          0          0            2
+#&gt; 2          0  14.783333            18          0          0            2
+#&gt; 3          0  16.583333            19          0          0            1
+#&gt; 4          0  13.450000            15          0          0            3
+#&gt; 5          0   8.466667             7          0          0            0
+#&gt; 6          0  10.150000            11          0          0            1
+#&gt;   skater_blocked skater_hits skater_ev_goals skater_ev_assists skater_ev_points
+#&gt; 1              0           0               0                 0                0
+#&gt; 2              0           1               0                 0                0
+#&gt; 3              1           2               0                 0                0
+#&gt; 4              0           2               0                 0                0
+#&gt; 5              0           0               0                 0                0
+#&gt; 6              0           0               0                 0                0
+#&gt;   skater_ev_toi skater_pp_goals skater_pp_assists skater_pp_points
+#&gt; 1     10.783333               0                 0                0
+#&gt; 2     12.850000               0                 0                0
+#&gt; 3     14.033333               0                 0                0
+#&gt; 4      9.483333               0                 0                0
+#&gt; 5      6.533333               0                 0                0
+#&gt; 6      9.233333               0                 1                1
+#&gt;   skater_pp_toi skater_pk_goals skater_pk_assists skater_pk_points
+#&gt; 1     2.6000000               0                 0                0
+#&gt; 2     1.7500000               0                 0                0
+#&gt; 3     2.0000000               0                 0                0
+#&gt; 4     3.6333333               0                 0                0
+#&gt; 5     1.8666667               0                 0                0
+#&gt; 6     0.7666667               0                 0                0
+#&gt;   skater_pk_toi goalie_games goalie_started goalie_wins goalie_losses
+#&gt; 1    2.00000000           NA             NA          NA            NA
+#&gt; 2    0.18333333           NA             NA          NA            NA
+#&gt; 3    0.55000000           NA             NA          NA            NA
+#&gt; 4    0.33333333           NA             NA          NA            NA
+#&gt; 5    0.06666667           NA             NA          NA            NA
+#&gt; 6    0.15000000           NA             NA          NA            NA
+#&gt;   goalie_ties goalie_ot goalie_shutouts goalie_shotagainst goalie_goalagainst
+#&gt; 1          NA        NA              NA                 NA                 NA
+#&gt; 2          NA        NA              NA                 NA                 NA
+#&gt; 3          NA        NA              NA                 NA                 NA
+#&gt; 4          NA        NA              NA                 NA                 NA
+#&gt; 5          NA        NA              NA                 NA                 NA
+#&gt; 6          NA        NA              NA                 NA                 NA
+#&gt;   goalie_savepct goalie_gaa goalie_toi goalie_ev_shotagainst
+#&gt; 1             NA         NA         NA                    NA
+#&gt; 2             NA         NA         NA                    NA
+#&gt; 3             NA         NA         NA                    NA
+#&gt; 4             NA         NA         NA                    NA
+#&gt; 5             NA         NA         NA                    NA
+#&gt; 6             NA         NA         NA                    NA
+#&gt;   goalie_ev_goalagainst goalie_ev_savepct goalie_pp_shotagainst
+#&gt; 1                    NA                NA                    NA
+#&gt; 2                    NA                NA                    NA
+#&gt; 3                    NA                NA                    NA
+#&gt; 4                    NA                NA                    NA
+#&gt; 5                    NA                NA                    NA
+#&gt; 6                    NA                NA                    NA
+#&gt;   goalie_pp_goalagainst goalie_pp_savepct goalie_pk_shotagainst
+#&gt; 1                    NA                NA                    NA
+#&gt; 2                    NA                NA                    NA
+#&gt; 3                    NA                NA                    NA
+#&gt; 4                    NA                NA                    NA
+#&gt; 5                    NA                NA                    NA
+#&gt; 6                    NA                NA                    NA
+#&gt;   goalie_pk_goalagainst goalie_pk_savepct
+#&gt; 1                    NA                NA
+#&gt; 2                    NA                NA
+#&gt; 3                    NA                NA
+#&gt; 4                    NA                NA
+#&gt; 5                    NA                NA
+#&gt; 6                    NA                NA</div><div class='input'>
+<span class='co'># Get the NHL 2010-11 playoffs statistics of both Vincent Lecavalier and Carey Price, keeping the IDs</span>
+<span class='fu'>tidy_players_gamelogs</span><span class='op'>(</span>
+  players_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>8467329L</span>, <span class='fl'>8471679L</span><span class='op'>)</span>,
+  seasons_id <span class='op'>=</span> <span class='st'>"20102011"</span>,
+  regular    <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  keep_id    <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span>
+</div><div class='output co'>#&gt;    player_id        player_name season_id season_years season_type    game_id
+#&gt; 1    8467329 Vincent Lecavalier  20102011      2010-11    playoffs 2010030141
+#&gt; 2    8467329 Vincent Lecavalier  20102011      2010-11    playoffs 2010030142
+#&gt; 3    8467329 Vincent Lecavalier  20102011      2010-11    playoffs 2010030143
+#&gt; 4    8467329 Vincent Lecavalier  20102011      2010-11    playoffs 2010030144
+#&gt; 5    8467329 Vincent Lecavalier  20102011      2010-11    playoffs 2010030145
+#&gt; 6    8467329 Vincent Lecavalier  20102011      2010-11    playoffs 2010030146
+#&gt; 7    8467329 Vincent Lecavalier  20102011      2010-11    playoffs 2010030147
+#&gt; 8    8467329 Vincent Lecavalier  20102011      2010-11    playoffs 2010030211
+#&gt; 9    8467329 Vincent Lecavalier  20102011      2010-11    playoffs 2010030212
+#&gt; 10   8467329 Vincent Lecavalier  20102011      2010-11    playoffs 2010030213
+#&gt; 11   8467329 Vincent Lecavalier  20102011      2010-11    playoffs 2010030214
+#&gt; 12   8467329 Vincent Lecavalier  20102011      2010-11    playoffs 2010030311
+#&gt; 13   8467329 Vincent Lecavalier  20102011      2010-11    playoffs 2010030312
+#&gt; 14   8467329 Vincent Lecavalier  20102011      2010-11    playoffs 2010030313
+#&gt; 15   8467329 Vincent Lecavalier  20102011      2010-11    playoffs 2010030314
+#&gt; 16   8467329 Vincent Lecavalier  20102011      2010-11    playoffs 2010030315
+#&gt; 17   8467329 Vincent Lecavalier  20102011      2010-11    playoffs 2010030316
+#&gt; 18   8467329 Vincent Lecavalier  20102011      2010-11    playoffs 2010030317
+#&gt; 19   8471679        Carey Price  20102011      2010-11    playoffs 2010030131
+#&gt; 20   8471679        Carey Price  20102011      2010-11    playoffs 2010030132
+#&gt; 21   8471679        Carey Price  20102011      2010-11    playoffs 2010030133
+#&gt; 22   8471679        Carey Price  20102011      2010-11    playoffs 2010030134
+#&gt; 23   8471679        Carey Price  20102011      2010-11    playoffs 2010030135
+#&gt; 24   8471679        Carey Price  20102011      2010-11    playoffs 2010030136
+#&gt; 25   8471679        Carey Price  20102011      2010-11    playoffs 2010030137
+#&gt;          game_datetime           venue_name team_status team_id
+#&gt; 1  2011-04-13 19:00:00 CONSOL Energy Center        away      14
+#&gt; 2  2011-04-15 19:00:00 CONSOL Energy Center        away      14
+#&gt; 3  2011-04-18 19:30:00 St. Pete Times Forum        home      14
+#&gt; 4  2011-04-20 19:00:00 St. Pete Times Forum        home      14
+#&gt; 5  2011-04-23 12:00:00 CONSOL Energy Center        away      14
+#&gt; 6  2011-04-25 19:00:00 St. Pete Times Forum        home      14
+#&gt; 7  2011-04-27 20:00:00 CONSOL Energy Center        away      14
+#&gt; 8  2011-04-29 19:00:00       Verizon Center        away      14
+#&gt; 9  2011-05-01 19:00:00       Verizon Center        away      14
+#&gt; 10 2011-05-03 18:30:00 St. Pete Times Forum        home      14
+#&gt; 11 2011-05-04 19:00:00 St. Pete Times Forum        home      14
+#&gt; 12 2011-05-14 20:00:00            TD Garden        away      14
+#&gt; 13 2011-05-17 20:00:00            TD Garden        away      14
+#&gt; 14 2011-05-19 20:00:00 St. Pete Times Forum        home      14
+#&gt; 15 2011-05-21 13:30:00 St. Pete Times Forum        home      14
+#&gt; 16 2011-05-23 20:00:00            TD Garden        away      14
+#&gt; 17 2011-05-25 20:00:00 St. Pete Times Forum        home      14
+#&gt; 18 2011-05-27 20:00:00            TD Garden        away      14
+#&gt; 19 2011-04-14 19:00:00            TD Garden        away       8
+#&gt; 20 2011-04-16 19:00:00            TD Garden        away       8
+#&gt; 21 2011-04-18 19:30:00          Centre Bell        home       8
+#&gt; 22 2011-04-21 19:00:00          Centre Bell        home       8
+#&gt; 23 2011-04-23 19:00:00            TD Garden        away       8
+#&gt; 24 2011-04-26 19:00:00          Centre Bell        home       8
+#&gt; 25 2011-04-27 19:00:00            TD Garden        away       8
+#&gt;    team_abbreviation team_score opponent_score opponent_abbreviation
+#&gt; 1                TBL          0              3                   PIT
+#&gt; 2                TBL          5              1                   PIT
+#&gt; 3                TBL          2              3                   PIT
+#&gt; 4                TBL          2              3                   PIT
+#&gt; 5                TBL          8              2                   PIT
+#&gt; 6                TBL          4              2                   PIT
+#&gt; 7                TBL          1              0                   PIT
+#&gt; 8                TBL          4              2                   WSH
+#&gt; 9                TBL          3              2                   WSH
+#&gt; 10               TBL          4              3                   WSH
+#&gt; 11               TBL          5              3                   WSH
+#&gt; 12               TBL          5              2                   BOS
+#&gt; 13               TBL          5              6                   BOS
+#&gt; 14               TBL          0              2                   BOS
+#&gt; 15               TBL          5              3                   BOS
+#&gt; 16               TBL          1              3                   BOS
+#&gt; 17               TBL          5              4                   BOS
+#&gt; 18               TBL          0              1                   BOS
+#&gt; 19               MTL          2              0                   BOS
+#&gt; 20               MTL          3              1                   BOS
+#&gt; 21               MTL          2              4                   BOS
+#&gt; 22               MTL          4              5                   BOS
+#&gt; 23               MTL          1              2                   BOS
+#&gt; 24               MTL          2              1                   BOS
+#&gt; 25               MTL          3              4                   BOS
+#&gt;    opponent_id game_status game_nbot game_shootout skater_games skater_goals
+#&gt; 1            5       final         0         FALSE            1            0
+#&gt; 2            5       final         0         FALSE            1            1
+#&gt; 3            5       final         0         FALSE            1            0
+#&gt; 4            5       final         2         FALSE            1            0
+#&gt; 5            5       final         0         FALSE            1            1
+#&gt; 6            5       final         0         FALSE            1            0
+#&gt; 7            5       final         0         FALSE            1            0
+#&gt; 8           15       final         0         FALSE            1            0
+#&gt; 9           15       final         1         FALSE            1            2
+#&gt; 10          15       final         0         FALSE            1            1
+#&gt; 11          15       final         0         FALSE            1            0
+#&gt; 12           6       final         0         FALSE            1            0
+#&gt; 13           6       final         0         FALSE            1            1
+#&gt; 14           6       final         0         FALSE            1            0
+#&gt; 15           6       final         0         FALSE            1            0
+#&gt; 16           6       final         0         FALSE            1            0
+#&gt; 17           6       final         0         FALSE            1            0
+#&gt; 18           6       final         0         FALSE            1            0
+#&gt; 19           6       final         0         FALSE           NA           NA
+#&gt; 20           6       final         0         FALSE           NA           NA
+#&gt; 21           6       final         0         FALSE           NA           NA
+#&gt; 22           6       final         1         FALSE           NA           NA
+#&gt; 23           6       final         2         FALSE           NA           NA
+#&gt; 24           6       final         0         FALSE           NA           NA
+#&gt; 25           6       final         1         FALSE           NA           NA
+#&gt;    skater_assists skater_points skater_plusminus skater_pim skater_toi
+#&gt; 1               0             0               -2          0   16.83333
+#&gt; 2               0             1                0          0   18.40000
+#&gt; 3               1             1                0          2   23.65000
+#&gt; 4               1             1                0          2   26.46667
+#&gt; 5               1             2                2          4   17.46667
+#&gt; 6               1             1                1          0   18.18333
+#&gt; 7               0             0                0          0   17.71667
+#&gt; 8               2             2                0          0   21.73333
+#&gt; 9               0             2                2          0   19.68333
+#&gt; 10              0             1                1          0   19.50000
+#&gt; 11              1             1                0          0   20.75000
+#&gt; 12              0             0                3          2   18.15000
+#&gt; 13              3             4                1          2   20.10000
+#&gt; 14              0             0               -1          0   23.15000
+#&gt; 15              1             1                0          0   18.80000
+#&gt; 16              0             0               -1          2   19.50000
+#&gt; 17              2             2                0          2   17.65000
+#&gt; 18              0             0                0          0   19.76667
+#&gt; 19             NA            NA               NA         NA         NA
+#&gt; 20             NA            NA               NA         NA         NA
+#&gt; 21             NA            NA               NA         NA         NA
+#&gt; 22             NA            NA               NA         NA         NA
+#&gt; 23             NA            NA               NA         NA         NA
+#&gt; 24             NA            NA               NA         NA         NA
+#&gt; 25             NA            NA               NA         NA         NA
+#&gt;    skater_shifts skater_gwg skater_otg skater_shots skater_blocked skater_hits
+#&gt; 1             22          0          0            4              1           4
+#&gt; 2             24          1          0            1              0           0
+#&gt; 3             26          0          0            5              0           0
+#&gt; 4             34          0          0            4              0           3
+#&gt; 5             25          1          0            2              1           0
+#&gt; 6             25          0          0            1              1           1
+#&gt; 7             22          0          0            1              1           2
+#&gt; 8             25          0          0            2              1           2
+#&gt; 9             24          1          1            3              0           0
+#&gt; 10            25          0          0            4              0           1
+#&gt; 11            26          0          0            3              0           3
+#&gt; 12            23          0          0            5              0           0
+#&gt; 13            26          0          0            5              1           0
+#&gt; 14            23          0          0            5              0           1
+#&gt; 15            24          0          0            5              0           1
+#&gt; 16            25          0          0            4              0           0
+#&gt; 17            20          0          0            0              0           1
+#&gt; 18            25          0          0            2              1           1
+#&gt; 19            NA         NA         NA           NA             NA          NA
+#&gt; 20            NA         NA         NA           NA             NA          NA
+#&gt; 21            NA         NA         NA           NA             NA          NA
+#&gt; 22            NA         NA         NA           NA             NA          NA
+#&gt; 23            NA         NA         NA           NA             NA          NA
+#&gt; 24            NA         NA         NA           NA             NA          NA
+#&gt; 25            NA         NA         NA           NA             NA          NA
+#&gt;    skater_ev_goals skater_ev_assists skater_ev_points skater_ev_toi
+#&gt; 1                0                 0                0      14.90000
+#&gt; 2                0                 0                0      14.05000
+#&gt; 3                0                 0                0      18.76667
+#&gt; 4                0                 1                1      20.43333
+#&gt; 5                1                 1                2      13.06667
+#&gt; 6                0                 1                1      13.53333
+#&gt; 7                0                 0                0      14.78333
+#&gt; 8                0                 1                1      16.83333
+#&gt; 9                1                 0                1      12.80000
+#&gt; 10               1                 0                1      15.03333
+#&gt; 11               0                 0                0      13.88333
+#&gt; 12               0                 0                0      14.08333
+#&gt; 13               0                 3                3      16.01667
+#&gt; 14               0                 0                0      18.78333
+#&gt; 15               0                 1                1      16.13333
+#&gt; 16               0                 0                0      14.95000
+#&gt; 17               0                 1                1      13.31667
+#&gt; 18               0                 0                0      19.76667
+#&gt; 19              NA                NA               NA            NA
+#&gt; 20              NA                NA               NA            NA
+#&gt; 21              NA                NA               NA            NA
+#&gt; 22              NA                NA               NA            NA
+#&gt; 23              NA                NA               NA            NA
+#&gt; 24              NA                NA               NA            NA
+#&gt; 25              NA                NA               NA            NA
+#&gt;    skater_pp_goals skater_pp_assists skater_pp_points skater_pp_toi
+#&gt; 1                0                 0                0      1.283333
+#&gt; 2                1                 0                1      3.800000
+#&gt; 3                0                 1                1      4.883333
+#&gt; 4                0                 0                0      5.916667
+#&gt; 5                0                 0                0      4.400000
+#&gt; 6                0                 0                0      4.650000
+#&gt; 7                0                 0                0      2.466667
+#&gt; 8                0                 1                1      4.316667
+#&gt; 9                1                 0                1      6.566667
+#&gt; 10               0                 0                0      4.333333
+#&gt; 11               0                 1                1      6.866667
+#&gt; 12               0                 0                0      4.066667
+#&gt; 13               1                 0                1      3.783333
+#&gt; 14               0                 0                0      4.083333
+#&gt; 15               0                 0                0      2.666667
+#&gt; 16               0                 0                0      4.166667
+#&gt; 17               0                 1                1      4.100000
+#&gt; 18               0                 0                0      0.000000
+#&gt; 19              NA                NA               NA            NA
+#&gt; 20              NA                NA               NA            NA
+#&gt; 21              NA                NA               NA            NA
+#&gt; 22              NA                NA               NA            NA
+#&gt; 23              NA                NA               NA            NA
+#&gt; 24              NA                NA               NA            NA
+#&gt; 25              NA                NA               NA            NA
+#&gt;    skater_pk_goals skater_pk_assists skater_pk_points skater_pk_toi
+#&gt; 1                0                 0                0     0.6500000
+#&gt; 2                0                 0                0     0.5500000
+#&gt; 3                0                 0                0     0.0000000
+#&gt; 4                0                 0                0     0.1166667
+#&gt; 5                0                 0                0     0.0000000
+#&gt; 6                0                 0                0     0.0000000
+#&gt; 7                0                 0                0     0.4666667
+#&gt; 8                0                 0                0     0.5833333
+#&gt; 9                0                 0                0     0.3166667
+#&gt; 10               0                 0                0     0.1333333
+#&gt; 11               0                 0                0     0.0000000
+#&gt; 12               0                 0                0     0.0000000
+#&gt; 13               0                 0                0     0.3000000
+#&gt; 14               0                 0                0     0.2833333
+#&gt; 15               0                 0                0     0.0000000
+#&gt; 16               0                 0                0     0.3833333
+#&gt; 17               0                 0                0     0.2333333
+#&gt; 18               0                 0                0     0.0000000
+#&gt; 19              NA                NA               NA            NA
+#&gt; 20              NA                NA               NA            NA
+#&gt; 21              NA                NA               NA            NA
+#&gt; 22              NA                NA               NA            NA
+#&gt; 23              NA                NA               NA            NA
+#&gt; 24              NA                NA               NA            NA
+#&gt; 25              NA                NA               NA            NA
+#&gt;    goalie_games goalie_started goalie_wins goalie_losses goalie_ties goalie_ot
+#&gt; 1            NA             NA          NA            NA          NA        NA
+#&gt; 2            NA             NA          NA            NA          NA        NA
+#&gt; 3            NA             NA          NA            NA          NA        NA
+#&gt; 4            NA             NA          NA            NA          NA        NA
+#&gt; 5            NA             NA          NA            NA          NA        NA
+#&gt; 6            NA             NA          NA            NA          NA        NA
+#&gt; 7            NA             NA          NA            NA          NA        NA
+#&gt; 8            NA             NA          NA            NA          NA        NA
+#&gt; 9            NA             NA          NA            NA          NA        NA
+#&gt; 10           NA             NA          NA            NA          NA        NA
+#&gt; 11           NA             NA          NA            NA          NA        NA
+#&gt; 12           NA             NA          NA            NA          NA        NA
+#&gt; 13           NA             NA          NA            NA          NA        NA
+#&gt; 14           NA             NA          NA            NA          NA        NA
+#&gt; 15           NA             NA          NA            NA          NA        NA
+#&gt; 16           NA             NA          NA            NA          NA        NA
+#&gt; 17           NA             NA          NA            NA          NA        NA
+#&gt; 18           NA             NA          NA            NA          NA        NA
+#&gt; 19            1              1           1             0           0         0
+#&gt; 20            1              1           1             0           0         0
+#&gt; 21            1              1           0             1           0         0
+#&gt; 22            1              1           0             1           0         0
+#&gt; 23            1              1           0             1           0         0
+#&gt; 24            1              1           1             0           0         0
+#&gt; 25            1              1           0             1           0         0
+#&gt;    goalie_shutouts goalie_shotagainst goalie_goalagainst goalie_savepct
+#&gt; 1               NA                 NA                 NA             NA
+#&gt; 2               NA                 NA                 NA             NA
+#&gt; 3               NA                 NA                 NA             NA
+#&gt; 4               NA                 NA                 NA             NA
+#&gt; 5               NA                 NA                 NA             NA
+#&gt; 6               NA                 NA                 NA             NA
+#&gt; 7               NA                 NA                 NA             NA
+#&gt; 8               NA                 NA                 NA             NA
+#&gt; 9               NA                 NA                 NA             NA
+#&gt; 10              NA                 NA                 NA             NA
+#&gt; 11              NA                 NA                 NA             NA
+#&gt; 12              NA                 NA                 NA             NA
+#&gt; 13              NA                 NA                 NA             NA
+#&gt; 14              NA                 NA                 NA             NA
+#&gt; 15              NA                 NA                 NA             NA
+#&gt; 16              NA                 NA                 NA             NA
+#&gt; 17              NA                 NA                 NA             NA
+#&gt; 18              NA                 NA                 NA             NA
+#&gt; 19               1                 31                  0      1.0000000
+#&gt; 20               0                 35                  1      0.9714286
+#&gt; 21               0                 24                  3      0.8750000
+#&gt; 22               0                 35                  5      0.8571429
+#&gt; 23               0                 51                  2      0.9607843
+#&gt; 24               0                 32                  1      0.9687500
+#&gt; 25               0                 34                  4      0.8823529
+#&gt;    goalie_gaa goalie_toi goalie_ev_shotagainst goalie_ev_goalagainst
+#&gt; 1          NA         NA                    NA                    NA
+#&gt; 2          NA         NA                    NA                    NA
+#&gt; 3          NA         NA                    NA                    NA
+#&gt; 4          NA         NA                    NA                    NA
+#&gt; 5          NA         NA                    NA                    NA
+#&gt; 6          NA         NA                    NA                    NA
+#&gt; 7          NA         NA                    NA                    NA
+#&gt; 8          NA         NA                    NA                    NA
+#&gt; 9          NA         NA                    NA                    NA
+#&gt; 10         NA         NA                    NA                    NA
+#&gt; 11         NA         NA                    NA                    NA
+#&gt; 12         NA         NA                    NA                    NA
+#&gt; 13         NA         NA                    NA                    NA
+#&gt; 14         NA         NA                    NA                    NA
+#&gt; 15         NA         NA                    NA                    NA
+#&gt; 16         NA         NA                    NA                    NA
+#&gt; 17         NA         NA                    NA                    NA
+#&gt; 18         NA         NA                    NA                    NA
+#&gt; 19   0.000000   60.00000                    26                     0
+#&gt; 20   1.000278   59.98333                    29                     1
+#&gt; 21   3.033708   59.33333                    20                     3
+#&gt; 22   4.840011   61.98333                    35                     5
+#&gt; 23   1.352113   88.75000                    46                     2
+#&gt; 24   1.000000   60.00000                    28                     1
+#&gt; 25   3.667855   65.43333                    32                     4
+#&gt;    goalie_ev_savepct goalie_pp_shotagainst goalie_pp_goalagainst
+#&gt; 1                 NA                    NA                    NA
+#&gt; 2                 NA                    NA                    NA
+#&gt; 3                 NA                    NA                    NA
+#&gt; 4                 NA                    NA                    NA
+#&gt; 5                 NA                    NA                    NA
+#&gt; 6                 NA                    NA                    NA
+#&gt; 7                 NA                    NA                    NA
+#&gt; 8                 NA                    NA                    NA
+#&gt; 9                 NA                    NA                    NA
+#&gt; 10                NA                    NA                    NA
+#&gt; 11                NA                    NA                    NA
+#&gt; 12                NA                    NA                    NA
+#&gt; 13                NA                    NA                    NA
+#&gt; 14                NA                    NA                    NA
+#&gt; 15                NA                    NA                    NA
+#&gt; 16                NA                    NA                    NA
+#&gt; 17                NA                    NA                    NA
+#&gt; 18                NA                    NA                    NA
+#&gt; 19         1.0000000                     5                     0
+#&gt; 20         0.9655172                     5                     0
+#&gt; 21         0.8500000                     3                     0
+#&gt; 22         0.8571429                     0                     0
+#&gt; 23         0.9565217                     4                     0
+#&gt; 24         0.9642857                     2                     0
+#&gt; 25         0.8750000                     2                     0
+#&gt;    goalie_pp_savepct goalie_pk_shotagainst goalie_pk_goalagainst
+#&gt; 1                 NA                    NA                    NA
+#&gt; 2                 NA                    NA                    NA
+#&gt; 3                 NA                    NA                    NA
+#&gt; 4                 NA                    NA                    NA
+#&gt; 5                 NA                    NA                    NA
+#&gt; 6                 NA                    NA                    NA
+#&gt; 7                 NA                    NA                    NA
+#&gt; 8                 NA                    NA                    NA
+#&gt; 9                 NA                    NA                    NA
+#&gt; 10                NA                    NA                    NA
+#&gt; 11                NA                    NA                    NA
+#&gt; 12                NA                    NA                    NA
+#&gt; 13                NA                    NA                    NA
+#&gt; 14                NA                    NA                    NA
+#&gt; 15                NA                    NA                    NA
+#&gt; 16                NA                    NA                    NA
+#&gt; 17                NA                    NA                    NA
+#&gt; 18                NA                    NA                    NA
+#&gt; 19                 1                     0                     0
+#&gt; 20                 1                     1                     0
+#&gt; 21                 1                     1                     0
+#&gt; 22               NaN                     0                     0
+#&gt; 23                 1                     1                     0
+#&gt; 24                 1                     2                     0
+#&gt; 25                 1                     0                     0
+#&gt;    goalie_pk_savepct
+#&gt; 1                 NA
+#&gt; 2                 NA
+#&gt; 3                 NA
+#&gt; 4                 NA
+#&gt; 5                 NA
+#&gt; 6                 NA
+#&gt; 7                 NA
+#&gt; 8                 NA
+#&gt; 9                 NA
+#&gt; 10                NA
+#&gt; 11                NA
+#&gt; 12                NA
+#&gt; 13                NA
+#&gt; 14                NA
+#&gt; 15                NA
+#&gt; 16                NA
+#&gt; 17                NA
+#&gt; 18                NA
+#&gt; 19               NaN
+#&gt; 20                 1
+#&gt; 21                 1
+#&gt; 22               NaN
+#&gt; 23                 1
+#&gt; 24                 1
+#&gt; 25               NaN</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

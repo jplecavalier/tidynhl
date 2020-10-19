@@ -178,20 +178,27 @@ attached in the active session.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Get the schedule of the 2019-2020 regular season and playoffs</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'>tidy_schedule</span><span class='op'>(</span><span class='st'>"20192020"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   season_years game_type       game_datetime game_status            venue_name
-#&gt; 1      2019-20   regular 2019-10-02 19:00:00       final      Scotiabank Arena
-#&gt; 2      2019-20   regular 2019-10-02 20:00:00       final     Enterprise Center
-#&gt; 3      2019-20   regular 2019-10-02 22:00:00       final          Rogers Place
-#&gt; 4      2019-20   regular 2019-10-02 22:30:00       final        T-Mobile Arena
-#&gt; 5      2019-20   regular 2019-10-03 19:00:00       final          Amalie Arena
-#&gt; 6      2019-20   regular 2019-10-03 19:00:00       final Madison Square Garden
-#&gt;   away_team away_score home_score home_team game_nbot game_shootout
-#&gt; 1       OTT          3          5       TOR         0         FALSE
-#&gt; 2       WSH          3          2       STL         1         FALSE
-#&gt; 3       VAN          2          3       EDM         0         FALSE
-#&gt; 4       SJS          1          4       VGK         0         FALSE
-#&gt; 5       FLA          2          5       TBL         0         FALSE
-#&gt; 6       WPG          4          6       NYR         0         FALSE</div><div class='input'>
+</div><div class='output co'>#&gt;   season_years season_type       game_datetime game_status
+#&gt; 1      2019-20     regular 2019-10-02 19:00:00       final
+#&gt; 2      2019-20     regular 2019-10-02 20:00:00       final
+#&gt; 3      2019-20     regular 2019-10-02 22:00:00       final
+#&gt; 4      2019-20     regular 2019-10-02 22:30:00       final
+#&gt; 5      2019-20     regular 2019-10-03 19:00:00       final
+#&gt; 6      2019-20     regular 2019-10-03 19:00:00       final
+#&gt;              venue_name away_team away_score home_score home_team game_nbot
+#&gt; 1      Scotiabank Arena       OTT          3          5       TOR         0
+#&gt; 2     Enterprise Center       WSH          3          2       STL         1
+#&gt; 3          Rogers Place       VAN          2          3       EDM         0
+#&gt; 4        T-Mobile Arena       SJS          1          4       VGK         0
+#&gt; 5          Amalie Arena       FLA          2          5       TBL         0
+#&gt; 6 Madison Square Garden       WPG          4          6       NYR         0
+#&gt;   game_shootout
+#&gt; 1         FALSE
+#&gt; 2         FALSE
+#&gt; 3         FALSE
+#&gt; 4         FALSE
+#&gt; 5         FALSE
+#&gt; 6         FALSE</div><div class='input'>
 <span class='co'># Get the regular season schedule of both the 2018-2019 and 2019-2020 seasons,</span>
 <span class='co'># keeping the IDs and indicating game datetime with Los Angeles local time</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'>tidy_schedule</span><span class='op'>(</span>
@@ -200,13 +207,13 @@ attached in the active session.</p></td>
   tz         <span class='op'>=</span> <span class='st'>"America/Los_Angeles"</span>,
   keep_id    <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   season_id season_years    game_id game_type       game_datetime game_status
-#&gt; 1  20182019      2018-19 2018020001   regular 2018-10-03 16:00:00       final
-#&gt; 2  20182019      2018-19 2018020002   regular 2018-10-03 16:30:00       final
-#&gt; 3  20182019      2018-19 2018020003   regular 2018-10-03 19:00:00       final
-#&gt; 4  20182019      2018-19 2018020004   regular 2018-10-03 19:30:00       final
-#&gt; 5  20182019      2018-19 2018020005   regular 2018-10-04 16:00:00       final
-#&gt; 6  20182019      2018-19 2018020007   regular 2018-10-04 16:00:00       final
+</div><div class='output co'>#&gt;   season_id season_years season_type    game_id       game_datetime game_status
+#&gt; 1  20182019      2018-19     regular 2018020001 2018-10-03 16:00:00       final
+#&gt; 2  20182019      2018-19     regular 2018020002 2018-10-03 16:30:00       final
+#&gt; 3  20182019      2018-19     regular 2018020003 2018-10-03 19:00:00       final
+#&gt; 4  20182019      2018-19     regular 2018020004 2018-10-03 19:30:00       final
+#&gt; 5  20182019      2018-19     regular 2018020005 2018-10-04 16:00:00       final
+#&gt; 6  20182019      2018-19     regular 2018020007 2018-10-04 16:00:00       final
 #&gt;               venue_name away_id away_team away_score home_score home_team
 #&gt; 1       Scotiabank Arena       8       MTL          2          3       TOR
 #&gt; 2      Capital One Arena       6       BOS          0          7       WSH
