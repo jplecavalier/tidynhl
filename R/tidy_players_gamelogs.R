@@ -1,4 +1,4 @@
-#' Get a tidy dataset of players' game logs
+#' Get a tidy dataset of NHL players game logs
 #'
 #' The function `tidy_players_gamelogs()` is meant to be a user-friendly way of getting the NHL game logs of selected players.
 #'

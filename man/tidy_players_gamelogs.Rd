@@ -2,7 +2,7 @@
 % Please edit documentation in R/tidy_players_gamelogs.R
 \name{tidy_players_gamelogs}
 \alias{tidy_players_gamelogs}
-\title{Get a tidy dataset of players' game logs}
+\title{Get a tidy dataset of NHL players game logs}
 \usage{
 tidy_players_gamelogs(
   players_id,
