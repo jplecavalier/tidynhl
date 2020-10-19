@@ -38,5 +38,9 @@ seasons_info[, players_id:=lapply(season_id, function(season_id) {
 
 })]
 
+# Add missing games
+seasons_info[season_id==19891990, games_missing_id:=.(list(1989020027L))]
+seasons_info[season_id==19901991, games_missing_id:=.(c(1990020681L, 1990020526L, 1990020465L, 1990020407L, 1990020269L))]
+
 # Set key
 setkey(seasons_info, season_id)
