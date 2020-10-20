@@ -8,14 +8,29 @@
 #'   attached in the active session.
 #'
 #' @examples
-#' # Get the 2019 NHL entry draft
-#' head(tidy_draft(2019L))
+#' # Load the data.table package to easily manipulate the data
+#' library(data.table)
 #'
-#' # Get both the 2018 and 2019 NHL entry drafts, keeping  the IDs
-#' head(tidy_draft(
-#'   drafts_year = 2018:2019,
+#' # Get the 2020 NHL entry draft
+#' draft_2020 <- tidy_draft(2020L)
+#'
+#' # Print the column names
+#' colnames(draft_2020)
+#'
+#' # Print an excerpt of the data
+#' draft_2020[, .(draft_round, draft_pick, draft_overall, team_abbreviation, prospect_fullname)]
+#'
+#' # Get both the 2019 and 2020 NHL entry drafts, keeping  the IDs
+#' drafts_20192020 <- tidy_draft(
+#'   drafts_year = 2019:2020,
 #'   keep_id     = TRUE
-#' ))
+#' )
+#'
+#' # Print the column names
+#' colnames(drafts_20192020)
+#'
+#' # Print an excerpt of the data
+#' drafts_20192020[, .(draft_year, draft_overall, prospect_id, prospect_fullname, player_id)]
 #'
 #' @export
 tidy_draft <- function(drafts_year, keep_id=FALSE, return_datatable=NULL) {

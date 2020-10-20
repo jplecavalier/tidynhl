@@ -13,16 +13,31 @@
 #'   attached in the active session.
 #'
 #' @examples
+#' # Load the data.table package to easily manipulate the data
+#' library(data.table)
+#'
 #' # Get the NHL career game logs of Vincent Lecavalier
-#' head(tidy_players_gamelogs(8467329L))
+#' gamelogs_lecavalier <- tidy_players_gamelogs(8467329L)
+#'
+#' # Print the column names
+#' colnames(gamelogs_lecavalier)
+#'
+#' # Print an excerpt of the data
+#' gamelogs_lecavalier[, .(season_years, season_type, skater_goals, skater_assists, skater_shots)]
 #'
 #' # Get the NHL 2010-11 playoffs statistics of both Vincent Lecavalier and Carey Price, keeping the IDs
-#' tidy_players_gamelogs(
+#' gamelogs_2011_playoffs_lecavalier_price <- tidy_players_gamelogs(
 #'   players_id = c(8467329L, 8471679L),
 #'   seasons_id = "20102011",
 #'   regular    = FALSE,
 #'   keep_id    = TRUE
 #' )
+#'
+#' # Print the column names
+#' colnames(gamelogs_2011_playoffs_lecavalier_price)
+#'
+#' # Print an excerpt of the data
+#' gamelogs_2011_playoffs_lecavalier_price[, .(player_id, player_name, game_id, skater_points, goalie_savepct)]
 #'
 #' @export
 tidy_players_gamelogs <- function(players_id, seasons_id=NULL, regular=TRUE, playoffs=TRUE, tz=Sys.timezone(), keep_id=FALSE, return_datatable=NULL) {

@@ -10,15 +10,30 @@
 #'   attached in the active session.
 #'
 #' @examples
+#' # Load the data.table package to easily manipulate the data
+#' library(data.table)
+#'
 #' # Get the NHL career statistics of Vincent Lecavalier
-#' tidy_players_stats(8467329L)
+#' stats_lecavalier <- tidy_players_stats(8467329L)
+#'
+#' # Print the column names
+#' colnames(stats_lecavalier)
+#'
+#' # Print an excerpt of the data
+#' stats_lecavalier[, .(season_years, season_type, team_abbreviation, skater_games, skater_points)]
 #'
 #' # Get the NHL career playoffs statistics of both Vincent Lecavalier and Carey Price, keeping the IDs
-#' tidy_players_stats(
+#' stats_playoffs_lecavalier_price <- tidy_players_stats(
 #'   players_id = c(8467329L, 8471679L),
 #'   regular    = FALSE,
 #'   keep_id    = TRUE
 #' )
+#'
+#' # Print the column names
+#' colnames(stats_playoffs_lecavalier_price)
+#'
+#' # Print an excerpt of the data
+#' stats_playoffs_lecavalier_price[, .(player_id, player_name, season_years, skater_points, goalie_savepct)]
 #'
 #' @export
 tidy_players_stats <- function(players_id, regular=TRUE, playoffs=TRUE, keep_id=FALSE, return_datatable=NULL) {
