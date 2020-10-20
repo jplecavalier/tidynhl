@@ -14,6 +14,10 @@ authors:
 
 home:
   strip_header: true
+  title: An R package for extracting NHL Data in a tidy format
+  description: >
+    The goal of this package is to provide a user-friendly interface for
+    retrieving NHL data in R. It is built on top of the NHL Stats API.
 
 reference:
 - title: Tidy datasets

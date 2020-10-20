@@ -11,8 +11,8 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 
 ## Overview
 
-`tidynhl` is a user-friendly package which aims at facilitating data
-extraction through the NHL API in a ready-to-use format.
+`tidynhl` is a user-friendly R package which aims at facilitating data
+extraction through the NHL API in a ready-to-use tidy format.
 
 ## Installation
 
