@@ -31,16 +31,31 @@ attached in the active session.}
 The function \code{tidy_schedule()} is meant to be a user-friendly way of getting the NHL schedule, including the final score of completed games.
 }
 \examples{
+# Load the data.table package to easily manipulate the data
+library(data.table)
+
 # Get the schedule of the 2019-2020 regular season and playoffs
-head(tidy_schedule("20192020"))
+schedule_20192020 <- tidy_schedule("20192020")
+
+# Print the column names
+colnames(schedule_20192020)
+
+# Print an excerpt of the data
+schedule_20192020[, .(season_type, game_datetime, away_team, away_score, home_score, home_team)]
 
 # Get the regular season schedule of both the 2018-2019 and 2019-2020 seasons,
 # keeping the IDs and indicating game datetime with Los Angeles local time
-head(tidy_schedule(
+schedule_regular_20182020 <- tidy_schedule(
   seasons_id = c("20182019", "20192020"),
   playoffs   = FALSE,
   tz         = "America/Los_Angeles",
   keep_id    = TRUE
-))
+)
+
+# Print the column names
+colnames(schedule_regular_20182020)
+
+# Print an excerpt of the data
+schedule_regular_20182020[, .(season_years, game_id, game_datetime, away_team, home_team)]
 
 }
