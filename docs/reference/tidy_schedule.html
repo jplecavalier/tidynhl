@@ -176,58 +176,60 @@ attached in the active session.</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Get the schedule of the 2019-2020 regular season and playoffs</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'>tidy_schedule</span><span class='op'>(</span><span class='st'>"20192020"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   season_years season_type       game_datetime game_status
-#&gt; 1      2019-20     regular 2019-10-02 19:00:00       final
-#&gt; 2      2019-20     regular 2019-10-02 20:00:00       final
-#&gt; 3      2019-20     regular 2019-10-02 22:00:00       final
-#&gt; 4      2019-20     regular 2019-10-02 22:30:00       final
-#&gt; 5      2019-20     regular 2019-10-03 19:00:00       final
-#&gt; 6      2019-20     regular 2019-10-03 19:00:00       final
-#&gt;              venue_name away_team away_score home_score home_team game_nbot
-#&gt; 1      Scotiabank Arena       OTT          3          5       TOR         0
-#&gt; 2     Enterprise Center       WSH          3          2       STL         1
-#&gt; 3          Rogers Place       VAN          2          3       EDM         0
-#&gt; 4        T-Mobile Arena       SJS          1          4       VGK         0
-#&gt; 5          Amalie Arena       FLA          2          5       TBL         0
-#&gt; 6 Madison Square Garden       WPG          4          6       NYR         0
-#&gt;   game_shootout
-#&gt; 1         FALSE
-#&gt; 2         FALSE
-#&gt; 3         FALSE
-#&gt; 4         FALSE
-#&gt; 5         FALSE
-#&gt; 6         FALSE</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='co'># Load the data.table package to easily manipulate the data</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://r-datatable.com'>data.table</a></span><span class='op'>)</span>
+
+<span class='co'># Get the schedule of the 2019-2020 regular season and playoffs</span>
+<span class='va'>schedule_20192020</span> <span class='op'>&lt;-</span> <span class='fu'>tidy_schedule</span><span class='op'>(</span><span class='st'>"20192020"</span><span class='op'>)</span>
+
+<span class='co'># Print the column names</span>
+<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>schedule_20192020</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] "season_years"  "season_type"   "game_datetime" "game_status"  
+#&gt;  [5] "venue_name"    "away_team"     "away_score"    "home_score"   
+#&gt;  [9] "home_team"     "game_nbot"     "game_shootout"</div><div class='input'>
+<span class='co'># Print an excerpt of the data</span>
+<span class='va'>schedule_20192020</span><span class='op'>[</span>, <span class='fu'>.</span><span class='op'>(</span><span class='va'>season_type</span>, <span class='va'>game_datetime</span>, <span class='va'>away_team</span>, <span class='va'>away_score</span>, <span class='va'>home_score</span>, <span class='va'>home_team</span><span class='op'>)</span><span class='op'>]</span>
+</div><div class='output co'>#&gt;       season_type       game_datetime away_team away_score home_score home_team
+#&gt;    1:     regular 2019-10-02 19:00:00       OTT          3          5       TOR
+#&gt;    2:     regular 2019-10-02 20:00:00       WSH          3          2       STL
+#&gt;    3:     regular 2019-10-02 22:00:00       VAN          2          3       EDM
+#&gt;    4:     regular 2019-10-02 22:30:00       SJS          1          4       VGK
+#&gt;    5:     regular 2019-10-03 19:00:00       FLA          2          5       TBL
+#&gt;   ---                                                                          
+#&gt; 1208:    playoffs 2020-09-21 20:00:00       DAL          2          3       TBL
+#&gt; 1209:    playoffs 2020-09-23 20:00:00       TBL          5          2       DAL
+#&gt; 1210:    playoffs 2020-09-25 20:00:00       TBL          5          4       DAL
+#&gt; 1211:    playoffs 2020-09-26 20:00:00       DAL          3          2       TBL
+#&gt; 1212:    playoffs 2020-09-28 20:00:00       TBL          2          0       DAL</div><div class='input'>
 <span class='co'># Get the regular season schedule of both the 2018-2019 and 2019-2020 seasons,</span>
 <span class='co'># keeping the IDs and indicating game datetime with Los Angeles local time</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'>tidy_schedule</span><span class='op'>(</span>
+<span class='va'>schedule_regular_20182020</span> <span class='op'>&lt;-</span> <span class='fu'>tidy_schedule</span><span class='op'>(</span>
   seasons_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"20182019"</span>, <span class='st'>"20192020"</span><span class='op'>)</span>,
   playoffs   <span class='op'>=</span> <span class='cn'>FALSE</span>,
   tz         <span class='op'>=</span> <span class='st'>"America/Los_Angeles"</span>,
   keep_id    <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   season_id season_years season_type    game_id       game_datetime game_status
-#&gt; 1  20182019      2018-19     regular 2018020001 2018-10-03 16:00:00       final
-#&gt; 2  20182019      2018-19     regular 2018020002 2018-10-03 16:30:00       final
-#&gt; 3  20182019      2018-19     regular 2018020003 2018-10-03 19:00:00       final
-#&gt; 4  20182019      2018-19     regular 2018020004 2018-10-03 19:30:00       final
-#&gt; 5  20182019      2018-19     regular 2018020005 2018-10-04 16:00:00       final
-#&gt; 6  20182019      2018-19     regular 2018020007 2018-10-04 16:00:00       final
-#&gt;               venue_name away_id away_team away_score home_score home_team
-#&gt; 1       Scotiabank Arena       8       MTL          2          3       TOR
-#&gt; 2      Capital One Arena       6       BOS          0          7       WSH
-#&gt; 3           Rogers Arena      20       CGY          2          5       VAN
-#&gt; 4 SAP Center at San Jose      24       ANA          5          2       SJS
-#&gt; 5         KeyBank Center       6       BOS          4          0       BUF
-#&gt; 6       PPG Paints Arena      15       WSH          6          7       PIT
-#&gt;   home_id game_nbot game_shootout
-#&gt; 1      10         1         FALSE
-#&gt; 2      15         0         FALSE
-#&gt; 3      23         0         FALSE
-#&gt; 4      28         0         FALSE
-#&gt; 5       7         0         FALSE
-#&gt; 6       5         1         FALSE</div><div class='input'>
+<span class='op'>)</span>
+
+<span class='co'># Print the column names</span>
+<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>schedule_regular_20182020</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] "season_id"     "season_years"  "season_type"   "game_id"      
+#&gt;  [5] "game_datetime" "game_status"   "venue_name"    "away_id"      
+#&gt;  [9] "away_team"     "away_score"    "home_score"    "home_team"    
+#&gt; [13] "home_id"       "game_nbot"     "game_shootout"</div><div class='input'>
+<span class='co'># Print an excerpt of the data</span>
+<span class='va'>schedule_regular_20182020</span><span class='op'>[</span>, <span class='fu'>.</span><span class='op'>(</span><span class='va'>season_years</span>, <span class='va'>game_id</span>, <span class='va'>game_datetime</span>, <span class='va'>away_team</span>, <span class='va'>home_team</span><span class='op'>)</span><span class='op'>]</span>
+</div><div class='output co'>#&gt;       season_years    game_id       game_datetime away_team home_team
+#&gt;    1:      2018-19 2018020001 2018-10-03 16:00:00       MTL       TOR
+#&gt;    2:      2018-19 2018020002 2018-10-03 16:30:00       BOS       WSH
+#&gt;    3:      2018-19 2018020003 2018-10-03 19:00:00       CGY       VAN
+#&gt;    4:      2018-19 2018020004 2018-10-03 19:30:00       ANA       SJS
+#&gt;    5:      2018-19 2018020005 2018-10-04 16:00:00       BOS       BUF
+#&gt;   ---                                                                
+#&gt; 2349:      2019-20 2019021079 2020-03-11 17:00:00       SJS       CHI
+#&gt; 2350:      2019-20 2019021080 2020-03-11 18:00:00       WPG       EDM
+#&gt; 2351:      2019-20 2019020876 2020-03-11 19:00:00       STL       ANA
+#&gt; 2352:      2019-20 2019021081 2020-03-11 19:00:00       NYR       COL
+#&gt; 2353:      2019-20 2019021082 2020-03-11 19:30:00       OTT       LAK</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

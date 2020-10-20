@@ -171,530 +171,106 @@ attached in the active session.</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Get the NHL career statistics of Vincent Lecavalier</span>
-<span class='fu'>tidy_players_stats</span><span class='op'>(</span><span class='fl'>8467329L</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;           player_name season_years season_type team_abbreviation skater_games
-#&gt; 1  Vincent Lecavalier      1998-99     regular               TBL           82
-#&gt; 2  Vincent Lecavalier      1999-00     regular               TBL           80
-#&gt; 3  Vincent Lecavalier      2000-01     regular               TBL           68
-#&gt; 4  Vincent Lecavalier      2001-02     regular               TBL           76
-#&gt; 5  Vincent Lecavalier      2002-03     regular               TBL           80
-#&gt; 6  Vincent Lecavalier      2002-03    playoffs               TBL           11
-#&gt; 7  Vincent Lecavalier      2003-04     regular               TBL           81
-#&gt; 8  Vincent Lecavalier      2003-04    playoffs               TBL           23
-#&gt; 9  Vincent Lecavalier      2005-06     regular               TBL           80
-#&gt; 10 Vincent Lecavalier      2005-06    playoffs               TBL            5
-#&gt; 11 Vincent Lecavalier      2006-07     regular               TBL           82
-#&gt; 12 Vincent Lecavalier      2006-07    playoffs               TBL            6
-#&gt; 13 Vincent Lecavalier      2007-08     regular               TBL           81
-#&gt; 14 Vincent Lecavalier      2008-09     regular               TBL           77
-#&gt; 15 Vincent Lecavalier      2009-10     regular               TBL           82
-#&gt; 16 Vincent Lecavalier      2010-11     regular               TBL           65
-#&gt; 17 Vincent Lecavalier      2010-11    playoffs               TBL           18
-#&gt; 18 Vincent Lecavalier      2011-12     regular               TBL           64
-#&gt; 19 Vincent Lecavalier      2012-13     regular               TBL           39
-#&gt; 20 Vincent Lecavalier      2013-14     regular               PHI           69
-#&gt; 21 Vincent Lecavalier      2013-14    playoffs               PHI            7
-#&gt; 22 Vincent Lecavalier      2014-15     regular               PHI           57
-#&gt; 23 Vincent Lecavalier      2015-16     regular               PHI            7
-#&gt; 24 Vincent Lecavalier      2015-16     regular               LAK           42
-#&gt; 25 Vincent Lecavalier      2015-16    playoffs               LAK            5
-#&gt;    skater_goals skater_assists skater_points skater_plusminus skater_pim
-#&gt; 1            13             15            28              -19         23
-#&gt; 2            25             42            67              -25         43
-#&gt; 3            23             28            51              -26         66
-#&gt; 4            20             17            37              -18         61
-#&gt; 5            33             45            78                0         39
-#&gt; 6             3              3             6               -2         22
-#&gt; 7            32             34            66               23         52
-#&gt; 8             9              7            16               -2         25
-#&gt; 9            35             40            75                0         90
-#&gt; 10            1              3             4                0          7
-#&gt; 11           52             56           108                2         44
-#&gt; 12            5              2             7                4         10
-#&gt; 13           40             52            92              -17         89
-#&gt; 14           29             38            67               -9         54
-#&gt; 15           24             46            70              -16         63
-#&gt; 16           25             29            54               -5         43
-#&gt; 17            6             13            19                6         16
-#&gt; 18           22             27            49               -2         50
-#&gt; 19           10             22            32               -5         29
-#&gt; 20           20             17            37              -16         44
-#&gt; 21            1              1             2               -5          2
-#&gt; 22            8             12            20               -7         36
-#&gt; 23            0              1             1               -1          2
-#&gt; 24           10              7            17                1         20
-#&gt; 25            1              1             2                0          2
-#&gt;    skater_toi skater_shifts skater_gwg skater_otg skater_shots skater_blocked
-#&gt; 1  1120.11667          1155          2          0          125              0
-#&gt; 2  1544.11667          1668          3          0          166              0
-#&gt; 3  1356.13333          1436          3          0          165              0
-#&gt; 4  1302.85000          1516          3          2          164              0
-#&gt; 5  1543.25000          1843          3          0          274             13
-#&gt; 6   248.53333           325          1          1           32              0
-#&gt; 7  1462.85000          1858          6          0          242              0
-#&gt; 8   451.83333           626          0          0           76              0
-#&gt; 9  1610.11667          1881          7          1          309             33
-#&gt; 10  111.43333           137          0          0           17              1
-#&gt; 11 1853.53333          2105          7          1          339             22
-#&gt; 12  158.86667           183          1          0           30              1
-#&gt; 13 1859.08333          2014          7          0          318             21
-#&gt; 14 1559.46667          1943          6          1          291             29
-#&gt; 15 1622.81667          2029          3          0          295             21
-#&gt; 16 1199.51667          1464          5          2          210             25
-#&gt; 17  357.50000           444          3          1           56              7
-#&gt; 18 1211.60000          1407          5          1          182             31
-#&gt; 19  697.43333           851          0          0           86             13
-#&gt; 20 1048.16667          1389          3          1          132             19
-#&gt; 21   74.80000           110          0          0            9              2
-#&gt; 22  720.90000           983          0          0          103             15
-#&gt; 23   66.21667            99          0          0            7              1
-#&gt; 24  582.55000           830          0          0           60             21
-#&gt; 25   71.66667           109          0          0            8              2
-#&gt;    skater_hits skater_ev_goals skater_ev_assists skater_ev_points skater_ev_toi
-#&gt; 1           52              11                10               21     918.91667
-#&gt; 2          116              19                20               39    1114.41667
-#&gt; 3           72              16                18               34     946.13333
-#&gt; 4           85              15                 8               23    1052.18333
-#&gt; 5           43              20                32               52    1134.86667
-#&gt; 6            8               2                 1                3     199.43333
-#&gt; 7           48              25                25               50    1136.56667
-#&gt; 8           33               7                 4               11     366.68333
-#&gt; 9           78              20                20               40    1100.68333
-#&gt; 10          10               0                 2                2      72.43333
-#&gt; 11         112              31                32               63    1340.31667
-#&gt; 12          21               4                 1                5     112.26667
-#&gt; 13         112              29                30               59    1394.66667
-#&gt; 14         110              18                23               41    1120.43333
-#&gt; 15          80              19                26               45    1234.46667
-#&gt; 16          93              13                13               26     925.20000
-#&gt; 17          20               3                 9               12     281.13333
-#&gt; 18         103              17                21               38     982.26667
-#&gt; 19          74               5                18               23     570.95000
-#&gt; 20          77              12                12               24     876.33333
-#&gt; 21           4               0                 0                0      61.61667
-#&gt; 22          40               7                 9               16     610.73333
-#&gt; 23           2               0                 1                1      63.78333
-#&gt; 24          60               4                 6               10     485.61667
-#&gt; 25          11               0                 1                1      62.43333
-#&gt;    skater_pp_goals skater_pp_assists skater_pp_points skater_pp_toi
-#&gt; 1                2                 4                6    189.733333
-#&gt; 2                6                22               28    417.566667
-#&gt; 3                7                10               17    389.300000
-#&gt; 4                5                 9               14    241.433333
-#&gt; 5               11                13               24    327.400000
-#&gt; 6                1                 2                3     35.700000
-#&gt; 7                5                 9               14    282.466667
-#&gt; 8                2                 3                5     78.800000
-#&gt; 9               13                19               32    414.483333
-#&gt; 10               1                 1                2     28.783333
-#&gt; 11              16                20               36    388.150000
-#&gt; 12               1                 1                2     32.816667
-#&gt; 13              10                19               29    337.950000
-#&gt; 14              10                14               24    327.883333
-#&gt; 15               5                20               25    331.416667
-#&gt; 16              12                16               28    259.266667
-#&gt; 17               3                 4                7     72.350000
-#&gt; 18               5                 6               11    217.633333
-#&gt; 19               5                 4                9    119.200000
-#&gt; 20               8                 5               13    169.250000
-#&gt; 21               1                 1                2     13.183333
-#&gt; 22               1                 3                4    109.983333
-#&gt; 23               0                 0                0      2.433333
-#&gt; 24               6                 1                7     73.266667
-#&gt; 25               1                 0                1      7.950000
-#&gt;    skater_pk_goals skater_pk_assists skater_pk_points skater_pk_toi
-#&gt; 1                0                 1                1    11.4666667
-#&gt; 2                0                 0                0    12.1333333
-#&gt; 3                0                 0                0    20.7000000
-#&gt; 4                0                 0                0     9.2333333
-#&gt; 5                2                 0                2    80.9833333
-#&gt; 6                0                 0                0    13.4000000
-#&gt; 7                2                 0                2    43.8166667
-#&gt; 8                0                 0                0     6.3500000
-#&gt; 9                2                 1                3    94.9500000
-#&gt; 10               0                 0                0    10.2166667
-#&gt; 11               5                 4                9   125.0666667
-#&gt; 12               0                 0                0    13.7833333
-#&gt; 13               1                 3                4   126.4666667
-#&gt; 14               1                 1                2   111.1500000
-#&gt; 15               0                 0                0    56.9333333
-#&gt; 16               0                 0                0    15.0500000
-#&gt; 17               0                 0                0     4.0166667
-#&gt; 18               0                 0                0    11.7000000
-#&gt; 19               0                 0                0     7.2833333
-#&gt; 20               0                 0                0     2.5833333
-#&gt; 21               0                 0                0     0.0000000
-#&gt; 22               0                 0                0     0.1833333
-#&gt; 23               0                 0                0     0.0000000
-#&gt; 24               0                 0                0    23.6666667
-#&gt; 25               0                 0                0     1.2833333
-#&gt;    goalie_games goalie_started goalie_wins goalie_losses goalie_ties goalie_ot
-#&gt; 1            NA             NA          NA            NA          NA        NA
-#&gt; 2            NA             NA          NA            NA          NA        NA
-#&gt; 3            NA             NA          NA            NA          NA        NA
-#&gt; 4            NA             NA          NA            NA          NA        NA
-#&gt; 5            NA             NA          NA            NA          NA        NA
-#&gt; 6            NA             NA          NA            NA          NA        NA
-#&gt; 7            NA             NA          NA            NA          NA        NA
-#&gt; 8            NA             NA          NA            NA          NA        NA
-#&gt; 9            NA             NA          NA            NA          NA        NA
-#&gt; 10           NA             NA          NA            NA          NA        NA
-#&gt; 11           NA             NA          NA            NA          NA        NA
-#&gt; 12           NA             NA          NA            NA          NA        NA
-#&gt; 13           NA             NA          NA            NA          NA        NA
-#&gt; 14           NA             NA          NA            NA          NA        NA
-#&gt; 15           NA             NA          NA            NA          NA        NA
-#&gt; 16           NA             NA          NA            NA          NA        NA
-#&gt; 17           NA             NA          NA            NA          NA        NA
-#&gt; 18           NA             NA          NA            NA          NA        NA
-#&gt; 19           NA             NA          NA            NA          NA        NA
-#&gt; 20           NA             NA          NA            NA          NA        NA
-#&gt; 21           NA             NA          NA            NA          NA        NA
-#&gt; 22           NA             NA          NA            NA          NA        NA
-#&gt; 23           NA             NA          NA            NA          NA        NA
-#&gt; 24           NA             NA          NA            NA          NA        NA
-#&gt; 25           NA             NA          NA            NA          NA        NA
-#&gt;    goalie_shutouts goalie_shotagainst goalie_goalagainst goalie_savepct
-#&gt; 1               NA                 NA                 NA             NA
-#&gt; 2               NA                 NA                 NA             NA
-#&gt; 3               NA                 NA                 NA             NA
-#&gt; 4               NA                 NA                 NA             NA
-#&gt; 5               NA                 NA                 NA             NA
-#&gt; 6               NA                 NA                 NA             NA
-#&gt; 7               NA                 NA                 NA             NA
-#&gt; 8               NA                 NA                 NA             NA
-#&gt; 9               NA                 NA                 NA             NA
-#&gt; 10              NA                 NA                 NA             NA
-#&gt; 11              NA                 NA                 NA             NA
-#&gt; 12              NA                 NA                 NA             NA
-#&gt; 13              NA                 NA                 NA             NA
-#&gt; 14              NA                 NA                 NA             NA
-#&gt; 15              NA                 NA                 NA             NA
-#&gt; 16              NA                 NA                 NA             NA
-#&gt; 17              NA                 NA                 NA             NA
-#&gt; 18              NA                 NA                 NA             NA
-#&gt; 19              NA                 NA                 NA             NA
-#&gt; 20              NA                 NA                 NA             NA
-#&gt; 21              NA                 NA                 NA             NA
-#&gt; 22              NA                 NA                 NA             NA
-#&gt; 23              NA                 NA                 NA             NA
-#&gt; 24              NA                 NA                 NA             NA
-#&gt; 25              NA                 NA                 NA             NA
-#&gt;    goalie_gaa goalie_toi goalie_ev_shotagainst goalie_ev_goalagainst
-#&gt; 1          NA         NA                    NA                    NA
-#&gt; 2          NA         NA                    NA                    NA
-#&gt; 3          NA         NA                    NA                    NA
-#&gt; 4          NA         NA                    NA                    NA
-#&gt; 5          NA         NA                    NA                    NA
-#&gt; 6          NA         NA                    NA                    NA
-#&gt; 7          NA         NA                    NA                    NA
-#&gt; 8          NA         NA                    NA                    NA
-#&gt; 9          NA         NA                    NA                    NA
-#&gt; 10         NA         NA                    NA                    NA
-#&gt; 11         NA         NA                    NA                    NA
-#&gt; 12         NA         NA                    NA                    NA
-#&gt; 13         NA         NA                    NA                    NA
-#&gt; 14         NA         NA                    NA                    NA
-#&gt; 15         NA         NA                    NA                    NA
-#&gt; 16         NA         NA                    NA                    NA
-#&gt; 17         NA         NA                    NA                    NA
-#&gt; 18         NA         NA                    NA                    NA
-#&gt; 19         NA         NA                    NA                    NA
-#&gt; 20         NA         NA                    NA                    NA
-#&gt; 21         NA         NA                    NA                    NA
-#&gt; 22         NA         NA                    NA                    NA
-#&gt; 23         NA         NA                    NA                    NA
-#&gt; 24         NA         NA                    NA                    NA
-#&gt; 25         NA         NA                    NA                    NA
-#&gt;    goalie_ev_savepct goalie_pp_shotagainst goalie_pp_goalagainst
-#&gt; 1                 NA                    NA                    NA
-#&gt; 2                 NA                    NA                    NA
-#&gt; 3                 NA                    NA                    NA
-#&gt; 4                 NA                    NA                    NA
-#&gt; 5                 NA                    NA                    NA
-#&gt; 6                 NA                    NA                    NA
-#&gt; 7                 NA                    NA                    NA
-#&gt; 8                 NA                    NA                    NA
-#&gt; 9                 NA                    NA                    NA
-#&gt; 10                NA                    NA                    NA
-#&gt; 11                NA                    NA                    NA
-#&gt; 12                NA                    NA                    NA
-#&gt; 13                NA                    NA                    NA
-#&gt; 14                NA                    NA                    NA
-#&gt; 15                NA                    NA                    NA
-#&gt; 16                NA                    NA                    NA
-#&gt; 17                NA                    NA                    NA
-#&gt; 18                NA                    NA                    NA
-#&gt; 19                NA                    NA                    NA
-#&gt; 20                NA                    NA                    NA
-#&gt; 21                NA                    NA                    NA
-#&gt; 22                NA                    NA                    NA
-#&gt; 23                NA                    NA                    NA
-#&gt; 24                NA                    NA                    NA
-#&gt; 25                NA                    NA                    NA
-#&gt;    goalie_pp_savepct goalie_pk_shotagainst goalie_pk_goalagainst
-#&gt; 1                 NA                    NA                    NA
-#&gt; 2                 NA                    NA                    NA
-#&gt; 3                 NA                    NA                    NA
-#&gt; 4                 NA                    NA                    NA
-#&gt; 5                 NA                    NA                    NA
-#&gt; 6                 NA                    NA                    NA
-#&gt; 7                 NA                    NA                    NA
-#&gt; 8                 NA                    NA                    NA
-#&gt; 9                 NA                    NA                    NA
-#&gt; 10                NA                    NA                    NA
-#&gt; 11                NA                    NA                    NA
-#&gt; 12                NA                    NA                    NA
-#&gt; 13                NA                    NA                    NA
-#&gt; 14                NA                    NA                    NA
-#&gt; 15                NA                    NA                    NA
-#&gt; 16                NA                    NA                    NA
-#&gt; 17                NA                    NA                    NA
-#&gt; 18                NA                    NA                    NA
-#&gt; 19                NA                    NA                    NA
-#&gt; 20                NA                    NA                    NA
-#&gt; 21                NA                    NA                    NA
-#&gt; 22                NA                    NA                    NA
-#&gt; 23                NA                    NA                    NA
-#&gt; 24                NA                    NA                    NA
-#&gt; 25                NA                    NA                    NA
-#&gt;    goalie_pk_savepct
-#&gt; 1                 NA
-#&gt; 2                 NA
-#&gt; 3                 NA
-#&gt; 4                 NA
-#&gt; 5                 NA
-#&gt; 6                 NA
-#&gt; 7                 NA
-#&gt; 8                 NA
-#&gt; 9                 NA
-#&gt; 10                NA
-#&gt; 11                NA
-#&gt; 12                NA
-#&gt; 13                NA
-#&gt; 14                NA
-#&gt; 15                NA
-#&gt; 16                NA
-#&gt; 17                NA
-#&gt; 18                NA
-#&gt; 19                NA
-#&gt; 20                NA
-#&gt; 21                NA
-#&gt; 22                NA
-#&gt; 23                NA
-#&gt; 24                NA
-#&gt; 25                NA</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='co'># Load the data.table package to easily manipulate the data</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://r-datatable.com'>data.table</a></span><span class='op'>)</span>
+
+<span class='co'># Get the NHL career statistics of Vincent Lecavalier</span>
+<span class='va'>stats_lecavalier</span> <span class='op'>&lt;-</span> <span class='fu'>tidy_players_stats</span><span class='op'>(</span><span class='fl'>8467329L</span><span class='op'>)</span>
+
+<span class='co'># Print the column names</span>
+<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>stats_lecavalier</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] "player_name"           "season_years"          "season_type"          
+#&gt;  [4] "team_abbreviation"     "skater_games"          "skater_goals"         
+#&gt;  [7] "skater_assists"        "skater_points"         "skater_plusminus"     
+#&gt; [10] "skater_pim"            "skater_toi"            "skater_shifts"        
+#&gt; [13] "skater_gwg"            "skater_otg"            "skater_shots"         
+#&gt; [16] "skater_blocked"        "skater_hits"           "skater_ev_goals"      
+#&gt; [19] "skater_ev_assists"     "skater_ev_points"      "skater_ev_toi"        
+#&gt; [22] "skater_pp_goals"       "skater_pp_assists"     "skater_pp_points"     
+#&gt; [25] "skater_pp_toi"         "skater_pk_goals"       "skater_pk_assists"    
+#&gt; [28] "skater_pk_points"      "skater_pk_toi"         "goalie_games"         
+#&gt; [31] "goalie_started"        "goalie_wins"           "goalie_losses"        
+#&gt; [34] "goalie_ties"           "goalie_ot"             "goalie_shutouts"      
+#&gt; [37] "goalie_shotagainst"    "goalie_goalagainst"    "goalie_savepct"       
+#&gt; [40] "goalie_gaa"            "goalie_toi"            "goalie_ev_shotagainst"
+#&gt; [43] "goalie_ev_goalagainst" "goalie_ev_savepct"     "goalie_pp_shotagainst"
+#&gt; [46] "goalie_pp_goalagainst" "goalie_pp_savepct"     "goalie_pk_shotagainst"
+#&gt; [49] "goalie_pk_goalagainst" "goalie_pk_savepct"    </div><div class='input'>
+<span class='co'># Print an excerpt of the data</span>
+<span class='va'>stats_lecavalier</span><span class='op'>[</span>, <span class='fu'>.</span><span class='op'>(</span><span class='va'>season_years</span>, <span class='va'>season_type</span>, <span class='va'>team_abbreviation</span>, <span class='va'>skater_games</span>, <span class='va'>skater_points</span><span class='op'>)</span><span class='op'>]</span>
+</div><div class='output co'>#&gt;     season_years season_type team_abbreviation skater_games skater_points
+#&gt;  1:      1998-99     regular               TBL           82            28
+#&gt;  2:      1999-00     regular               TBL           80            67
+#&gt;  3:      2000-01     regular               TBL           68            51
+#&gt;  4:      2001-02     regular               TBL           76            37
+#&gt;  5:      2002-03     regular               TBL           80            78
+#&gt;  6:      2002-03    playoffs               TBL           11             6
+#&gt;  7:      2003-04     regular               TBL           81            66
+#&gt;  8:      2003-04    playoffs               TBL           23            16
+#&gt;  9:      2005-06     regular               TBL           80            75
+#&gt; 10:      2005-06    playoffs               TBL            5             4
+#&gt; 11:      2006-07     regular               TBL           82           108
+#&gt; 12:      2006-07    playoffs               TBL            6             7
+#&gt; 13:      2007-08     regular               TBL           81            92
+#&gt; 14:      2008-09     regular               TBL           77            67
+#&gt; 15:      2009-10     regular               TBL           82            70
+#&gt; 16:      2010-11     regular               TBL           65            54
+#&gt; 17:      2010-11    playoffs               TBL           18            19
+#&gt; 18:      2011-12     regular               TBL           64            49
+#&gt; 19:      2012-13     regular               TBL           39            32
+#&gt; 20:      2013-14     regular               PHI           69            37
+#&gt; 21:      2013-14    playoffs               PHI            7             2
+#&gt; 22:      2014-15     regular               PHI           57            20
+#&gt; 23:      2015-16     regular               PHI            7             1
+#&gt; 24:      2015-16     regular               LAK           42            17
+#&gt; 25:      2015-16    playoffs               LAK            5             2
+#&gt;     season_years season_type team_abbreviation skater_games skater_points</div><div class='input'>
 <span class='co'># Get the NHL career playoffs statistics of both Vincent Lecavalier and Carey Price, keeping the IDs</span>
-<span class='fu'>tidy_players_stats</span><span class='op'>(</span>
+<span class='va'>stats_playoffs_lecavalier_price</span> <span class='op'>&lt;-</span> <span class='fu'>tidy_players_stats</span><span class='op'>(</span>
   players_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>8467329L</span>, <span class='fl'>8471679L</span><span class='op'>)</span>,
   regular    <span class='op'>=</span> <span class='cn'>FALSE</span>,
   keep_id    <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span>
-</div><div class='output co'>#&gt;    player_id        player_name season_id season_years season_type team_id
-#&gt; 1    8467329 Vincent Lecavalier  20022003      2002-03    playoffs      14
-#&gt; 2    8467329 Vincent Lecavalier  20032004      2003-04    playoffs      14
-#&gt; 3    8467329 Vincent Lecavalier  20052006      2005-06    playoffs      14
-#&gt; 4    8467329 Vincent Lecavalier  20062007      2006-07    playoffs      14
-#&gt; 5    8467329 Vincent Lecavalier  20102011      2010-11    playoffs      14
-#&gt; 6    8467329 Vincent Lecavalier  20132014      2013-14    playoffs       4
-#&gt; 7    8467329 Vincent Lecavalier  20152016      2015-16    playoffs      26
-#&gt; 8    8471679        Carey Price  20072008      2007-08    playoffs       8
-#&gt; 9    8471679        Carey Price  20082009      2008-09    playoffs       8
-#&gt; 10   8471679        Carey Price  20092010      2009-10    playoffs       8
-#&gt; 11   8471679        Carey Price  20102011      2010-11    playoffs       8
-#&gt; 12   8471679        Carey Price  20122013      2012-13    playoffs       8
-#&gt; 13   8471679        Carey Price  20132014      2013-14    playoffs       8
-#&gt; 14   8471679        Carey Price  20142015      2014-15    playoffs       8
-#&gt; 15   8471679        Carey Price  20162017      2016-17    playoffs       8
-#&gt; 16   8471679        Carey Price  20192020      2019-20    playoffs       8
-#&gt;    team_abbreviation skater_games skater_goals skater_assists skater_points
-#&gt; 1                TBL           11            3              3             6
-#&gt; 2                TBL           23            9              7            16
-#&gt; 3                TBL            5            1              3             4
-#&gt; 4                TBL            6            5              2             7
-#&gt; 5                TBL           18            6             13            19
-#&gt; 6                PHI            7            1              1             2
-#&gt; 7                LAK            5            1              1             2
-#&gt; 8                MTL           NA           NA             NA            NA
-#&gt; 9                MTL           NA           NA             NA            NA
-#&gt; 10               MTL           NA           NA             NA            NA
-#&gt; 11               MTL           NA           NA             NA            NA
-#&gt; 12               MTL           NA           NA             NA            NA
-#&gt; 13               MTL           NA           NA             NA            NA
-#&gt; 14               MTL           NA           NA             NA            NA
-#&gt; 15               MTL           NA           NA             NA            NA
-#&gt; 16               MTL           NA           NA             NA            NA
-#&gt;    skater_plusminus skater_pim skater_toi skater_shifts skater_gwg skater_otg
-#&gt; 1                -2         22  248.53333           325          1          1
-#&gt; 2                -2         25  451.83333           626          0          0
-#&gt; 3                 0          7  111.43333           137          0          0
-#&gt; 4                 4         10  158.86667           183          1          0
-#&gt; 5                 6         16  357.50000           444          3          1
-#&gt; 6                -5          2   74.80000           110          0          0
-#&gt; 7                 0          2   71.66667           109          0          0
-#&gt; 8                NA         NA         NA            NA         NA         NA
-#&gt; 9                NA         NA         NA            NA         NA         NA
-#&gt; 10               NA         NA         NA            NA         NA         NA
-#&gt; 11               NA         NA         NA            NA         NA         NA
-#&gt; 12               NA         NA         NA            NA         NA         NA
-#&gt; 13               NA         NA         NA            NA         NA         NA
-#&gt; 14               NA         NA         NA            NA         NA         NA
-#&gt; 15               NA         NA         NA            NA         NA         NA
-#&gt; 16               NA         NA         NA            NA         NA         NA
-#&gt;    skater_shots skater_blocked skater_hits skater_ev_goals skater_ev_assists
-#&gt; 1            32              0           8               2                 1
-#&gt; 2            76              0          33               7                 4
-#&gt; 3            17              1          10               0                 2
-#&gt; 4            30              1          21               4                 1
-#&gt; 5            56              7          20               3                 9
-#&gt; 6             9              2           4               0                 0
-#&gt; 7             8              2          11               0                 1
-#&gt; 8            NA             NA          NA              NA                NA
-#&gt; 9            NA             NA          NA              NA                NA
-#&gt; 10           NA             NA          NA              NA                NA
-#&gt; 11           NA             NA          NA              NA                NA
-#&gt; 12           NA             NA          NA              NA                NA
-#&gt; 13           NA             NA          NA              NA                NA
-#&gt; 14           NA             NA          NA              NA                NA
-#&gt; 15           NA             NA          NA              NA                NA
-#&gt; 16           NA             NA          NA              NA                NA
-#&gt;    skater_ev_points skater_ev_toi skater_pp_goals skater_pp_assists
-#&gt; 1                 3     199.43333               1                 2
-#&gt; 2                11     366.68333               2                 3
-#&gt; 3                 2      72.43333               1                 1
-#&gt; 4                 5     112.26667               1                 1
-#&gt; 5                12     281.13333               3                 4
-#&gt; 6                 0      61.61667               1                 1
-#&gt; 7                 1      62.43333               1                 0
-#&gt; 8                NA            NA              NA                NA
-#&gt; 9                NA            NA              NA                NA
-#&gt; 10               NA            NA              NA                NA
-#&gt; 11               NA            NA              NA                NA
-#&gt; 12               NA            NA              NA                NA
-#&gt; 13               NA            NA              NA                NA
-#&gt; 14               NA            NA              NA                NA
-#&gt; 15               NA            NA              NA                NA
-#&gt; 16               NA            NA              NA                NA
-#&gt;    skater_pp_points skater_pp_toi skater_pk_goals skater_pk_assists
-#&gt; 1                 3      35.70000               0                 0
-#&gt; 2                 5      78.80000               0                 0
-#&gt; 3                 2      28.78333               0                 0
-#&gt; 4                 2      32.81667               0                 0
-#&gt; 5                 7      72.35000               0                 0
-#&gt; 6                 2      13.18333               0                 0
-#&gt; 7                 1       7.95000               0                 0
-#&gt; 8                NA            NA              NA                NA
-#&gt; 9                NA            NA              NA                NA
-#&gt; 10               NA            NA              NA                NA
-#&gt; 11               NA            NA              NA                NA
-#&gt; 12               NA            NA              NA                NA
-#&gt; 13               NA            NA              NA                NA
-#&gt; 14               NA            NA              NA                NA
-#&gt; 15               NA            NA              NA                NA
-#&gt; 16               NA            NA              NA                NA
-#&gt;    skater_pk_points skater_pk_toi goalie_games goalie_started goalie_wins
-#&gt; 1                 0     13.400000           NA             NA          NA
-#&gt; 2                 0      6.350000           NA             NA          NA
-#&gt; 3                 0     10.216667           NA             NA          NA
-#&gt; 4                 0     13.783333           NA             NA          NA
-#&gt; 5                 0      4.016667           NA             NA          NA
-#&gt; 6                 0      0.000000           NA             NA          NA
-#&gt; 7                 0      1.283333           NA             NA          NA
-#&gt; 8                NA            NA           11             11           5
-#&gt; 9                NA            NA            4              4           0
-#&gt; 10               NA            NA            4              1           0
-#&gt; 11               NA            NA            7              7           3
-#&gt; 12               NA            NA            4              4           1
-#&gt; 13               NA            NA           12             12           8
-#&gt; 14               NA            NA           12             12           6
-#&gt; 15               NA            NA            6              6           2
-#&gt; 16               NA            NA           10             10           5
-#&gt;    goalie_losses goalie_ties goalie_ot goalie_shutouts goalie_shotagainst
-#&gt; 1             NA          NA        NA              NA                 NA
-#&gt; 2             NA          NA        NA              NA                 NA
-#&gt; 3             NA          NA        NA              NA                 NA
-#&gt; 4             NA          NA        NA              NA                 NA
-#&gt; 5             NA          NA        NA              NA                 NA
-#&gt; 6             NA          NA        NA              NA                 NA
-#&gt; 7             NA          NA        NA              NA                 NA
-#&gt; 8              6          NA        NA               2                304
-#&gt; 9              4          NA        NA               0                123
-#&gt; 10             1          NA        NA               0                 73
-#&gt; 11             4          NA        NA               1                242
-#&gt; 12             2          NA        NA               0                123
-#&gt; 13             4          NA        NA               1                358
-#&gt; 14             6          NA        NA               1                352
-#&gt; 15             4          NA        NA               0                179
-#&gt; 16             5          NA         0               2                282
-#&gt;    goalie_goalagainst goalie_savepct goalie_gaa goalie_toi
-#&gt; 1                  NA             NA         NA         NA
-#&gt; 2                  NA             NA         NA         NA
-#&gt; 3                  NA             NA         NA         NA
-#&gt; 4                  NA             NA         NA         NA
-#&gt; 5                  NA             NA         NA         NA
-#&gt; 6                  NA             NA         NA         NA
-#&gt; 7                  NA             NA         NA         NA
-#&gt; 8                  30      0.9013158   2.776136   648.3833
-#&gt; 9                  15      0.8780488   4.106464   219.1667
-#&gt; 10                  8      0.8904110   3.564356   134.6667
-#&gt; 11                 16      0.9338843   2.107651   455.4833
-#&gt; 12                 13      0.8943089   3.262461   239.0833
-#&gt; 13                 29      0.9189944   2.355277   738.7667
-#&gt; 14                 28      0.9204545   2.234885   751.7167
-#&gt; 15                 12      0.9329609   1.858224   387.4667
-#&gt; 16                 18      0.9361702   1.783552   605.5333
-#&gt;    goalie_ev_shotagainst goalie_ev_goalagainst goalie_ev_savepct
-#&gt; 1                     NA                    NA                NA
-#&gt; 2                     NA                    NA                NA
-#&gt; 3                     NA                    NA                NA
-#&gt; 4                     NA                    NA                NA
-#&gt; 5                     NA                    NA                NA
-#&gt; 6                     NA                    NA                NA
-#&gt; 7                     NA                    NA                NA
-#&gt; 8                    232                    23         0.9008621
-#&gt; 9                     99                    11         0.8888889
-#&gt; 10                    57                     6         0.8947368
-#&gt; 11                   216                    16         0.9259259
-#&gt; 12                   101                    10         0.9009901
-#&gt; 13                   309                    23         0.9255663
-#&gt; 14                   288                    16         0.9444444
-#&gt; 15                   156                    10         0.9358974
-#&gt; 16                   208                    11         0.9471154
-#&gt;    goalie_pp_shotagainst goalie_pp_goalagainst goalie_pp_savepct
-#&gt; 1                     NA                    NA                NA
-#&gt; 2                     NA                    NA                NA
-#&gt; 3                     NA                    NA                NA
-#&gt; 4                     NA                    NA                NA
-#&gt; 5                     NA                    NA                NA
-#&gt; 6                     NA                    NA                NA
-#&gt; 7                     NA                    NA                NA
-#&gt; 8                     53                     5         0.9056604
-#&gt; 9                     22                     4         0.8181818
-#&gt; 10                    15                     1         0.9333333
-#&gt; 11                    21                     0         1.0000000
-#&gt; 12                    20                     3         0.8500000
-#&gt; 13                    42                     5         0.8809524
-#&gt; 14                    51                    12         0.7647059
-#&gt; 15                    18                     1         0.9444444
-#&gt; 16                    70                     7         0.9000000
-#&gt;    goalie_pk_shotagainst goalie_pk_goalagainst goalie_pk_savepct
-#&gt; 1                     NA                    NA                NA
-#&gt; 2                     NA                    NA                NA
-#&gt; 3                     NA                    NA                NA
-#&gt; 4                     NA                    NA                NA
-#&gt; 5                     NA                    NA                NA
-#&gt; 6                     NA                    NA                NA
-#&gt; 7                     NA                    NA                NA
-#&gt; 8                     19                     2         0.8947368
-#&gt; 9                      2                     0         1.0000000
-#&gt; 10                     1                     1         0.0000000
-#&gt; 11                     5                     0         1.0000000
-#&gt; 12                     2                     0         1.0000000
-#&gt; 13                     7                     1         0.8571429
-#&gt; 14                    13                     0         1.0000000
-#&gt; 15                     5                     1         0.8000000
-#&gt; 16                     4                     0         1.0000000</div><div class='input'>
+
+<span class='co'># Print the column names</span>
+<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>stats_playoffs_lecavalier_price</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] "player_id"             "player_name"           "season_id"            
+#&gt;  [4] "season_years"          "season_type"           "team_id"              
+#&gt;  [7] "team_abbreviation"     "skater_games"          "skater_goals"         
+#&gt; [10] "skater_assists"        "skater_points"         "skater_plusminus"     
+#&gt; [13] "skater_pim"            "skater_toi"            "skater_shifts"        
+#&gt; [16] "skater_gwg"            "skater_otg"            "skater_shots"         
+#&gt; [19] "skater_blocked"        "skater_hits"           "skater_ev_goals"      
+#&gt; [22] "skater_ev_assists"     "skater_ev_points"      "skater_ev_toi"        
+#&gt; [25] "skater_pp_goals"       "skater_pp_assists"     "skater_pp_points"     
+#&gt; [28] "skater_pp_toi"         "skater_pk_goals"       "skater_pk_assists"    
+#&gt; [31] "skater_pk_points"      "skater_pk_toi"         "goalie_games"         
+#&gt; [34] "goalie_started"        "goalie_wins"           "goalie_losses"        
+#&gt; [37] "goalie_ties"           "goalie_ot"             "goalie_shutouts"      
+#&gt; [40] "goalie_shotagainst"    "goalie_goalagainst"    "goalie_savepct"       
+#&gt; [43] "goalie_gaa"            "goalie_toi"            "goalie_ev_shotagainst"
+#&gt; [46] "goalie_ev_goalagainst" "goalie_ev_savepct"     "goalie_pp_shotagainst"
+#&gt; [49] "goalie_pp_goalagainst" "goalie_pp_savepct"     "goalie_pk_shotagainst"
+#&gt; [52] "goalie_pk_goalagainst" "goalie_pk_savepct"    </div><div class='input'>
+<span class='co'># Print an excerpt of the data</span>
+<span class='va'>stats_playoffs_lecavalier_price</span><span class='op'>[</span>, <span class='fu'>.</span><span class='op'>(</span><span class='va'>player_id</span>, <span class='va'>player_name</span>, <span class='va'>season_years</span>, <span class='va'>skater_points</span>, <span class='va'>goalie_savepct</span><span class='op'>)</span><span class='op'>]</span>
+</div><div class='output co'>#&gt;     player_id        player_name season_years skater_points goalie_savepct
+#&gt;  1:   8467329 Vincent Lecavalier      2002-03             6             NA
+#&gt;  2:   8467329 Vincent Lecavalier      2003-04            16             NA
+#&gt;  3:   8467329 Vincent Lecavalier      2005-06             4             NA
+#&gt;  4:   8467329 Vincent Lecavalier      2006-07             7             NA
+#&gt;  5:   8467329 Vincent Lecavalier      2010-11            19             NA
+#&gt;  6:   8467329 Vincent Lecavalier      2013-14             2             NA
+#&gt;  7:   8467329 Vincent Lecavalier      2015-16             2             NA
+#&gt;  8:   8471679        Carey Price      2007-08            NA      0.9013158
+#&gt;  9:   8471679        Carey Price      2008-09            NA      0.8780488
+#&gt; 10:   8471679        Carey Price      2009-10            NA      0.8904110
+#&gt; 11:   8471679        Carey Price      2010-11            NA      0.9338843
+#&gt; 12:   8471679        Carey Price      2012-13            NA      0.8943089
+#&gt; 13:   8471679        Carey Price      2013-14            NA      0.9189944
+#&gt; 14:   8471679        Carey Price      2014-15            NA      0.9204545
+#&gt; 15:   8471679        Carey Price      2016-17            NA      0.9329609
+#&gt; 16:   8471679        Carey Price      2019-20            NA      0.9361702</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
