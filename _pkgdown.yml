@@ -25,3 +25,9 @@ reference:
     All `tidynhl` functions that will return a ready-to-use dataset.
   contents:
   - starts_with("tidy_")
+
+- title: Get functions
+  desc: >
+    All `tidynhl` functions that will return a vector having the same length as its parameters.
+  contents:
+  - starts_with("get_")
