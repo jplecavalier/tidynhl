@@ -21,12 +21,12 @@ The function \code{get_players_id()} is meant to be a user-friendly way of getti
 get_players_id("Vincent Lecavalier")
 
 # Get the NHL ID of Vincent Lecavalier and Josh Anderson
-get_players_id(c("Vincent Lecavalier", "Josh Anderson))
+get_players_id(c("Vincent Lecavalier", "Josh Anderson"))
 
 # Get the NHL ID of Vincent Lecavalier and Josh Anderson (born May 7, 1994)
 get_players_id(
-  players_name = c("Vincent Lecavalier", "Josh Anderson),
-  players_dob = c(NA_character_, as.Date("1994-05-07"))
+  players_name = c("Vincent Lecavalier", "Josh Anderson"),
+  players_dob = as.Date(c(NA, "1994-05-07"))
 )
 
 }
