@@ -54,7 +54,7 @@ get_players_id <- function(players_name, players_dob=NULL, players_position_type
 
     if (length(player_id)==0L) {
 
-      warnings(paste0(
+      warning(paste0(
         "no ID matching for ",
         player_name,
         ", NA returned"
