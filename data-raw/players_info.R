@@ -69,8 +69,8 @@ players_info <- rbindlist(lapply(players_id, function(id) {
     player_inches = height_inch(player$height),
     player_pounds = player$weight,
     player_hand = player$shootsCatches,
-    player_position_code = player$primaryPosition.code,
-    player_position_type = player$primaryPosition.type
+    player_position = player$primaryPosition.code,
+    player_position_type = str_sub(player$primaryPosition.type, 1L, 1L)
   )
 
 }))
