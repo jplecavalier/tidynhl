@@ -60,7 +60,7 @@ get_players_id <- function(players_name, players_dob=NULL, players_position_type
         ", NA returned"
       ))
 
-      player_id <- NA_character_
+      player_id <- NA_integer_
 
     } else if (length(player_id)>1L) {
 
