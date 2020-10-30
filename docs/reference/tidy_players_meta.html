@@ -175,9 +175,6 @@ attached in the active session.</p></td>
 <span class='va'>metadata_lecavalier</span><span class='op'>[</span>, <span class='fu'>.</span><span class='op'>(</span><span class='va'>player_name</span>, <span class='va'>player_birth_date</span>, <span class='va'>player_nationality</span>, <span class='va'>player_hand</span><span class='op'>)</span><span class='op'>]</span>
 </div><div class='output co'>#&gt;           player_name player_birth_date player_nationality player_hand
 #&gt; 1: Vincent Lecavalier        1980-04-21                CAN           L</div><div class='input'>
-<span class='co'># Print an excerpt of the data</span>
-<span class='va'>gamelogs_lecavalier</span><span class='op'>[</span>, <span class='fu'>.</span><span class='op'>(</span><span class='va'>season_years</span>, <span class='va'>season_type</span>, <span class='va'>skater_goals</span>, <span class='va'>skater_assists</span>, <span class='va'>skater_shots</span><span class='op'>)</span><span class='op'>]</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in eval(expr, envir, enclos): object 'gamelogs_lecavalier' not found</span></div><div class='input'>
 <span class='co'># Get metadata about both Vincent Lecavalier and Carey Price, keeping the IDs</span>
 <span class='va'>metadata_lecavalier_price</span> <span class='op'>&lt;-</span> <span class='fu'>tidy_players_meta</span><span class='op'>(</span>
   players_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>8467329L</span>, <span class='fl'>8471679L</span><span class='op'>)</span>,

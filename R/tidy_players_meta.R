@@ -20,9 +20,6 @@
 #' # Print an excerpt of the data
 #' metadata_lecavalier[, .(player_name, player_birth_date, player_nationality, player_hand)]
 #'
-#' # Print an excerpt of the data
-#' gamelogs_lecavalier[, .(season_years, season_type, skater_goals, skater_assists, skater_shots)]
-#'
 #' # Get metadata about both Vincent Lecavalier and Carey Price, keeping the IDs
 #' metadata_lecavalier_price <- tidy_players_meta(
 #'   players_id = c(8467329L, 8471679L),
