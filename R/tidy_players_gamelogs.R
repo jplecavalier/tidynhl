@@ -46,8 +46,6 @@ tidy_players_gamelogs <- function(players_id, seasons_id=NULL, regular=TRUE, pla
     return_datatable <- "data.table"%in%.packages()
   }
 
-  # TO DO: Automatic seasons_id using tidy_players_stats()
-
   if (is.null(seasons_id)) {
     temp <- tidy_players_stats(players_id, regular, playoffs, TRUE, TRUE)[, .(seasons_id=list(unique(season_id))), .(player_id)]
     seasons_id <- data.table(player_id=players_id)[temp, seasons_id:=seasons_id, on=.(player_id)][, seasons_id]
