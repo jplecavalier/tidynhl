@@ -89,6 +89,8 @@ tidy_draft <- function(drafts_year, keep_id=FALSE, return_datatable=NULL) {
 
   setcolorder(drafts, c("draft_year", "draft_round", "draft_pick", "draft_overall", "team_id", "team_abbreviation", "prospect_id", "prospect_fullname", "player_id"))
 
+  setorder(drafts, draft_year, draft_overall)
+
   if (!keep_id) {
     drafts[, colnames(drafts)[grep("_id$", colnames(drafts))]:=NULL]
   }
