@@ -157,5 +157,5 @@ playoff year while he was anywhere but in the Sunshine State.
 
 ## Conclusion
 
-As we saw by in this short introduction to `tidynhl`, the main goal of the package is to make it easy to retrieve NHL data, even for R beginning
+As we saw in this short introduction to `tidynhl`, the main goal of the package is to make it easy to retrieve NHL data, even for R beginning
 users.
