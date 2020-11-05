@@ -20,9 +20,9 @@ set.seed(20201031L)
 The goal of `tidynhl` is to make it easy for users to extract NHL data in a tidy format. In this sense, the word tidy refers to a state in which the data is
 already neat enough to begin analyses right away, without having to clean anything or make any significant transformations.
 
-This package was at first a project that I created to answer my personal needs. This explains, in part, the dependency to the `data.table` package (since I am
-a massive user on my own). Even if I could get rid of the dependency without significant efforts, I decided to stick on it, trying to influence the most
-possible users to at least give it a try. This being said, it is totally possible to use the package without using `data.table` to handle the resulting data.
+This package was at first a project that I created to answer personal needs. This explains, in part, the dependency to the `data.table` package (I myself am
+a massive user). Even if I could get rid of the dependency without significant efforts, I decided to stick to it, hoping to influence as many users as
+possible to at least give it a try. This being said, it is totally possible to use the package without using `data.table` to handle the resulting data.
 The native behavior of `tidynhl` is to return tidy datasets in `data.table` objects when the `data.table` package is attached to the current R session. In any
 other cases, the returned datasets will be standard `data.frame` objects that could be handled directly with the native R functions, or transformed into
 `tibble` objects for analysis with `dplyr`.
@@ -44,7 +44,7 @@ The package contains two different families of functions:
 ## NHL Entry Drafts
 
 Even though Lecavalier and St. Louis both had successful careers, their NHL beginnings were totally opposite. Indeed, Lecavalier was the overall first pick of
-the 1998 NHL Entry Draft while St. Louis was never drafted at all (even though he would have been available to select in the 1993 NHL Entry Draft). First,
+the 1998 NHL Entry Draft while St. Louis was never drafted at all (even though he was available for selection in the 1993 NHL Entry Draft). First,
 let's retrieve data about the 1993 and 1998 NHL Entry Drafts.
 
 ```{r retrieve_nhl_entry_drafts}
@@ -89,7 +89,7 @@ career_stats <- tidy_players_stats(ids)
 career_stats[]
 ```
 
-There is a lot of information above. Let's give a closer look to their total contributions as a Tampa Bay Lightning player regarding some key statistics.
+There is a lot of information above. Let's take a closer look at their total contributions as a Tampa Bay Lightning player in terms of some key statistics.
 
 ```{r tbl_stats}
 career_stats[team_abbreviation=="TBL"][, .(
@@ -121,7 +121,7 @@ stanleycup_gamelogs <- tidy_players_gamelogs(
 stanleycup_gamelogs[]
 ```
 
-Again, there is a lot of information above. Let's compare each player success against their different opponents.
+Again, there is a lot of information above. Let's compare each player's success against their different opponents.
 
 ```{r compare_playoffs_opponent}
 stanleycup_gamelogs[order(game_datetime)][, .(
@@ -138,8 +138,8 @@ Even though there is no objective way of ranking each player's contribution, one
 Canadiens (2nd round), that St. Louis and Richards were kind of nose-to-nose against the New York Islanders (1st round) and the Philadelphia Flyers (Eastern
 Semi-Final) and that Richards probably locked in the Conn Smythe by being the best player against the Calgary Flames in the Final.
 
-In stead of splitting the data by opponents, we could have split it between home and away games to see if one was better than the others when playing at the
-St. Pete Times Forum during this playoffs year.
+Instead of splitting the data by opponents, we could have split it between home and away games to see if one was better than the others when playing at the
+St. Pete Times Forum during this playoff year.
 
 ```{r compare_playoffs_homeaway}
 stanleycup_gamelogs[, .(
@@ -157,5 +157,5 @@ playoff year while he was anywhere but in the Sunshine State.
 
 ## Conclusion
 
-As we saw by the reading of this short introduction to `tidynhl`, the main goal of the package is to make it easy to retrieve NHL data, even for R beginning
+As we saw in this short introduction to `tidynhl`, the main goal of the package is to make it easy to retrieve NHL data, even for R beginning
 users.
