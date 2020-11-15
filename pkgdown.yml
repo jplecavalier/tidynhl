@@ -1,0 +1,10 @@
+pandoc: 2.7.3
+pkgdown: 1.6.1
+pkgdown_sha: ~
+articles:
+  tidynhl: tidynhl.html
+last_built: 2020-11-15T15:06Z
+urls:
+  reference: https://jplecavalier.github.io/tidynhl/reference
+  article: https://jplecavalier.github.io/tidynhl/articles
+
