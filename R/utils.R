@@ -41,9 +41,9 @@ season_years <- function(season_id) {
     test = is.na(season_id),
     yes = NA_character_,
     no = paste0(
-      stringr::str_sub(c(season_id, NA_character_), 1L, 4L),
+      substr(season_id, 1L, 4L),
       "-",
-      stringr::str_sub(c(season_id, NA_character_), -2L, -1L)
+      substr(season_id, 7L, 8L)
     )
   )
 }

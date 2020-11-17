@@ -105,7 +105,7 @@ tidy_schedule <- function(seasons_id, regular=TRUE, playoffs=TRUE, tz=Sys.timezo
     games[gameType%in%c("R", "P"), .(
       season_id = season,
       season_years = season_years(season),
-      season_type = ifelse(stringr::str_sub(gamePk, 5L, 6L)=="02", "regular", "playoffs"),
+      season_type = ifelse(substr(gamePk, 5L, 6L)=="02", "regular", "playoffs"),
       game_id = gamePk,
       game_datetime = suppressMessages(lubridate::as_datetime(gameDate, tz=tz)),
       game_status = tolower(status.detailedState),
