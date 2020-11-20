@@ -1,6 +1,6 @@
 test_that("tidy_players_meta() gives correct informations", {
 
-  expect_snapshot_value(tidy_players_meta(c(8471679L, 8448782L, 8448960L)), style="json2")
+  expect_snapshot_output(tidy_players_meta(c(8471679L, 8448782L, 8448960L)))
 
 })
 
