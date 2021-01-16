@@ -4,10 +4,18 @@
 \alias{tidy_players_meta}
 \title{Get a tidy dataset of NHL players metadata}
 \usage{
-tidy_players_meta(players_id, keep_id = FALSE, return_datatable = NULL)
+tidy_players_meta(
+  players_id,
+  internal = TRUE,
+  keep_id = FALSE,
+  return_datatable = NULL
+)
 }
 \arguments{
 \item{players_id}{Integer vector indicating the NHL ID of players for whom the game logs will be returned.}
+
+\item{internal}{Logical indicating whether to use the internal database or the external API. When using the external API, additional columns are available.
+Default to \code{TRUE}.}
 
 \item{keep_id}{\emph{(optional)} Logical indicating if the IDs of different dimensions should be returned. Default to \code{FALSE}.}
 
@@ -27,8 +35,14 @@ metadata_lecavalier <- tidy_players_meta(8467329L)
 # Print the column names
 colnames(metadata_lecavalier)
 
+# Get metadata about Carey Price using the external API
+metadata_price <- tidy_players_meta(8471679L)
+
+# Print the column names
+colnames(metadata_price)
+
 # Print an excerpt of the data
-metadata_lecavalier[, .(player_name, player_birth_date, player_nationality, player_hand)]
+metadata_price[, .(player_name, player_number, player_active, team_abbreviation)]
 
 # Get metadata about both Vincent Lecavalier and Carey Price, keeping the IDs
 metadata_lecavalier_price <- tidy_players_meta(
