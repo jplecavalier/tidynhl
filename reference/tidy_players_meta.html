@@ -98,7 +98,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -112,7 +112,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/jplecavalier/tidynhl/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -138,7 +138,12 @@
     <p>The function <code>tidy_players_meta()</code> is meant to be a user-friendly way of getting metadata about the selected players.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tidy_players_meta</span><span class='op'>(</span><span class='va'>players_id</span>, keep_id <span class='op'>=</span> <span class='cn'>FALSE</span>, return_datatable <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>tidy_players_meta</span><span class='op'>(</span>
+  <span class='va'>players_id</span>,
+  internal <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  keep_id <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  return_datatable <span class='op'>=</span> <span class='cn'>NULL</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,6 +151,11 @@
     <tr>
       <th>players_id</th>
       <td><p>Integer vector indicating the NHL ID of players for whom the game logs will be returned.</p></td>
+    </tr>
+    <tr>
+      <th>internal</th>
+      <td><p>Logical indicating whether to use the internal database or the external API. When using the external API, additional columns are available.
+Default to <code>TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>keep_id</th>
@@ -161,7 +171,7 @@ attached in the active session.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Load the data.table package to easily manipulate the data</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://r-datatable.com'>data.table</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://Rdatatable.gitlab.io/data.table'>data.table</a></span><span class='op'>)</span>
 
 <span class='co'># Get metadata about Vincent Lecavalier</span>
 <span class='va'>metadata_lecavalier</span> <span class='op'>&lt;-</span> <span class='fu'>tidy_players_meta</span><span class='op'>(</span><span class='fl'>8467329L</span><span class='op'>)</span>
@@ -174,10 +184,20 @@ attached in the active session.</p></td>
 #&gt;  [7] "player_inches"              "player_pounds"             
 #&gt;  [9] "player_hand"                "player_position"           
 #&gt; [11] "player_position_type"      </div><div class='input'>
+<span class='co'># Get metadata about Carey Price using the external API</span>
+<span class='va'>metadata_price</span> <span class='op'>&lt;-</span> <span class='fu'>tidy_players_meta</span><span class='op'>(</span><span class='fl'>8471679L</span><span class='op'>)</span>
+
+<span class='co'># Print the column names</span>
+<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>metadata_price</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;  [1] "player_name"                "player_birth_date"         
+#&gt;  [3] "player_birth_city"          "player_birth_stateprovince"
+#&gt;  [5] "player_birth_country"       "player_nationality"        
+#&gt;  [7] "player_inches"              "player_pounds"             
+#&gt;  [9] "player_hand"                "player_position"           
+#&gt; [11] "player_position_type"      </div><div class='input'>
 <span class='co'># Print an excerpt of the data</span>
-<span class='va'>metadata_lecavalier</span><span class='op'>[</span>, <span class='fu'>.</span><span class='op'>(</span><span class='va'>player_name</span>, <span class='va'>player_birth_date</span>, <span class='va'>player_nationality</span>, <span class='va'>player_hand</span><span class='op'>)</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;           player_name player_birth_date player_nationality player_hand
-#&gt; 1: Vincent Lecavalier        1980-04-21                CAN           L</div><div class='input'>
+<span class='va'>metadata_price</span><span class='op'>[</span>, <span class='fu'>.</span><span class='op'>(</span><span class='va'>player_name</span>, <span class='va'>player_number</span>, <span class='va'>player_active</span>, <span class='va'>team_abbreviation</span><span class='op'>)</span><span class='op'>]</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in eval(jsub, SDenv, parent.frame()): object 'player_number' not found</span></div><div class='input'>
 <span class='co'># Get metadata about both Vincent Lecavalier and Carey Price, keeping the IDs</span>
 <span class='va'>metadata_lecavalier_price</span> <span class='op'>&lt;-</span> <span class='fu'>tidy_players_meta</span><span class='op'>(</span>
   players_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>8467329L</span>, <span class='fl'>8471679L</span><span class='op'>)</span>,
