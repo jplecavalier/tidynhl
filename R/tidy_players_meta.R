@@ -20,7 +20,7 @@
 #' colnames(metadata_lecavalier)
 #'
 #' # Get metadata about Carey Price using the external API
-#' metadata_price <- tidy_players_meta(8471679L)
+#' metadata_price <- tidy_players_meta(8471679L, internal=FALSE)
 #'
 #' # Print the column names
 #' colnames(metadata_price)
