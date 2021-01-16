@@ -185,19 +185,23 @@ attached in the active session.</p></td>
 #&gt;  [9] "player_hand"                "player_position"           
 #&gt; [11] "player_position_type"      </div><div class='input'>
 <span class='co'># Get metadata about Carey Price using the external API</span>
-<span class='va'>metadata_price</span> <span class='op'>&lt;-</span> <span class='fu'>tidy_players_meta</span><span class='op'>(</span><span class='fl'>8471679L</span><span class='op'>)</span>
+<span class='va'>metadata_price</span> <span class='op'>&lt;-</span> <span class='fu'>tidy_players_meta</span><span class='op'>(</span><span class='fl'>8471679L</span>, internal<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
 
 <span class='co'># Print the column names</span>
 <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>metadata_price</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] "player_name"                "player_birth_date"         
-#&gt;  [3] "player_birth_city"          "player_birth_stateprovince"
-#&gt;  [5] "player_birth_country"       "player_nationality"        
-#&gt;  [7] "player_inches"              "player_pounds"             
-#&gt;  [9] "player_hand"                "player_position"           
-#&gt; [11] "player_position_type"      </div><div class='input'>
+</div><div class='output co'>#&gt;  [1] "player_name"                "team_abbreviation"         
+#&gt;  [3] "player_number"              "player_birth_date"         
+#&gt;  [5] "player_birth_city"          "player_birth_stateprovince"
+#&gt;  [7] "player_birth_country"       "player_nationality"        
+#&gt;  [9] "player_inches"              "player_pounds"             
+#&gt; [11] "player_active"              "player_alt_captain"        
+#&gt; [13] "player_captain"             "player_rookie"             
+#&gt; [15] "player_hand"                "player_roster_status"      
+#&gt; [17] "player_position"            "player_position_type"      </div><div class='input'>
 <span class='co'># Print an excerpt of the data</span>
 <span class='va'>metadata_price</span><span class='op'>[</span>, <span class='fu'>.</span><span class='op'>(</span><span class='va'>player_name</span>, <span class='va'>player_number</span>, <span class='va'>player_active</span>, <span class='va'>team_abbreviation</span><span class='op'>)</span><span class='op'>]</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in eval(jsub, SDenv, parent.frame()): object 'player_number' not found</span></div><div class='input'>
+</div><div class='output co'>#&gt;    player_name player_number player_active team_abbreviation
+#&gt; 1: Carey Price            31          TRUE               MTL</div><div class='input'>
 <span class='co'># Get metadata about both Vincent Lecavalier and Carey Price, keeping the IDs</span>
 <span class='va'>metadata_lecavalier_price</span> <span class='op'>&lt;-</span> <span class='fu'>tidy_players_meta</span><span class='op'>(</span>
   players_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>8467329L</span>, <span class='fl'>8471679L</span><span class='op'>)</span>,
