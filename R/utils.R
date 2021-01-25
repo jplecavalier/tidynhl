@@ -53,7 +53,7 @@ add_copyright <- function(object) {
   attr(object, "copyright") <- paste(
     "NHL and the NHL Shield are registered trademarks of the National Hockey League.",
     "NHL and NHL team marks are the property of the NHL and its teams.",
-    "© NHL 2021. All Rights Reserved."
+    "\u00a9 NHL 2021. All Rights Reserved."
   )
 
   object
