@@ -24,3 +24,14 @@ returned. Default can be set globally with options("tidynhl.data.table").}
 The function \code{tidy_teams_meta()} is meant to be a user-friendly way of getting metadata about NHL
 teams.
 }
+\examples{
+# Allowing large outputs for the pkgdown website
+options(width = 1000L)
+
+# Get metadata of active teams
+tidy_teams_meta()
+
+# Get metadata of active and historical teams keeping the IDs
+tidy_teams_meta(active_only = FALSE, keep_id = TRUE)
+
+}

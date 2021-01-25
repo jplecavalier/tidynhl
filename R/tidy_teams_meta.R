@@ -10,6 +10,16 @@
 #' @param return_datatable *(optional)* Logical indicating whether or not a data.table should be
 #'   returned. Default can be set globally with options("tidynhl.data.table").
 #'
+#' @examples
+#' # Allowing large outputs for the pkgdown website
+#' options(width = 1000L)
+#'
+#' # Get metadata of active teams
+#' tidy_teams_meta()
+#'
+#' # Get metadata of active and historical teams keeping the IDs
+#' tidy_teams_meta(active_only = FALSE, keep_id = TRUE)
+#'
 #' @export
 tidy_teams_meta <- function(
   active_only = TRUE,
