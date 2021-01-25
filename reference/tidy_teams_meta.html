@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • tidynhl</title>
+<title>Get a tidy dataset of NHL teams metadata — tidy_teams_meta • tidynhl</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,9 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Get a tidy dataset of NHL teams metadata — tidy_teams_meta" />
+<meta property="og:description" content="The function tidy_teams_meta() is meant to be a user-friendly way of getting metadata about NHL
+teams." />
 <meta property="og:image" content="https://jplecavalier.github.io/tidynhl/logo.png" />
 
 
@@ -76,7 +78,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -126,91 +128,46 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Get a tidy dataset of NHL teams metadata</h1>
+    <small class="dont-index">Source: <a href='https://github.com/jplecavalier/tidynhl/blob/master/R/tidy_teams_meta.R'><code>R/tidy_teams_meta.R</code></a></small>
+    <div class="hidden name"><code>tidy_teams_meta.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>The function <code>tidy_teams_meta()</code> is meant to be a user-friendly way of getting metadata about NHL
+teams.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>tidy_teams_meta</span><span class='op'>(</span>
+  active_only <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  keep_id <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  return_datatable <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"tidynhl.data.table"</span>, <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-tidy-datasets" class="hasAnchor"><a href="#section-tidy-datasets" class="anchor"></a>Tidy datasets</h2>
-          <p class="section-desc"><p>All <code>tidynhl</code> functions that will return a ready-to-use dataset.</p></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="tidy_draft.html">tidy_draft()</a></code> </p>
-        </td>
-        <td><p>Get a tidy dataset of the NHL entry drafts</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tidy_players_gamelogs.html">tidy_players_gamelogs()</a></code> </p>
-        </td>
-        <td><p>Get a tidy dataset of NHL players game logs</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tidy_players_meta.html">tidy_players_meta()</a></code> </p>
-        </td>
-        <td><p>Get a tidy dataset of NHL players metadata</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tidy_players_stats.html">tidy_players_stats()</a></code> </p>
-        </td>
-        <td><p>Get a tidy dataset of NHL players statistics</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tidy_schedule.html">tidy_schedule()</a></code> </p>
-        </td>
-        <td><p>Get a tidy dataset of the NHL schedule</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tidy_teams_meta.html">tidy_teams_meta()</a></code> </p>
-        </td>
-        <td><p>Get a tidy dataset of NHL teams metadata</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-get-functions" class="hasAnchor"><a href="#section-get-functions" class="anchor"></a>Get functions</h2>
-          <p class="section-desc"><p>All <code>tidynhl</code> functions that will return a vector having the same length as its parameters.</p></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="get_players_id.html">get_players_id()</a></code> </p>
-        </td>
-        <td><p>Get NHL players ID</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>active_only</th>
+      <td><p><em>(optional)</em> Logical indicating if only active teams should be returned.
+Default to <code>TRUE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>keep_id</th>
+      <td><p><em>(optional)</em> Logical indicating if the IDs of different dimensions should be
+returned. Default to <code>FALSE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>return_datatable</th>
+      <td><p><em>(optional)</em> Logical indicating whether or not a data.table should be
+returned. Default can be set globally with options("tidynhl.data.table").</p></td>
+    </tr>
     </table>
-  </div>
 
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
