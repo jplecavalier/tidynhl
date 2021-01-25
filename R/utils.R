@@ -47,3 +47,42 @@ season_years <- function(season_id) {
     )
   )
 }
+
+add_copyright <- function(object) {
+
+  attr(object, "copyright") <- paste(
+    "NHL and the NHL Shield are registered trademarks of the National Hockey League.",
+    "NHL and NHL team marks are the property of the NHL and its teams.",
+    "© NHL 2021. All Rights Reserved."
+  )
+
+  object
+
+}
+
+get_nhl_api <- function(base_url, paths) {
+
+  urls <- paste0(base_url, paths)
+  nb_urls <- length(urls)
+  waits <- c(0, runif(nb_urls-1L, 1, 1.5))
+
+  output <- mapply(function(url, wait) {
+    Sys.sleep(wait)
+    jsonlite::fromJSON(httr::content(httr::GET(url), "text", encoding = "UTF-8"), flatten = TRUE)
+  }, url = urls, wait = waits, SIMPLIFY = FALSE, USE.NAMES = FALSE)
+
+  add_copyright(output)
+
+}
+
+get_records_api <- function(paths) {
+
+  get_nhl_api("https://records.nhl.com/site/api/", paths)
+
+}
+
+drop_ids <- function(data) {
+
+  data[, colnames(data)[grep("_id$", colnames(data))]:=NULL]
+
+}
