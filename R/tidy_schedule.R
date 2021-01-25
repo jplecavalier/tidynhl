@@ -122,8 +122,9 @@ tidy_schedule <- function(seasons_id, regular=TRUE, playoffs=TRUE, tz=Sys.timezo
 
   # TO DO: Make a patch for the missing games, making sure not to duplicate them when the API will be fixed
 
-  games[teams_info, away_team:=team_abbreviation, on=c(away_id="team_id")]
-  games[teams_info, home_team:=team_abbreviation, on=c(home_id="team_id")]
+  teams_meta <- tidy_teams_meta(active_only = FALSE, keep_id = TRUE, return_datatable = TRUE)
+  games[teams_meta, away_team:=team_abbreviation, on=c(away_id="team_id")]
+  games[teams_meta, home_team:=team_abbreviation, on=c(home_id="team_id")]
 
   games[game_status!="final", `:=`(
     away_score = NA_integer_,

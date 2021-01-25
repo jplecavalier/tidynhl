@@ -260,7 +260,8 @@ tidy_players_stats <- function(players_id, regular=TRUE, playoffs=TRUE, keep_id=
 
   }))
 
-  stats[teams_info, team_abbreviation:=team_abbreviation, on=.(team_id)]
+  teams_meta <- tidy_teams_meta(active_only = FALSE, keep_id = TRUE, return_datatable = TRUE)
+  stats[teams_meta, team_abbreviation:=team_abbreviation, on=.(team_id)]
   stats[players_info, player_name:=player_name, on=.(player_id)]
 
   setcolorder(stats, c("player_id", "player_name", "season_id", "season_years", "season_type", "team_id", "team_abbreviation"))

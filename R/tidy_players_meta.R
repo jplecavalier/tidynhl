@@ -168,7 +168,8 @@ tidy_players_meta <- function(players_id, internal=TRUE, keep_id=FALSE, return_d
 
     }))
 
-    meta[teams_info, team_abbreviation:=team_abbreviation, on=.(team_id)]
+    teams_meta <- tidy_teams_meta(active_only = FALSE, keep_id = TRUE, return_datatable = TRUE)
+    meta[teams_meta, team_abbreviation:=team_abbreviation, on=.(team_id)]
 
     setcolorder(meta, c("player_id", "player_name", "team_id", "team_abbreviation"))
 

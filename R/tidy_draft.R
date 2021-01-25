@@ -84,7 +84,8 @@ tidy_draft <- function(drafts_year, keep_id=FALSE, return_datatable=NULL) {
 
   }))
 
-  drafts[teams_info, team_abbreviation:=team_abbreviation, on=.(team_id)]
+  teams_meta <- tidy_teams_meta(active_only = FALSE, keep_id = TRUE, return_datatable = TRUE)
+  drafts[teams_meta, team_abbreviation:=team_abbreviation, on=.(team_id)]
   drafts[prospects_info, player_id:=player_id, on=.(prospect_id)]
 
   setcolorder(drafts, c("draft_year", "draft_round", "draft_pick", "draft_overall", "team_id", "team_abbreviation", "prospect_id", "prospect_fullname", "player_id"))
