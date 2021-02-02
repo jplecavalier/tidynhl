@@ -27,6 +27,11 @@ create_data_table <- function(data) {
 }
 
 convert_toi <- function(toi) {
+
+  if (length(toi)==0L) {
+    return(numeric(0L))
+  }
+
   sapply(strsplit(toi, ":"), function(x) {
     if (is.na(x[1])) {
       NA_real_
@@ -34,6 +39,7 @@ convert_toi <- function(toi) {
       as.integer(x[1])+as.integer(x[2])/60L
     }
   })
+
 }
 
 season_years <- function(season_id) {
