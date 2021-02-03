@@ -182,23 +182,8 @@ attached in the active session.</p></td>
 
 <span class='co'># Print the column names</span>
 <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>stats_lecavalier</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] "player_name"           "season_years"          "season_type"          
-#&gt;  [4] "team_abbreviation"     "skater_games"          "skater_goals"         
-#&gt;  [7] "skater_assists"        "skater_points"         "skater_plusminus"     
-#&gt; [10] "skater_pim"            "skater_toi"            "skater_shifts"        
-#&gt; [13] "skater_gwg"            "skater_otg"            "skater_shots"         
-#&gt; [16] "skater_blocked"        "skater_hits"           "skater_ev_goals"      
-#&gt; [19] "skater_ev_assists"     "skater_ev_points"      "skater_ev_toi"        
-#&gt; [22] "skater_pp_goals"       "skater_pp_assists"     "skater_pp_points"     
-#&gt; [25] "skater_pp_toi"         "skater_pk_goals"       "skater_pk_assists"    
-#&gt; [28] "skater_pk_points"      "skater_pk_toi"         "goalie_games"         
-#&gt; [31] "goalie_started"        "goalie_wins"           "goalie_losses"        
-#&gt; [34] "goalie_ties"           "goalie_ot"             "goalie_shutouts"      
-#&gt; [37] "goalie_shotagainst"    "goalie_goalagainst"    "goalie_savepct"       
-#&gt; [40] "goalie_gaa"            "goalie_toi"            "goalie_ev_shotagainst"
-#&gt; [43] "goalie_ev_goalagainst" "goalie_ev_savepct"     "goalie_pp_shotagainst"
-#&gt; [46] "goalie_pp_goalagainst" "goalie_pp_savepct"     "goalie_pk_shotagainst"
-#&gt; [49] "goalie_pk_goalagainst" "goalie_pk_savepct"    </div><div class='input'>
+</div><div class='output co'>#&gt;  [1] "player_name"           "season_years"          "season_type"           "team_abbreviation"     "skater_games"          "skater_goals"          "skater_assists"        "skater_points"         "skater_plusminus"      "skater_pim"            "skater_toi"            "skater_shifts"         "skater_gwg"            "skater_otg"            "skater_shots"          "skater_blocked"        "skater_hits"           "skater_ev_goals"       "skater_ev_assists"     "skater_ev_points"      "skater_ev_toi"         "skater_pp_goals"       "skater_pp_assists"     "skater_pp_points"      "skater_pp_toi"         "skater_pk_goals"       "skater_pk_assists"     "skater_pk_points"      "skater_pk_toi"         "goalie_games"          "goalie_started"        "goalie_wins"           "goalie_losses"         "goalie_ties"           "goalie_ot"             "goalie_shutouts"       "goalie_shotagainst"    "goalie_goalagainst"    "goalie_savepct"        "goalie_gaa"            "goalie_toi"           
+#&gt; [42] "goalie_ev_shotagainst" "goalie_ev_goalagainst" "goalie_ev_savepct"     "goalie_pp_shotagainst" "goalie_pp_goalagainst" "goalie_pp_savepct"     "goalie_pk_shotagainst" "goalie_pk_goalagainst" "goalie_pk_savepct"    </div><div class='input'>
 <span class='co'># Print an excerpt of the data</span>
 <span class='va'>stats_lecavalier</span><span class='op'>[</span>, <span class='fu'>.</span><span class='op'>(</span><span class='va'>season_years</span>, <span class='va'>season_type</span>, <span class='va'>team_abbreviation</span>, <span class='va'>skater_games</span>, <span class='va'>skater_points</span><span class='op'>)</span><span class='op'>]</span>
 </div><div class='output co'>#&gt;     season_years season_type team_abbreviation skater_games skater_points
@@ -237,24 +222,8 @@ attached in the active session.</p></td>
 
 <span class='co'># Print the column names</span>
 <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>stats_playoffs_lecavalier_price</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] "player_id"             "player_name"           "season_id"            
-#&gt;  [4] "season_years"          "season_type"           "team_id"              
-#&gt;  [7] "team_abbreviation"     "skater_games"          "skater_goals"         
-#&gt; [10] "skater_assists"        "skater_points"         "skater_plusminus"     
-#&gt; [13] "skater_pim"            "skater_toi"            "skater_shifts"        
-#&gt; [16] "skater_gwg"            "skater_otg"            "skater_shots"         
-#&gt; [19] "skater_blocked"        "skater_hits"           "skater_ev_goals"      
-#&gt; [22] "skater_ev_assists"     "skater_ev_points"      "skater_ev_toi"        
-#&gt; [25] "skater_pp_goals"       "skater_pp_assists"     "skater_pp_points"     
-#&gt; [28] "skater_pp_toi"         "skater_pk_goals"       "skater_pk_assists"    
-#&gt; [31] "skater_pk_points"      "skater_pk_toi"         "goalie_games"         
-#&gt; [34] "goalie_started"        "goalie_wins"           "goalie_losses"        
-#&gt; [37] "goalie_ties"           "goalie_ot"             "goalie_shutouts"      
-#&gt; [40] "goalie_shotagainst"    "goalie_goalagainst"    "goalie_savepct"       
-#&gt; [43] "goalie_gaa"            "goalie_toi"            "goalie_ev_shotagainst"
-#&gt; [46] "goalie_ev_goalagainst" "goalie_ev_savepct"     "goalie_pp_shotagainst"
-#&gt; [49] "goalie_pp_goalagainst" "goalie_pp_savepct"     "goalie_pk_shotagainst"
-#&gt; [52] "goalie_pk_goalagainst" "goalie_pk_savepct"    </div><div class='input'>
+</div><div class='output co'>#&gt;  [1] "player_id"             "player_name"           "season_id"             "season_years"          "season_type"           "team_id"               "team_abbreviation"     "skater_games"          "skater_goals"          "skater_assists"        "skater_points"         "skater_plusminus"      "skater_pim"            "skater_toi"            "skater_shifts"         "skater_gwg"            "skater_otg"            "skater_shots"          "skater_blocked"        "skater_hits"           "skater_ev_goals"       "skater_ev_assists"     "skater_ev_points"      "skater_ev_toi"         "skater_pp_goals"       "skater_pp_assists"     "skater_pp_points"      "skater_pp_toi"         "skater_pk_goals"       "skater_pk_assists"     "skater_pk_points"      "skater_pk_toi"         "goalie_games"          "goalie_started"        "goalie_wins"           "goalie_losses"         "goalie_ties"           "goalie_ot"             "goalie_shutouts"       "goalie_shotagainst"    "goalie_goalagainst"   
+#&gt; [42] "goalie_savepct"        "goalie_gaa"            "goalie_toi"            "goalie_ev_shotagainst" "goalie_ev_goalagainst" "goalie_ev_savepct"     "goalie_pp_shotagainst" "goalie_pp_goalagainst" "goalie_pp_savepct"     "goalie_pk_shotagainst" "goalie_pk_goalagainst" "goalie_pk_savepct"    </div><div class='input'>
 <span class='co'># Print an excerpt of the data</span>
 <span class='va'>stats_playoffs_lecavalier_price</span><span class='op'>[</span>, <span class='fu'>.</span><span class='op'>(</span><span class='va'>player_id</span>, <span class='va'>player_name</span>, <span class='va'>season_years</span>, <span class='va'>skater_points</span>, <span class='va'>goalie_savepct</span><span class='op'>)</span><span class='op'>]</span>
 </div><div class='output co'>#&gt;     player_id        player_name season_years skater_points goalie_savepct

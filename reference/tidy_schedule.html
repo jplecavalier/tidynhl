@@ -187,9 +187,7 @@ attached in the active session.</p></td>
 
 <span class='co'># Print the column names</span>
 <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>schedule_20192020</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] "season_years"  "season_type"   "game_datetime" "game_status"  
-#&gt;  [5] "venue_name"    "away_team"     "away_score"    "home_score"   
-#&gt;  [9] "home_team"     "game_nbot"     "game_shootout"</div><div class='input'>
+</div><div class='output co'>#&gt;  [1] "season_years"  "season_type"   "game_datetime" "game_status"   "venue_name"    "away_team"     "away_score"    "home_score"    "home_team"     "game_nbot"     "game_shootout"</div><div class='input'>
 <span class='co'># Print an excerpt of the data</span>
 <span class='va'>schedule_20192020</span><span class='op'>[</span>, <span class='fu'>.</span><span class='op'>(</span><span class='va'>season_type</span>, <span class='va'>game_datetime</span>, <span class='va'>away_team</span>, <span class='va'>away_score</span>, <span class='va'>home_score</span>, <span class='va'>home_team</span><span class='op'>)</span><span class='op'>]</span>
 </div><div class='output co'>#&gt;       season_type       game_datetime away_team away_score home_score home_team
@@ -215,10 +213,7 @@ attached in the active session.</p></td>
 
 <span class='co'># Print the column names</span>
 <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>schedule_regular_20182020</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] "season_id"     "season_years"  "season_type"   "game_id"      
-#&gt;  [5] "game_datetime" "game_status"   "venue_name"    "away_id"      
-#&gt;  [9] "away_team"     "away_score"    "home_score"    "home_team"    
-#&gt; [13] "home_id"       "game_nbot"     "game_shootout"</div><div class='input'>
+</div><div class='output co'>#&gt;  [1] "season_id"     "season_years"  "season_type"   "game_id"       "game_datetime" "game_status"   "venue_name"    "away_id"       "away_team"     "away_score"    "home_score"    "home_team"     "home_id"       "game_nbot"     "game_shootout"</div><div class='input'>
 <span class='co'># Print an excerpt of the data</span>
 <span class='va'>schedule_regular_20182020</span><span class='op'>[</span>, <span class='fu'>.</span><span class='op'>(</span><span class='va'>season_years</span>, <span class='va'>game_id</span>, <span class='va'>game_datetime</span>, <span class='va'>away_team</span>, <span class='va'>home_team</span><span class='op'>)</span><span class='op'>]</span>
 </div><div class='output co'>#&gt;       season_years    game_id       game_datetime away_team home_team

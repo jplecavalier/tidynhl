@@ -47,7 +47,8 @@
 
 
 <meta property="og:title" content="Get a tidy dataset of the NHL entry drafts — tidy_draft" />
-<meta property="og:description" content="The function tidy_draft() is meant to be a user-friendly way of getting data about the NHL entry drafts." />
+<meta property="og:description" content="The function tidy_draft() is meant to be a user-friendly way of getting data about the NHL
+entry drafts." />
 <meta property="og:image" content="https://jplecavalier.github.io/tidynhl/logo.png" />
 
 
@@ -135,80 +136,69 @@
     </div>
 
     <div class="ref-description">
-    <p>The function <code>tidy_draft()</code> is meant to be a user-friendly way of getting data about the NHL entry drafts.</p>
+    <p>The function <code>tidy_draft()</code> is meant to be a user-friendly way of getting data about the NHL
+entry drafts.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tidy_draft</span><span class='op'>(</span><span class='va'>drafts_year</span>, keep_id <span class='op'>=</span> <span class='cn'>FALSE</span>, return_datatable <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>tidy_draft</span><span class='op'>(</span>
+  <span class='va'>drafts_year</span>,
+  keep_id <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  return_datatable <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"tidynhl.data.table"</span>, <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>drafts_year</th>
-      <td><p>Integer vector indicating which entry drafts will be returned. The first NHL entry draft was held in 1963.</p></td>
+      <td><p>Integer vector indicating which entry drafts will be returned. The first NHL
+entry draft was held in 1963.</p></td>
     </tr>
     <tr>
       <th>keep_id</th>
-      <td><p><em>(optional)</em> Logical indicating if the IDs of different dimensions should be returned. Default to <code>FALSE</code>.</p></td>
+      <td><p><em>(optional)</em> Logical indicating if the IDs of different dimensions should be
+returned. Default to <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>return_datatable</th>
-      <td><p><em>(optional)</em> Logical indicating whether or not a data.table should be returned. Default to <code>TRUE</code> if the <code>data.table</code> package is
-attached in the active session.</p></td>
+      <td><p><em>(optional)</em> Logical indicating whether or not a data.table should be
+returned. Default can be set globally with options("tidynhl.data.table").</p></td>
     </tr>
     </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Load the data.table package to easily manipulate the data</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://Rdatatable.gitlab.io/data.table'>data.table</a></span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='co'># Allowing large outputs for the pkgdown website</span>
+<span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span><span class='op'>(</span>width <span class='op'>=</span> <span class='fl'>1000L</span><span class='op'>)</span>
 
 <span class='co'># Get the 2020 NHL entry draft</span>
-<span class='va'>draft_2020</span> <span class='op'>&lt;-</span> <span class='fu'>tidy_draft</span><span class='op'>(</span><span class='fl'>2020L</span><span class='op'>)</span>
-
-<span class='co'># Print the column names</span>
-<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>draft_2020</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "draft_year"        "draft_round"       "draft_pick"       
-#&gt; [4] "draft_overall"     "team_abbreviation" "prospect_fullname"</div><div class='input'>
-<span class='co'># Print an excerpt of the data</span>
-<span class='va'>draft_2020</span><span class='op'>[</span>, <span class='fu'>.</span><span class='op'>(</span><span class='va'>draft_round</span>, <span class='va'>draft_pick</span>, <span class='va'>draft_overall</span>, <span class='va'>team_abbreviation</span>, <span class='va'>prospect_fullname</span><span class='op'>)</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;      draft_round draft_pick draft_overall team_abbreviation prospect_fullname
-#&gt;   1:           1          1             1               NYR Alexis Lafrenière
-#&gt;   2:           1          2             2               LAK   Quinton Byfield
-#&gt;   3:           1          3             3               OTT       Tim Stützle
-#&gt;   4:           1          4             4               DET     Lucas Raymond
-#&gt;   5:           1          5             5               OTT    Jake Sanderson
-#&gt;  ---                                                                         
-#&gt; 213:           7         27           213               TOR     Ryan Tverberg
-#&gt; 214:           7         28           214               NYI   Henrik Tikkanen
-#&gt; 215:           7         29           215               VGK    Maxim Marushev
-#&gt; 216:           7         30           216               BUF     Jakub Konecny
-#&gt; 217:           7         31           217               TBL  Declan Mcdonnell</div><div class='input'>
+<span class='fu'>tidy_draft</span><span class='op'>(</span><span class='fl'>2020L</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;      draft_year draft_round draft_pick draft_overall team_abbreviation prospect_fullname
+#&gt;   1:       2020           1          1             1               NYR Alexis Lafrenière
+#&gt;   2:       2020           1          2             2               LAK   Quinton Byfield
+#&gt;   3:       2020           1          3             3               OTT       Tim Stützle
+#&gt;   4:       2020           1          4             4               DET     Lucas Raymond
+#&gt;   5:       2020           1          5             5               OTT    Jake Sanderson
+#&gt;  ---                                                                                    
+#&gt; 213:       2020           7         27           213               TOR     Ryan Tverberg
+#&gt; 214:       2020           7         28           214               NYI   Henrik Tikkanen
+#&gt; 215:       2020           7         29           215               VGK    Maxim Marushev
+#&gt; 216:       2020           7         30           216               BUF     Jakub Konecny
+#&gt; 217:       2020           7         31           217               TBL  Declan Mcdonnell</div><div class='input'>
 <span class='co'># Get both the 2019 and 2020 NHL entry drafts, keeping  the IDs</span>
-<span class='va'>drafts_20192020</span> <span class='op'>&lt;-</span> <span class='fu'>tidy_draft</span><span class='op'>(</span>
-  drafts_year <span class='op'>=</span> <span class='fl'>2019</span><span class='op'>:</span><span class='fl'>2020</span>,
-  keep_id     <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span>
-
-<span class='co'># Print the column names</span>
-<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>drafts_20192020</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "draft_year"        "draft_round"       "draft_pick"       
-#&gt; [4] "draft_overall"     "team_id"           "team_abbreviation"
-#&gt; [7] "prospect_id"       "prospect_fullname" "player_id"        </div><div class='input'>
-<span class='co'># Print an excerpt of the data</span>
-<span class='va'>drafts_20192020</span><span class='op'>[</span>, <span class='fu'>.</span><span class='op'>(</span><span class='va'>draft_year</span>, <span class='va'>draft_overall</span>, <span class='va'>prospect_id</span>, <span class='va'>prospect_fullname</span>, <span class='va'>player_id</span><span class='op'>)</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;      draft_year draft_overall prospect_id prospect_fullname player_id
-#&gt;   1:       2019             1       76849       Jack Hughes   8481559
-#&gt;   2:       2019             2       76511       Kaapo Kakko   8481554
-#&gt;   3:       2019             3       72578        Kirby Dach   8481523
-#&gt;   4:       2019             4       72579       Bowen Byram   8481524
-#&gt;   5:       2019             5       72693     Alex Turcotte   8481532
-#&gt;  ---                                                                 
-#&gt; 430:       2020           213       82632     Ryan Tverberg   8482525
-#&gt; 431:       2020           214       72778   Henrik Tikkanen   8482472
-#&gt; 432:       2020           215       69859    Maxim Marushev   8482473
-#&gt; 433:       2020           216       82344     Jakub Konecny   8482526
-#&gt; 434:       2020           217       82321  Declan Mcdonnell   8482474</div><div class='input'>
+<span class='fu'>tidy_draft</span><span class='op'>(</span>drafts_year <span class='op'>=</span> <span class='fl'>2019</span><span class='op'>:</span><span class='fl'>2020</span>, keep_id <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;      draft_year draft_round draft_pick draft_overall team_id team_abbreviation prospect_id prospect_fullname player_id
+#&gt;   1:       2019           1          1             1       1               NJD       76849       Jack Hughes   8481559
+#&gt;   2:       2019           1          2             2       3               NYR       76511       Kaapo Kakko   8481554
+#&gt;   3:       2019           1          3             3      16               CHI       72578        Kirby Dach   8481523
+#&gt;   4:       2019           1          4             4      21               COL       72579       Bowen Byram   8481524
+#&gt;   5:       2019           1          5             5      26               LAK       72693     Alex Turcotte   8481532
+#&gt;  ---                                                                                                                  
+#&gt; 430:       2020           7         27           213      10               TOR       82632     Ryan Tverberg   8482525
+#&gt; 431:       2020           7         28           214       2               NYI       72778   Henrik Tikkanen   8482472
+#&gt; 432:       2020           7         29           215      54               VGK       69859    Maxim Marushev   8482473
+#&gt; 433:       2020           7         30           216       7               BUF       82344     Jakub Konecny   8482526
+#&gt; 434:       2020           7         31           217      14               TBL       82321  Declan Mcdonnell   8482474</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
