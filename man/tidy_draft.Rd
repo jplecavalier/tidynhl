@@ -4,42 +4,34 @@
 \alias{tidy_draft}
 \title{Get a tidy dataset of the NHL entry drafts}
 \usage{
-tidy_draft(drafts_year, keep_id = FALSE, return_datatable = NULL)
+tidy_draft(
+  drafts_year,
+  keep_id = FALSE,
+  return_datatable = getOption("tidynhl.data.table", TRUE)
+)
 }
 \arguments{
-\item{drafts_year}{Integer vector indicating which entry drafts will be returned. The first NHL entry draft was held in 1963.}
+\item{drafts_year}{Integer vector indicating which entry drafts will be returned. The first NHL
+entry draft was held in 1963.}
 
-\item{keep_id}{\emph{(optional)} Logical indicating if the IDs of different dimensions should be returned. Default to \code{FALSE}.}
+\item{keep_id}{\emph{(optional)} Logical indicating if the IDs of different dimensions should be
+returned. Default to \code{FALSE}.}
 
-\item{return_datatable}{\emph{(optional)} Logical indicating whether or not a data.table should be returned. Default to \code{TRUE} if the \code{data.table} package is
-attached in the active session.}
+\item{return_datatable}{\emph{(optional)} Logical indicating whether or not a data.table should be
+returned. Default can be set globally with options("tidynhl.data.table").}
 }
 \description{
-The function \code{tidy_draft()} is meant to be a user-friendly way of getting data about the NHL entry drafts.
+The function \code{tidy_draft()} is meant to be a user-friendly way of getting data about the NHL
+entry drafts.
 }
 \examples{
-# Load the data.table package to easily manipulate the data
-library(data.table)
+# Allowing large outputs for the pkgdown website
+options(width = 1000L)
 
 # Get the 2020 NHL entry draft
-draft_2020 <- tidy_draft(2020L)
-
-# Print the column names
-colnames(draft_2020)
-
-# Print an excerpt of the data
-draft_2020[, .(draft_round, draft_pick, draft_overall, team_abbreviation, prospect_fullname)]
+tidy_draft(2020L)
 
 # Get both the 2019 and 2020 NHL entry drafts, keeping  the IDs
-drafts_20192020 <- tidy_draft(
-  drafts_year = 2019:2020,
-  keep_id     = TRUE
-)
-
-# Print the column names
-colnames(drafts_20192020)
-
-# Print an excerpt of the data
-drafts_20192020[, .(draft_year, draft_overall, prospect_id, prospect_fullname, player_id)]
+tidy_draft(drafts_year = 2019:2020, keep_id = TRUE)
 
 }

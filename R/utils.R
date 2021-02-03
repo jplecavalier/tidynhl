@@ -26,6 +26,50 @@ create_data_table <- function(data) {
 
 }
 
+validate_columns <- function(data, columns) {
+
+  missing <- !(names(columns) %in% colnames(data))
+  missing_columns <- columns[which(missing)]
+  if (length(missing_columns) > 0L) {
+    present_columns <- columns[-which(missing)]
+  } else {
+    present_columns <- columns
+  }
+
+  mapply(function(name, value) {
+
+    class_expected <- class(value)
+    class_actual <- class(data[, get(name)])
+
+    mismatch <- FALSE
+    if (length(class_expected) != length(class_actual)) {
+      mismatch <- TRUE
+    } else {
+      if (sum(class_expected != class_actual) > 0L) {
+        mismatch <- TRUE
+      }
+    }
+
+    if (mismatch) {
+      warning(paste0(
+        "actual class for column '",
+        name,
+        "' is [",
+        paste(paste0("'", class_actual, "'"), collapse = ", "),
+        "] while expected class is [",
+        paste(paste0("'", class_expected, "'"), collapse = ", "),
+        "], please open an issue with a reprex throwing this warning"
+      ))
+    }
+
+  }, name = names(present_columns), value = present_columns)
+
+  if (length(missing_columns) > 0L) {
+    data[, names(missing_columns) := lapply(missing_columns, rep, .N)]
+  }
+
+}
+
 convert_toi <- function(toi) {
 
   if (length(toi)==0L) {
@@ -70,7 +114,7 @@ get_nhl_api <- function(base_url, paths) {
 
   urls <- paste0(base_url, paths)
   nb_urls <- length(urls)
-  waits <- c(0, runif(nb_urls-1L, 1, 1.5))
+  waits <- c(0, runif(nb_urls - 1L, 1, 1.5))
 
   output <- mapply(function(url, wait) {
     Sys.sleep(wait)
@@ -84,6 +128,12 @@ get_nhl_api <- function(base_url, paths) {
 get_records_api <- function(paths) {
 
   get_nhl_api("https://records.nhl.com/site/api/", paths)
+
+}
+
+get_stats_api <- function(paths) {
+
+  get_nhl_api("https://statsapi.web.nhl.com/api/v1/", paths)
 
 }
 
