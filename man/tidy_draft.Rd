@@ -18,7 +18,7 @@ entry draft was held in 1963.}
 returned. Default to \code{FALSE}.}
 
 \item{return_datatable}{\emph{(optional)} Logical indicating whether or not a data.table should be
-returned. Default can be set globally with options("tidynhl.data.table").}
+returned. Default can be set globally with \code{options("tidynhl.data.table")}.}
 }
 \description{
 The function \code{tidy_draft()} is meant to be a user-friendly way of getting data about the NHL

@@ -14,7 +14,7 @@
 #' @param keep_id *(optional)* Logical indicating if the IDs of different dimensions should be
 #'   returned. Default to `FALSE`.
 #' @param return_datatable *(optional)* Logical indicating whether or not a data.table should be
-#'   returned. Default can be set globally with options("tidynhl.data.table").
+#'   returned. Default can be set globally with `options("tidynhl.data.table")`.
 #'
 #' @examples
 #' # Allowing large outputs for the pkgdown website
