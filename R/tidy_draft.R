@@ -91,6 +91,7 @@ tidy_draft <- function(
 
   setcolorder(drafts, c("draft_year", "draft_round", "draft_pick", "draft_overall", "team_id",
                         "team_abbreviation", "prospect_id", "prospect_fullname", "player_id"))
+  setorder(drafts, draft_year, draft_overall)
 
   if (!keep_id) {
     drop_ids(drafts)
