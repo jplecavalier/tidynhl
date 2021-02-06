@@ -142,3 +142,5 @@ drop_ids <- function(data) {
   data[, colnames(data)[grep("_id$", colnames(data))]:=NULL]
 
 }
+
+data <- new.env()
