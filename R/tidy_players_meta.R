@@ -50,11 +50,40 @@ tidy_players_meta <- function(
     stop("argument 'return_datatable' should be one of 'TRUE' or 'FALSE'")
   }
 
-  players_meta <- create_data_table(get_records_api("player")[[1]]$data)
+  if (!exists("players_meta", envir = data)) {
+    load_players_meta()
+  }
+  players_meta <- copy(get("players_meta", envir = data))
 
   if (!is.null(players_id)) {
-    players_meta <- players_meta[id %in% players_id]
+    players_meta <- players_meta[player_id %in% players_id]
   }
+
+  missing_ids <- setdiff(players_id, players_meta[, player_id])
+  if (length(missing_ids) > 0L) {
+
+    warning(paste0(
+      "the following IDs are unknown: ",
+      paste(missing_ids, collapse=", ")
+    ))
+
+  }
+
+  if (!keep_id) {
+    drop_ids(players_meta)
+  }
+
+  if (!return_datatable) {
+    players_meta <- as.data.frame(players_meta)
+  }
+
+  add_copyright(players_meta)
+
+}
+
+load_players_meta <- function() {
+
+  players_meta <- create_data_table(get_records_api("player")[[1]]$data)
 
   validate_columns(players_meta, list(
     id = NA_integer_,
@@ -108,16 +137,6 @@ tidy_players_meta <- function(
   players_meta[, player_position_type := player_position]
   players_meta[player_position %in% c("L", "C", "R"), player_position_type := "F"]
 
-  missing_ids <- setdiff(players_id, players_meta[, player_id])
-  if (length(missing_ids) > 0L) {
-
-    warning(paste0(
-      "the following IDs are unknown: ",
-      paste(missing_ids, collapse=", ")
-    ))
-
-  }
-
   teams_meta <- tidy_teams_meta(active_only = FALSE, keep_id = TRUE, return_datatable = TRUE)
   players_meta[teams_meta, team_abbreviation := team_abbreviation, on=.(team_id)]
 
@@ -130,14 +149,6 @@ tidy_players_meta <- function(
   ))
   setorder(players_meta, player_id)
 
-  if (!keep_id) {
-    drop_ids(players_meta)
-  }
-
-  if (!return_datatable) {
-    players_meta <- as.data.frame(players_meta)
-  }
-
-  add_copyright(players_meta)
+  assign("players_meta", players_meta, data)
 
 }
