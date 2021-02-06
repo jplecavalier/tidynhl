@@ -11,8 +11,9 @@ tidy_drafts(
 )
 }
 \arguments{
-\item{drafts_year}{Integer vector indicating which entry drafts will be returned. The first NHL
-entry draft was held in 1963.}
+\item{drafts_year}{\emph{(optional)}  Integer vector indicating which entry drafts will be returned.
+The first NHL entry draft was held in 1963. Default to \code{NULL} which will return every entry
+drafts in NHL history.}
 
 \item{keep_id}{\emph{(optional)} Logical indicating if the IDs of different dimensions should be
 returned. Default to \code{FALSE}.}

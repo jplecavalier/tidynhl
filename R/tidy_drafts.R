@@ -3,8 +3,9 @@
 #' The function `tidy_drafts()` is meant to be a user-friendly way of getting data about the NHL
 #' entry drafts.
 #'
-#' @param drafts_year Integer vector indicating which entry drafts will be returned. The first NHL
-#'   entry draft was held in 1963.
+#' @param drafts_year *(optional)*  Integer vector indicating which entry drafts will be returned.
+#'   The first NHL entry draft was held in 1963. Default to `NULL` which will return every entry
+#'   drafts in NHL history.
 #' @param keep_id *(optional)* Logical indicating if the IDs of different dimensions should be
 #'   returned. Default to `FALSE`.
 #' @param return_datatable *(optional)* Logical indicating whether or not a data.table should be
