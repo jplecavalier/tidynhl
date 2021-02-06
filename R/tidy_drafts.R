@@ -70,7 +70,7 @@ tidy_drafts <- function(
 
     warning(paste0(
       "no draft found for the following years: ",
-      paste(missing_draft, collapse=", ")
+      paste(missing_draft, collapse = ", ")
     ))
 
   }

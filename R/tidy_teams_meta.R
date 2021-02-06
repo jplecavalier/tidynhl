@@ -81,9 +81,9 @@ load_teams_meta <- function() {
 
   teams_meta <- franchise[, rbindlist(mapply(function(franchise_id, teams) {
 
-    franchiseTeam <- teams[, rbindlist(franchiseTeam, fill=TRUE)]
+    franchiseTeam <- teams[, rbindlist(franchiseTeam, fill = TRUE)]
     if (!("lastSeason.id" %in% colnames(franchiseTeam))) {
-      franchiseTeam[, lastSeason.id:=NA_character_]
+      franchiseTeam[, lastSeason.id := NA_character_]
     }
 
     teams[, shortName := placeName]
@@ -441,7 +441,7 @@ load_teams_meta <- function() {
   ))
 
   cols <- setdiff(colnames(venues_active), "team_id")
-  teams_meta[venues_active, (cols):=mget(cols), on=.(team_id)]
+  teams_meta[venues_active, (cols) := mget(cols), on = .(team_id)]
 
   setcolorder(teams_meta, c(setdiff(colnames(teams_meta), "logo_last_url"), "logo_last_url"))
   setorder(teams_meta, season_last_id, team_abbreviation)

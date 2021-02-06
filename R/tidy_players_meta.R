@@ -64,7 +64,7 @@ tidy_players_meta <- function(
 
     warning(paste0(
       "the following IDs are unknown: ",
-      paste(missing_ids, collapse=", ")
+      paste(missing_ids, collapse = ", ")
     ))
 
   }
@@ -138,7 +138,7 @@ load_players_meta <- function() {
   players_meta[player_position %in% c("L", "C", "R"), player_position_type := "F"]
 
   teams_meta <- tidy_teams_meta(active_only = FALSE, keep_id = TRUE, return_datatable = TRUE)
-  players_meta[teams_meta, team_abbreviation := team_abbreviation, on=.(team_id)]
+  players_meta[teams_meta, team_abbreviation := team_abbreviation, on = .(team_id)]
 
   setcolorder(players_meta, c(
     "player_id", "player_name", "player_active", "player_roster_status", "player_number",
