@@ -1,13 +1,13 @@
-#' Get a tidy dataset of the NHL schedule
+#' Get a tidy dataset of NHL schedules
 #'
-#' The function `tidy_schedule()` is meant to be a user-friendly way of getting the NHL schedule,
+#' The function `tidy_schedules()` is meant to be a user-friendly way of getting NHL schedules,
 #' including the final score of completed games.
 #'
 #' @param seasons_id Character vector of the seasons ID for which the schedule will be returned. The
 #'   required format is 'xxxxyyyy'.
-#' @param regular *(optional)* Logical indicating if the regular season schedule should be returned.
-#'   Default to `TRUE`.
-#' @param playoffs *(optional)* Logical indicating if the playoffs schedule should be returned.
+#' @param regular *(optional)* Logical indicating if the regular season schedules should be
+#'   returned. Default to `TRUE`.
+#' @param playoffs *(optional)* Logical indicating if the playoffs schedules should be returned.
 #'   Default to `TRUE`.
 #' @param tz *(optional)* Character specifying the timezone that should be used for datetime.
 #'   Default to the user system timezone.
@@ -21,11 +21,11 @@
 #' options(width = 1000L)
 #'
 #' # Get the schedule of the 2019-2020 regular season and playoffs
-#' tidy_schedule("20192020")
+#' tidy_schedules("20192020")
 #'
 #' # Get the regular season schedule of both the 2018-2019 and 2019-2020 seasons, keeping the IDs
 #' # and indicating game datetime with Los Angeles local time
-#' tidy_schedule(
+#' tidy_schedules(
 #'   seasons_id = c("20182019", "20192020"),
 #'   playoffs = FALSE,
 #'   tz = "America/Los_Angeles",
@@ -33,7 +33,7 @@
 #' )
 #'
 #' @export
-tidy_schedule <- function(
+tidy_schedules <- function(
   seasons_id,
   regular = TRUE,
   playoffs = TRUE,
@@ -57,7 +57,7 @@ tidy_schedule <- function(
   api_returns <- get_stats_api(paste0(
     "schedule?startDate=", start, "&endDate=", end, "&expand=schedule.linescore"))
 
-  seasons_games <- rbindlist(lapply(api_returns, function(api_return) {
+  schedules <- rbindlist(lapply(api_returns, function(api_return) {
 
     season_games <- create_data_table(rbindlist(api_return$dates$games, fill = TRUE))
 
@@ -71,7 +71,7 @@ tidy_schedule <- function(
 
   }), fill = TRUE)
 
-  validate_columns(seasons_games, list(
+  validate_columns(schedules, list(
     season = NA_character_,
     gamePk = NA_integer_,
     gameType = NA_character_,
@@ -86,7 +86,7 @@ tidy_schedule <- function(
     linescore.hasShootout = NA
   ))
 
-  seasons_games <- seasons_games[, .(
+  schedules <- schedules[, .(
     season_id = season,
     season_years = season_years(season),
     season_type = ifelse(substr(gamePk, 5L, 6L) == "02", "regular", "playoffs"),
@@ -106,30 +106,30 @@ tidy_schedule <- function(
   #       fixed
 
   teams_meta <- tidy_teams_meta(active_only = FALSE, keep_id = TRUE, return_datatable = TRUE)
-  seasons_games[teams_meta, away_abbreviation := team_abbreviation, on = c(away_id = "team_id")]
-  seasons_games[teams_meta, home_abbreviation := team_abbreviation, on = c(home_id = "team_id")]
+  schedules[teams_meta, away_abbreviation := team_abbreviation, on = c(away_id = "team_id")]
+  schedules[teams_meta, home_abbreviation := team_abbreviation, on = c(home_id = "team_id")]
 
-  seasons_games[game_status != "final", `:=`(
+  schedules[game_status != "final", `:=`(
     away_score = NA_integer_,
     home_score = NA_integer_,
     game_nbot = NA_integer_,
     game_shootout = NA
   )]
 
-  setcolorder(seasons_games, c("season_id", "season_years", "season_type", "game_id",
-                               "game_datetime", "game_status", "venue_name", "away_id",
-                               "away_abbreviation", "away_score", "home_score", "home_abbreviation",
-                               "home_id", "game_nbot", "game_shootout"))
+  setcolorder(schedules, c("season_id", "season_years", "season_type", "game_id", "game_datetime",
+                           "game_status", "venue_name", "away_id", "away_abbreviation",
+                           "away_score", "home_score", "home_abbreviation", "home_id", "game_nbot",
+                           "game_shootout"))
 
   if (!keep_id) {
-    drop_ids(seasons_games)
+    drop_ids(schedules)
   }
 
   if (!return_datatable) {
-    seasons_games <- as.data.frame(seasons_games)
+    schedules <- as.data.frame(schedules)
   }
 
-  add_copyright(seasons_games)
-  seasons_games[]
+  add_copyright(schedules)
+  schedules[]
 
 }
