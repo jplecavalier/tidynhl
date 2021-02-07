@@ -79,12 +79,13 @@ tidy_drafts <- function(
     drop_ids(drafts)
   }
 
-  if (!return_datatable) {
-    drafts <- as.data.frame(drafts)
-  }
-
   add_copyright(drafts)
-  drafts[]
+
+  if (return_datatable) {
+    drafts[]
+  } else {
+    as.data.frame(drafts)
+  }
 
 }
 

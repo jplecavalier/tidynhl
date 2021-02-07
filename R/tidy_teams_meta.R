@@ -54,12 +54,13 @@ tidy_teams_meta <- function(
     teams_meta <- teams_meta[team_active == TRUE, .SD, .SDcols = !drop_columns]
   }
 
-  if (!return_datatable) {
-    teams_meta <- as.data.frame(teams_meta)
-  }
-
   add_copyright(teams_meta)
-  teams_meta[]
+
+  if (return_datatable) {
+    teams_meta[]
+  } else {
+    as.data.frame(teams_meta)
+  }
 
 }
 

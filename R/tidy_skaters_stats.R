@@ -178,11 +178,12 @@ tidy_skaters_stats <- function(
     drop_ids(skaters_stats)
   }
 
-  if (!return_datatable) {
-    skaters_stats <- as.data.frame(skaters_stats)
-  }
-
   add_copyright(skaters_stats)
-  skaters_stats[]
+
+  if (return_datatable) {
+    skaters_stats[]
+  } else {
+    as.data.frame(skaters_stats)
+  }
 
 }

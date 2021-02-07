@@ -169,11 +169,12 @@ tidy_goalies_stats <- function(
     drop_ids(goalies_stats)
   }
 
-  if (!return_datatable) {
-    goalies_stats <- as.data.frame(goalies_stats)
-  }
-
   add_copyright(goalies_stats)
-  goalies_stats[]
+
+  if (return_datatable) {
+    goalies_stats[]
+  } else {
+    as.data.frame(goalies_stats)
+  }
 
 }

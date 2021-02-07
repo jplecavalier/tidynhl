@@ -125,11 +125,12 @@ tidy_schedules <- function(
     drop_ids(schedules)
   }
 
-  if (!return_datatable) {
-    schedules <- as.data.frame(schedules)
-  }
-
   add_copyright(schedules)
-  schedules[]
+
+  if (return_datatable) {
+    schedules[]
+  } else {
+    as.data.frame(schedules)
+  }
 
 }

@@ -73,12 +73,13 @@ tidy_players_meta <- function(
     drop_ids(players_meta)
   }
 
-  if (!return_datatable) {
-    players_meta <- as.data.frame(players_meta)
-  }
-
   add_copyright(players_meta)
-  players_meta[]
+
+  if (return_datatable) {
+    players_meta[]
+  } else {
+    as.data.frame(players_meta)
+  }
 
 }
 
