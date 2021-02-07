@@ -2,10 +2,11 @@
 
 export(get_players_id)
 export(tidy_drafts)
+export(tidy_goalies_stats)
 export(tidy_players_gamelogs)
 export(tidy_players_meta)
-export(tidy_players_stats)
 export(tidy_schedule)
+export(tidy_skaters_stats)
 export(tidy_teams_meta)
 import(data.table)
 importFrom(magrittr,"%>%")
