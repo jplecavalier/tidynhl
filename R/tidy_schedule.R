@@ -51,7 +51,11 @@ tidy_schedule <- function(
 
   # TODO: Add more complete parameters check
 
-  api_returns <- get_stats_api(paste0("schedule?season=", seasons_id, "&expand=schedule.linescore"))
+  start <- seasons_info[season_id %in% seasons_id, as.character(season_regular_start)]
+  end <- seasons_info[season_id %in% seasons_id, as.character(season_playoffs_end)]
+
+  api_returns <- get_stats_api(paste0(
+    "schedule?startDate=", start, "&endDate=", end, "&expand=schedule.linescore"))
 
   seasons_games <- rbindlist(lapply(api_returns, function(api_return) {
 
