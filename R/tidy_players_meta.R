@@ -78,6 +78,7 @@ tidy_players_meta <- function(
   }
 
   add_copyright(players_meta)
+  players_meta[]
 
 }
 

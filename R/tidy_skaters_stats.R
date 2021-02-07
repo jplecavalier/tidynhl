@@ -183,5 +183,6 @@ tidy_skaters_stats <- function(
   }
 
   add_copyright(skaters_stats)
+  skaters_stats[]
 
 }

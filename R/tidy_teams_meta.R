@@ -59,6 +59,7 @@ tidy_teams_meta <- function(
   }
 
   add_copyright(teams_meta)
+  teams_meta[]
 
 }
 

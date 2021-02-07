@@ -84,6 +84,7 @@ tidy_drafts <- function(
   }
 
   add_copyright(drafts)
+  drafts[]
 
 }
 

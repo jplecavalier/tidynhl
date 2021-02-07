@@ -100,21 +100,23 @@ season_years <- function(season_id) {
 
 add_copyright <- function(object) {
 
-  attr(object, "copyright") <- paste(
+  setattr(object, "copyright", paste(
     "NHL and the NHL Shield are registered trademarks of the National Hockey League.",
     "NHL and NHL team marks are the property of the NHL and its teams.",
     "\u00a9 NHL 2021. All Rights Reserved."
-  )
-
-  object
+  ))
 
 }
 
 get_nhl_api <- function(base_url, paths) {
 
+  nb_paths <- length(paths)
+  if (nb_paths == 0L) {
+    return(list())
+  }
+
   urls <- paste0(base_url, paths)
-  nb_urls <- length(urls)
-  waits <- c(0, runif(nb_urls - 1L, 1, 1.5))
+  waits <- c(0, runif(nb_paths - 1L, 1, 1.5))
 
   output <- mapply(function(url, wait) {
     Sys.sleep(wait)

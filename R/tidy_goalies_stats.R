@@ -174,5 +174,6 @@ tidy_goalies_stats <- function(
   }
 
   add_copyright(goalies_stats)
+  goalies_stats[]
 
 }

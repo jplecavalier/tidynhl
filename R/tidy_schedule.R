@@ -106,10 +106,10 @@ tidy_schedule <- function(
   #       fixed
 
   teams_meta <- tidy_teams_meta(active_only = FALSE, keep_id = TRUE, return_datatable = TRUE)
-  seasons_games[teams_meta, away_team:=team_abbreviation, on=c(away_id="team_id")]
-  seasons_games[teams_meta, home_team:=team_abbreviation, on=c(home_id="team_id")]
+  seasons_games[teams_meta, away_abbreviation := team_abbreviation, on = c(away_id = "team_id")]
+  seasons_games[teams_meta, home_abbreviation := team_abbreviation, on = c(home_id = "team_id")]
 
-  seasons_games[game_status!="final", `:=`(
+  seasons_games[game_status != "final", `:=`(
     away_score = NA_integer_,
     home_score = NA_integer_,
     game_nbot = NA_integer_,
@@ -117,9 +117,9 @@ tidy_schedule <- function(
   )]
 
   setcolorder(seasons_games, c("season_id", "season_years", "season_type", "game_id",
-                               "game_datetime", "game_status", "venue_name", "away_id", "away_team",
-                               "away_score", "home_score", "home_team", "home_id", "game_nbot",
-                               "game_shootout"))
+                               "game_datetime", "game_status", "venue_name", "away_id",
+                               "away_abbreviation", "away_score", "home_score", "home_abbreviation",
+                               "home_id", "game_nbot", "game_shootout"))
 
   if (!keep_id) {
     drop_ids(seasons_games)
@@ -130,5 +130,6 @@ tidy_schedule <- function(
   }
 
   add_copyright(seasons_games)
+  seasons_games[]
 
 }
