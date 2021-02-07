@@ -49,7 +49,7 @@ tidy_teams_meta <- function(
   }
 
   if (active_only) {
-    drop_columns <- c("team_active", "season_last_id", "season_last_label")
+    drop_columns <- c("team_active", "season_last_id", "season_last_years")
     drop_columns <- drop_columns[which(drop_columns %in% colnames(teams_meta))]
     teams_meta <- teams_meta[team_active == TRUE, .SD, .SDcols = !drop_columns]
   }
@@ -113,9 +113,9 @@ load_teams_meta <- function() {
       team_fullname = teams[, fullName],
       team_shortname = teams[, shortName],
       season_first_id = franchiseTeam[, firstSeason.id],
-      season_first_label = franchiseTeam[, season_years(firstSeason.id)],
+      season_first_years = franchiseTeam[, season_years(firstSeason.id)],
       season_last_id = franchiseTeam[, lastSeason.id],
-      season_last_label = franchiseTeam[, season_years(lastSeason.id)],
+      season_last_years = franchiseTeam[, season_years(lastSeason.id)],
       conference_active_id = teams[, conference.id],
       conference_active_abbreviation = teams[, conference.abbreviation],
       conference_active_name = teams[, conference.name],
