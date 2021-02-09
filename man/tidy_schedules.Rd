@@ -24,7 +24,7 @@ returned. Default to \code{TRUE}.}
 Default to \code{TRUE}.}
 
 \item{tz}{\emph{(optional)} Character specifying the timezone that should be used for datetime.
-Default to the user system timezone.}
+Default to the user system time zone.}
 
 \item{keep_id}{\emph{(optional)} Logical indicating if the IDs of different dimensions should be
 returned. Default to \code{FALSE}.}

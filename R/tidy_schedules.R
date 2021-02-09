@@ -10,7 +10,7 @@
 #' @param playoffs *(optional)* Logical indicating if the playoffs schedules should be returned.
 #'   Default to `TRUE`.
 #' @param tz *(optional)* Character specifying the timezone that should be used for datetime.
-#'   Default to the user system timezone.
+#'   Default to the user system time zone.
 #' @param keep_id *(optional)* Logical indicating if the IDs of different dimensions should be
 #'   returned. Default to `FALSE`.
 #' @param return_datatable *(optional)* Logical indicating whether or not a data.table should be
@@ -42,16 +42,46 @@ tidy_schedules <- function(
   return_datatable = getOption("tidynhl.data.table", TRUE)
 ) {
 
-  # TODO: Replace this when tidy_seasons_meta() will be developed
+  seasons_meta <- tidy_seasons_meta(keep_id = TRUE, return_datatable = TRUE)
 
-  check_seasons_id <- seasons_id%in%seasons_info[, season_id]
-  if (sum(!check_seasons_id)>0) {
-    stop(paste("the following values are invalid for parameter 'seasons_id':", paste(seasons_id[!check_seasons_id], collapse = ", ")))
+  seasons_id <- unique(seasons_id)
+  missing_seasons <- setdiff(seasons_id, seasons_meta[, season_id])
+  if (length(missing_seasons) > 0L) {
+    stop(paste(
+      "every elements of the argument 'seasons_id' must be valid NHL season ID,",
+      "the following are not:",
+      paste(missing_seasons, collapse = ", ")
+    ))
   }
 
-  # TODO: Add more complete parameters check
+  if (!is.logical(regular) | is.na(regular) | length(regular) != 1L) {
+    stop("argument 'regular' should be one of 'TRUE' or 'FALSE'")
+  }
 
-  seasons_meta <- copy(seasons_info)
+  if (!is.logical(playoffs) | is.na(playoffs) | length(playoffs) != 1L) {
+    stop("argument 'playoffs' should be one of 'TRUE' or 'FALSE'")
+  }
+
+  if (!regular & !playoffs) {
+    stop("at least one of arguments 'regular' or 'playoffs' should be 'TRUE'")
+  }
+
+  if (!is.character(tz) | is.na(tz) | length(tz) != 1L) {
+    stop("argument 'tz' should be a character of length 1")
+  } else {
+    if (!(tz %in% OlsonNames())) {
+      warning("argument 'tz' is not recognized as a valid time zone, using 'UTC' instead")
+      tz <- "UTC"
+    }
+  }
+
+  if (!is.logical(keep_id) | is.na(keep_id) | length(keep_id) != 1L) {
+    stop("argument 'keep_id' should be one of 'TRUE' or 'FALSE'")
+  }
+
+  if (!is.logical(return_datatable) | is.na(return_datatable) | length(return_datatable) != 1L) {
+    stop("argument 'return_datatable' should be one of 'TRUE' or 'FALSE'")
+  }
 
   schedules <- data.table(
     season_id = seasons_id
@@ -120,9 +150,6 @@ tidy_schedules <- function(
     game_nbot = linescore.currentPeriod - linescore.hasShootout - 3L,
     game_shootout = linescore.hasShootout
   )]
-
-  # TODO: Make a patch for the missing games, making sure not to duplicate them when the API will be
-  #       fixed
 
   teams_meta <- tidy_teams_meta(active_only = FALSE, keep_id = TRUE, return_datatable = TRUE)
   schedules[teams_meta, away_abbreviation := team_abbreviation, on = c(away_id = "team_id")]
