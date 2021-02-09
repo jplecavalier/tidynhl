@@ -46,6 +46,7 @@ tidy_skaters_gamelogs <- function(
   return_datatable = getOption("tidynhl.data.table", TRUE)
 ) {
 
+  seasons_meta <- tidy_seasons_meta(keep_id = TRUE, return_datatable = TRUE)
   players_meta <- tidy_players_meta(keep_id = TRUE, return_datatable = TRUE)
 
   error <- FALSE
@@ -72,7 +73,15 @@ tidy_skaters_gamelogs <- function(
   }
 
   if (!is.null(seasons_id)) {
-    # TODO: Add parameters check when tidy_seasons_meta() will be available
+    seasons_id <- unique(seasons_id)
+    missing_seasons <- setdiff(seasons_id, seasons_meta[, season_id])
+    if (length(missing_seasons) > 0L) {
+      stop(paste(
+        "every elements of the argument 'seasons_id' must be valid NHL season ID,",
+        "the following are not:",
+        paste(missing_seasons, collapse = ", ")
+      ))
+    }
   }
 
   if (!is.logical(regular) | is.na(regular) | length(regular) != 1L) {
