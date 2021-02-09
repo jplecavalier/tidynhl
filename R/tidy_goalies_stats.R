@@ -164,6 +164,9 @@ tidy_goalies_stats <- function(
     goalie_pk_savepct = stat.shortHandedSaves / stat.shortHandedShots
   )]
 
+  goalies_stats[is.na(goalie_ties), goalie_ties := 0L]
+  goalies_stats[is.na(goalie_ot), goalie_ot := 0L]
+
   teams_meta <- tidy_teams_meta(active_only = FALSE, keep_id = TRUE, return_datatable = TRUE)
   goalies_stats[teams_meta, team_abbreviation := team_abbreviation, on = .(team_id)]
 
