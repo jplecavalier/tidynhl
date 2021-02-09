@@ -129,6 +129,16 @@ tidy_goalies_gamelogs <- function(
   goalies_gamelogs <- goalies_seasons[, rbindlist(mapply(
     FUN = function(player_id, season_id, season_type, api_return) {
 
+      if (!is.null(api_return$messageNumber)) {
+        warning(paste(
+          "some game logs are missing since the API returned an error for the following keys:",
+          paste0("{player_id=", player_id, ","),
+          paste0("season_id=", season_id, ","),
+          paste0("season_type=", season_type, "}")
+        ))
+        return(NULL)
+      }
+
       splits <- create_data_table(api_return$stats$splits[[1]])
       splits[, `:=`(
         player_id = player_id,
