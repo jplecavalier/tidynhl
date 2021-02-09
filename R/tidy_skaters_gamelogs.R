@@ -54,6 +54,8 @@ tidy_skaters_gamelogs <- function(
   } else {
     if (sum(as.integer(players_id) != players_id) > 0L) {
       error <- TRUE
+    } else {
+      players_id <- as.integer(players_id)
     }
   }
   if (error) {

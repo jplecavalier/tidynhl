@@ -36,13 +36,14 @@ tidy_drafts <- function(
       if (sum(as.integer(drafts_year) != drafts_year) > 0L) {
         error <- TRUE
       } else {
+        drafts_year <- as.integer(drafts_year)
         if (sum(drafts_year < 1963L) > 0L) {
           error <- TRUE
         }
       }
     }
     if (error) {
-      stop("argument 'drafts_year' should be a vector of integers greater than or equal to 1963L")
+      stop("argument 'drafts_year' should be a vector of integers greater than or equal to 1963")
     }
   }
 
