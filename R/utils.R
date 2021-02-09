@@ -122,6 +122,7 @@ get_nhl_api <- function(base_url, paths) {
   }, url = urls, wait = waits, SIMPLIFY = FALSE, USE.NAMES = FALSE)
 
   add_copyright(output)
+  output
 
 }
 

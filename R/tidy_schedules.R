@@ -51,13 +51,32 @@ tidy_schedules <- function(
 
   # TODO: Add more complete parameters check
 
-  start <- seasons_info[season_id %in% seasons_id, as.character(season_regular_start)]
-  end <- seasons_info[season_id %in% seasons_id, as.character(season_playoffs_end)]
+  seasons_meta <- copy(seasons_info)
 
-  api_returns <- get_stats_api(paste0(
-    "schedule?startDate=", start, "&endDate=", end, "&expand=schedule.linescore"))
+  schedules <- data.table(
+    season_id = seasons_id
+  )
 
-  schedules <- rbindlist(lapply(api_returns, function(api_return) {
+  schedules[seasons_meta, `:=` (
+    start_date = season_regular_start,
+    end_date = season_playoffs_end
+  ), on = .(season_id)]
+
+  schedules[, `:=`(
+    url_season = paste0("schedule?season=", season_id, "&expand=schedule.linescore"),
+    url_dates = paste0(
+      "schedule?startDate=", start_date,
+      "&endDate=", end_date,
+      "&expand=schedule.linescore"
+    )
+  )]
+
+  schedules[, api_return := get_stats_api(url_season)]
+  schedules[which(sapply(api_return, function(api_return) {
+    !is.null(api_return$messageNumber)
+  })), api_return := get_stats_api(url_dates)]
+
+  schedules <- schedules[, rbindlist(lapply(api_return, function(api_return) {
 
     season_games <- create_data_table(rbindlist(api_return$dates$games, fill = TRUE))
 
@@ -69,7 +88,7 @@ tidy_schedules <- function(
       season_games[gameType == "P"]
     }
 
-  }), fill = TRUE)
+  }), fill = TRUE)]
 
   validate_columns(schedules, list(
     season = NA_character_,
