@@ -1,5 +1,3 @@
-api_url <- "https://statsapi.web.nhl.com/api/v1/"
-
 create_data_table <- function(data) {
 
   return_dt <- is.data.frame(data)
