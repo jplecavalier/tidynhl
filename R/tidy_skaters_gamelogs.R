@@ -96,6 +96,15 @@ tidy_skaters_gamelogs <- function(
     stop("at least one of arguments 'regular' or 'playoffs' should be 'TRUE'")
   }
 
+  if (!is.character(tz) | is.na(tz) | length(tz) != 1L) {
+    stop("argument 'tz' should be a character of length 1")
+  } else {
+    if (!(tz %in% OlsonNames())) {
+      warning("argument 'tz' is not recognized as a valid time zone, using 'UTC' instead")
+      tz <- "UTC"
+    }
+  }
+
   if (!is.logical(keep_id) | is.na(keep_id) | length(keep_id) != 1L) {
     stop("argument 'keep_id' should be one of 'TRUE' or 'FALSE'")
   }
