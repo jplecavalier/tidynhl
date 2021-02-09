@@ -66,7 +66,7 @@ tidy_skaters_gamelogs <- function(
   non_skaters_id <- players_meta[player_id %in% players_id & player_position_type == "G", player_id]
   if (length(non_skaters_id) > 0L) {
     stop(paste(
-      "every elements of the argument 'players_id' must be identified as skaters,",
+      "every elements of the argument 'players_id' should be identified as skaters,",
       "the following are not:",
       paste(non_skaters_id, collapse = ", ")
     ))
@@ -77,7 +77,7 @@ tidy_skaters_gamelogs <- function(
     missing_seasons <- setdiff(seasons_id, seasons_meta[, season_id])
     if (length(missing_seasons) > 0L) {
       stop(paste(
-        "every elements of the argument 'seasons_id' must be valid NHL season ID,",
+        "every elements of the argument 'seasons_id' should be a valid NHL season ID,",
         "the following are not:",
         paste(missing_seasons, collapse = ", ")
       ))

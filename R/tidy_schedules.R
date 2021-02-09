@@ -48,7 +48,7 @@ tidy_schedules <- function(
   missing_seasons <- setdiff(seasons_id, seasons_meta[, season_id])
   if (length(missing_seasons) > 0L) {
     stop(paste(
-      "every elements of the argument 'seasons_id' must be valid NHL season ID,",
+      "every elements of the argument 'seasons_id' should be a valid NHL season ID,",
       "the following are not:",
       paste(missing_seasons, collapse = ", ")
     ))

@@ -53,7 +53,7 @@ tidy_goalies_stats <- function(
   non_goalies_id <- players_meta[player_id %in% players_id & player_position_type != "G", player_id]
   if (length(non_goalies_id) > 0L) {
     stop(paste(
-      "every elements of the argument 'players_id' must be identified as goalies,",
+      "every elements of the argument 'players_id' should be identified as goalies,",
       "the following are not:",
       paste(non_goalies_id, collapse = ", ")
     ))

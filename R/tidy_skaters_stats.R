@@ -53,7 +53,7 @@ tidy_skaters_stats <- function(
   non_skaters_id <- players_meta[player_id %in% players_id & player_position_type == "G", player_id]
   if (length(non_skaters_id) > 0L) {
     stop(paste(
-      "every elements of the argument 'players_id' must be identified as skaters,",
+      "every elements of the argument 'players_id' should be identified as skaters,",
       "the following are not:",
       paste(non_skaters_id, collapse = ", ")
     ))
