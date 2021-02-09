@@ -1,4 +1,4 @@
-#' Get a tidy dataset of the NHL entry drafts
+#' Get a tidy dataset of NHL entry drafts
 #'
 #' The function `tidy_drafts()` is meant to be a user-friendly way of getting data about the NHL
 #' entry drafts.

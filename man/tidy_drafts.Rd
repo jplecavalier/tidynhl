@@ -2,7 +2,7 @@
 % Please edit documentation in R/tidy_drafts.R
 \name{tidy_drafts}
 \alias{tidy_drafts}
-\title{Get a tidy dataset of the NHL entry drafts}
+\title{Get a tidy dataset of NHL entry drafts}
 \usage{
 tidy_drafts(
   drafts_year = NULL,
