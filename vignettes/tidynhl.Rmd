@@ -13,7 +13,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-options(width=1000)
+options(width = 1000)
 set.seed(20201031L)
 ```
 
@@ -48,7 +48,7 @@ the 1998 NHL Entry Draft while St. Louis was never drafted at all (even though h
 let's retrieve data about the 1993 and 1998 NHL Entry Drafts.
 
 ```{r retrieve_nhl_entry_drafts}
-drafts <- tidy_draft(c(1993L, 1998L))
+drafts <- tidy_drafts(c(1993L, 1998L))
 drafts[]
 ```
 
@@ -85,7 +85,7 @@ meta[]
 Note the 8-inch difference in height! Let's now retrieve their NHL career statistics.
 
 ```{r retrieve_career_stats}
-career_stats <- tidy_players_stats(ids)
+career_stats <- tidy_skaters_stats(ids)
 career_stats[]
 ```
 
@@ -113,7 +113,7 @@ winning the Conn Smythe Trophy, which has been awarded to [Brad Richards](https:
 mix for the analysis of this subsection? No problem, let's do it! We begin by retrieving their game logs for this particular Stanley Cup Playoffs run.
 
 ```{r retrieve_gamelogs_stanley_cup}
-stanleycup_gamelogs <- tidy_players_gamelogs(
+stanleycup_gamelogs <- tidy_skaters_gamelogs(
   players_id = c(ids, get_players_id("Brad Richards")),
   seasons_id = "20032004",
   regular    = FALSE
