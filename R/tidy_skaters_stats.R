@@ -42,6 +42,8 @@ tidy_skaters_stats <- function(
   } else {
     if (sum(as.integer(players_id) != players_id) > 0L) {
       error <- TRUE
+    } else {
+      players_id <- as.integer(players_id)
     }
   }
   if (error) {
@@ -77,35 +79,42 @@ tidy_skaters_stats <- function(
     stop("argument 'return_datatable' should be one of 'TRUE' or 'FALSE'")
   }
 
-  if (regular) {
-    urls_regular <- paste0("people/", players_id, "/stats?stats=yearByYear")
-  } else {
-    urls_regular <- NULL
-  }
+  skaters_stats <- data.table(
+    player_id = rep(players_id, each = 2L),
+    season_type = c(ifelse(regular, "regular", NA_character_),
+                    ifelse(playoffs, "playoffs", NA_character_))
+  )[!is.na(season_type)]
 
-  if (playoffs) {
-    urls_playoffs <- paste0("people/", players_id, "/stats?stats=yearByYearPlayoffs")
-  } else {
-    urls_playoffs <- NULL
-  }
+  skaters_stats[, url := paste0(
+    "people/", player_id,
+    "/stats?stats=", ifelse(season_type == "regular", "yearByYear", "yearByYearPlayoffs")
+  )]
 
-  api_returns <- get_stats_api(c(urls_regular, urls_playoffs))
+  skaters_stats[, api_return := get_stats_api(url)]
 
-  skaters_stats <- rbindlist(mapply(function(player_id, api_return) {
+  skaters_stats <- skaters_stats[, rbindlist(mapply(
+    FUN = function(player_id, season_type, api_return) {
 
-    splits <- create_data_table(api_return$stats$splits[[1]])
-    splits[, player_id := player_id]
-    splits[, type := api_return$stats$type.displayName]
+      splits <- create_data_table(api_return$stats$splits[[1]])
+      splits[, `:=`(
+        player_id = player_id,
+        season_type = season_type
+      )]
 
-    splits[league.id == 133]
+      splits[]
 
-  }, player_id = players_id, api_return = api_returns, SIMPLIFY = FALSE), fill = TRUE)
+    },
+    player_id = player_id,
+    season_type = season_type,
+    api_return = api_return,
+    SIMPLIFY = FALSE
+  ), fill = TRUE)]
 
   validate_columns(skaters_stats, list(
     player_id = NA_integer_,
+    season_type = NA_character_,
     season = NA_character_,
     sequenceNumber = NA_integer_,
-    type = NA_character_,
     team.id = NA_integer_,
     stat.games = NA_integer_,
     stat.goals = NA_integer_,
@@ -129,12 +138,12 @@ tidy_skaters_stats <- function(
     stat.shortHandedTimeOnIce = NA_character_
   ))
 
-  skaters_stats <- skaters_stats[, .(
+  skaters_stats <- skaters_stats[league.id == 133L, .(
     player_id = player_id,
     season_id = season,
     season_years = season_years(season),
     sequence = sequenceNumber,
-    season_type = ifelse(type == "yearByYear", "regular", "playoffs"),
+    season_type = season_type,
     team_id = team.id,
     skater_games = stat.games,
     skater_goals = stat.goals,
