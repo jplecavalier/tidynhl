@@ -11,22 +11,21 @@ get_players_id(players_name, players_dob = NULL, players_position_type = NULL)
 
 \item{players_dob}{\emph{(optional)} Date vector representing the date of birth of the players}
 
-\item{players_position_type}{\emph{(optional)} Character vector representing the position type (F, D or G) of the players}
+\item{players_position_type}{\emph{(optional)} Character vector representing the position type (F, D,
+or G) of the players}
 }
 \description{
-The function \code{get_players_id()} is meant to be a user-friendly way of getting NHL players ID using their name, date of birth and/or primary position type.
+The function \code{get_players_id()} is meant to be a user-friendly way of getting NHL players ID
+using their name, date of birth and/or primary position type.
 }
 \examples{
 # Get the NHL ID of Vincent Lecavalier
 get_players_id("Vincent Lecavalier")
 
-# Get the NHL ID of Vincent Lecavalier and Josh Anderson
+# Get the NHL ID of both Vincent Lecavalier and Josh Anderson
 get_players_id(c("Vincent Lecavalier", "Josh Anderson"))
 
-# Get the NHL ID of Vincent Lecavalier and Josh Anderson (born May 7, 1994)
-get_players_id(
-  players_name = c("Vincent Lecavalier", "Josh Anderson"),
-  players_dob = as.Date(c(NA, "1994-05-07"))
-)
+# Get the NHL ID of Josh Anderson born May 7, 1994
+get_players_id("Josh Anderson", players_dob = as.Date("1994-05-07"))
 
 }

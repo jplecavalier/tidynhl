@@ -13,23 +13,27 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-options(width=1000)
+options(width = 1000L)
 set.seed(20201031L)
 ```
 
-The goal of `tidynhl` is to make it easy for users to extract NHL data in a tidy format. In this sense, the word tidy refers to a state in which the data is
-already neat enough to begin analyses right away, without having to clean anything or make any significant transformations.
+The goal of `tidynhl` is to make it easy for users to extract NHL data in a tidy format. In this
+sense, the word tidy refers to a state in which the data is already neat enough to begin analyses
+right away, without having to clean anything or make any significant transformations.
 
-This package was at first a project that I created to answer personal needs. This explains, in part, the dependency to the `data.table` package (I myself am
-a massive user). Even if I could get rid of the dependency without significant efforts, I decided to stick to it, hoping to influence as many users as
-possible to at least give it a try. This being said, it is totally possible to use the package without using `data.table` to handle the resulting data.
-The native behavior of `tidynhl` is to return tidy datasets in `data.table` objects when the `data.table` package is attached to the current R session. In any
-other cases, the returned datasets will be standard `data.frame` objects that could be handled directly with the native R functions, or transformed into
-`tibble` objects for analysis with `dplyr`.
+This package was at first a project that I created to answer personal needs. This explains, in part,
+the dependency to the [`data.table`](https://rdatatable.gitlab.io/data.table/) package (I myself am
+a massive user). Even if I could get rid of the dependency without significant efforts, I decided to
+stick to it, hoping to influence as many users as possible to at least give it a try. This being
+said, it is totally possible to use the package without using `data.table` to handle the resulting
+data. The native behavior of `tidynhl` is to return tidy datasets in `data.table` objects, but one
+could easily set `options("tidynhl.data.table")` to `FALSE` to get standard `data.frame` objects.
 
-First of all, let's attach `tidynhl` and `data.table` to begin our overview of the package with a simple use case, analyzing the NHL careers of
-[Vincent Lecavalier](https://www.nhl.com/player/vincent-lecavalier-8467329) and [Martin St. Louis](https://www.nhl.com/player/martin-st-louis-8466378), long
-date teammates and important leaders of the [Tampa Bay Lightning](https://www.nhl.com/lightning) in the 2000s.
+First of all, let's attach `tidynhl` and `data.table` to begin our overview of the package with a
+simple use case, analyzing the NHL careers of
+[Vincent Lecavalier](https://www.nhl.com/player/vincent-lecavalier-8467329) and
+[Martin St. Louis](https://www.nhl.com/player/martin-st-louis-8466378), long date teammates and
+major leaders in the 2000s for the [Tampa Bay Lightning](https://www.nhl.com/lightning).
 
 ```{r setup}
 library(tidynhl)
@@ -43,32 +47,36 @@ The package contains two different families of functions:
 
 ## NHL Entry Drafts
 
-Even though Lecavalier and St. Louis both had successful careers, their NHL beginnings were totally opposite. Indeed, Lecavalier was the overall first pick of
-the 1998 NHL Entry Draft while St. Louis was never drafted at all (even though he was available for selection in the 1993 NHL Entry Draft). First,
-let's retrieve data about the 1993 and 1998 NHL Entry Drafts.
+Even though Lecavalier and St. Louis both had successful careers, their NHL beginnings were totally
+opposite. Indeed, Lecavalier was the overall first pick of the 1998 NHL Entry Draft while St. Louis
+was never drafted at all (even though he was available for selection in the 1993 NHL Entry Draft).
+First, let's retrieve data about the 1993 and 1998 NHL Entry Drafts.
 
 ```{r retrieve_nhl_entry_drafts}
-drafts <- tidy_draft(c(1993L, 1998L))
+drafts <- tidy_drafts(c(1993L, 1998L))
 drafts[]
 ```
 
 The top-5 selection the year when Lecavalier was drafted was
 
 ```{r lecavalier_top5}
-drafts[draft_year==1998L & draft_overall<=5L]
+drafts[draft_year == 1998L & draft_overall <= 5L]
 ```
 
-We could make fun of NHL scouts by printing five random players that have been chosen in 1993 while St. Louis was still available.
+We could make fun of NHL scouts by printing five random players that have been chosen in 1993 while
+St. Louis was still available.
 
 ```{r stlouis_random}
-drafts[draft_year==1993L][sample(.N, 5L)]
+drafts[draft_year == 1993L][sample(.N, 5L)]
 ```
 
-I will admit that Brendan Morrison was a fair choice (still far behind St. Louis in terms of NHL success), but I honestly never heard of any other.
+I will admit that Brendan Morrison was a fair choice (still far behind St. Louis in terms of NHL
+success), but I honestly never heard of any other.
 
 ## Career overview
 
-In order to be able to get information on Lecavalier and St. Louis, we will first need to get their personal NHL IDs.
+In order to be able to get information on Lecavalier and St. Louis, we will first need to get their
+personal NHL IDs.
 
 ```{r get_ids}
 ids <- get_players_id(c("Vincent Lecavalier", "Martin St. Louis"))
@@ -82,80 +90,89 @@ meta <- tidy_players_meta(ids)
 meta[]
 ```
 
-Note the 8-inch difference in height! Let's now retrieve their NHL career statistics.
+Note the 8-inches difference in height! Let's now retrieve their NHL career statistics.
 
 ```{r retrieve_career_stats}
-career_stats <- tidy_players_stats(ids)
+career_stats <- tidy_skaters_stats(ids)
 career_stats[]
 ```
 
-There is a lot of information above. Let's take a closer look at their total contributions as a Tampa Bay Lightning player in terms of some key statistics.
+There is a lot of information above. Let's take a closer look at their total contributions as a
+Tampa Bay Lightning player in terms of some key statistics.
 
 ```{r tbl_stats}
-career_stats[team_abbreviation=="TBL"][, .(
+career_stats[team_abbreviation == "TBL"][, .(
   nb_season = .N,
-  games     = sum(skater_games),
-  goals     = sum(skater_goals),
-  assists   = sum(skater_assists),
-  points    = sum(skater_points),
+  games = sum(skater_games),
+  goals = sum(skater_goals),
+  assists = sum(skater_assists),
+  points = sum(skater_points),
   plusminus = sum(skater_plusminus),
-  pim       = sum(skater_pim)
+  pim = sum(skater_pim)
 ), .(player_name, team_abbreviation, season_type)]
 ```
 
-We could then conclude that, even though they were two excellent players for the Tampa Bay Lightning, St. Louis has a slight advantage over Lecavalier. The
-biggest difference is probably their +/- ratio, which points out that St. Louis was probably a more responsible player in defense.
+We could then conclude that, even though they were two excellent players for the Tampa Bay
+Lightning, St. Louis has a slight advantage over Lecavalier. The biggest difference is probably
+their +/- ratio, which points out that St. Louis was probably a more responsible player in defense.
 
 ## 2004 Stanley Cup Playoffs
 
-The Tampa Bay Lightning won their first Stanley Cup back in 2004. Lecavalier and St. Louis were key players in this conquest, but they both fell short of
-winning the Conn Smythe Trophy, which has been awarded to [Brad Richards](https://www.nhl.com/player/brad-richards-8467389). So why not adding Richards in the
-mix for the analysis of this subsection? No problem, let's do it! We begin by retrieving their game logs for this particular Stanley Cup Playoffs run.
+The Tampa Bay Lightning won their first Stanley Cup back in 2004. Lecavalier and St. Louis were key
+players in this conquest, but they both fell short of winning the Conn Smythe Trophy, which has been
+awarded to [Brad Richards](https://www.nhl.com/player/brad-richards-8467389). So why not adding
+Richards in the mix for the analysis of this subsection? No problem, let's do it! We begin by
+retrieving their game logs for this particular Stanley Cup Playoffs run.
 
 ```{r retrieve_gamelogs_stanley_cup}
-stanleycup_gamelogs <- tidy_players_gamelogs(
+stanleycup_gamelogs <- tidy_skaters_gamelogs(
   players_id = c(ids, get_players_id("Brad Richards")),
   seasons_id = "20032004",
-  regular    = FALSE
+  regular = FALSE
 )
 stanleycup_gamelogs[]
 ```
 
-Again, there is a lot of information above. Let's compare each player's success against their different opponents.
+Again, there is a lot of information above. Let's compare each player's success against their
+different opponents.
 
 ```{r compare_playoffs_opponent}
 stanleycup_gamelogs[order(game_datetime)][, .(
-  games     = sum(skater_games),
-  goals     = sum(skater_goals),
-  assists   = sum(skater_assists),
-  points    = sum(skater_points),
+  games = sum(skater_games),
+  goals = sum(skater_goals),
+  assists = sum(skater_assists),
+  points = sum(skater_points),
   plusminus = sum(skater_plusminus),
-  toi       = sum(skater_toi)
+  toi = sum(skater_toi)
 ), .(player_name, opponent_abbreviation)]
 ```
 
-Even though there is no objective way of ranking each player's contribution, one could argue that Lecavalier was the best player against the Montreal
-Canadiens (2nd round), that St. Louis and Richards were kind of nose-to-nose against the New York Islanders (1st round) and the Philadelphia Flyers (Eastern
-Semi-Final) and that Richards probably locked in the Conn Smythe by being the best player against the Calgary Flames in the Final.
+Even though there is no objective way of ranking each player's contribution, one could argue that
+Lecavalier was the best player against the Montreal Canadiens (2nd round), that St. Louis and
+Richards were kind of nose-to-nose against the New York Islanders (1st round) and the Philadelphia
+Flyers (Eastern Semi-Final) and that Richards probably locked in the Conn Smythe by being the best
+player against the Calgary Flames in the Final.
 
-Instead of splitting the data by opponents, we could have split it between home and away games to see if one was better than the others when playing at the
-St. Pete Times Forum during this playoff year.
+Instead of splitting the data by opponents, we could have split it between home and away games to
+see if one was better than the others when playing at the St. Pete Times Forum during this playoff
+year.
 
 ```{r compare_playoffs_homeaway}
 stanleycup_gamelogs[, .(
-  games           = sum(skater_games),
-  goals           = sum(skater_goals),
-  assists         = sum(skater_assists),
-  points          = sum(skater_points),
-  plusminus       = sum(skater_plusminus),
-  points_per_game = sum(skater_points)/sum(skater_games)
+  games = sum(skater_games),
+  goals = sum(skater_goals),
+  assists = sum(skater_assists),
+  points = sum(skater_points),
+  plusminus = sum(skater_plusminus),
+  points_per_game = sum(skater_points) / sum(skater_games)
 ), .(player_name, team_status)]
 ```
 
-One could argue that, while Lecavalier was slightly better at home and St. Louis was slightly better away, Richards was clearly a more dominant player for that
-playoff year while he was anywhere but in the Sunshine State.
+One could argue that, while Lecavalier was slightly better at home and St. Louis was slightly better
+away, Richards was clearly a more dominant player for that playoff year while he was anywhere but in
+the Sunshine State.
 
 ## Conclusion
 
-As we saw in this short introduction to `tidynhl`, the main goal of the package is to make it easy to retrieve NHL data, even for R beginning
-users.
+As we saw in this short introduction to `tidynhl`, the main goal of the package is to make it easy
+to retrieve NHL data, even for R beginners.

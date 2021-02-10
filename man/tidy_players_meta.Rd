@@ -5,55 +5,34 @@
 \title{Get a tidy dataset of NHL players metadata}
 \usage{
 tidy_players_meta(
-  players_id,
-  internal = TRUE,
+  players_id = NULL,
   keep_id = FALSE,
-  return_datatable = NULL
+  return_datatable = getOption("tidynhl.data.table", TRUE)
 )
 }
 \arguments{
-\item{players_id}{Integer vector indicating the NHL ID of players for whom the game logs will be returned.}
+\item{players_id}{\emph{(optional)} Integer vector indicating the NHL ID of players for whom the
+metadata will be returned. Default to \code{NULL} which will return every players in the NHL
+database.}
 
-\item{internal}{Logical indicating whether to use the internal database or the external API. When using the external API, additional columns are available.
-Default to \code{TRUE}.}
+\item{keep_id}{\emph{(optional)} Logical indicating if the IDs of different dimensions should be
+returned. Default to \code{FALSE}.}
 
-\item{keep_id}{\emph{(optional)} Logical indicating if the IDs of different dimensions should be returned. Default to \code{FALSE}.}
-
-\item{return_datatable}{\emph{(optional)} Logical indicating whether or not a data.table should be returned. Default to \code{TRUE} if the \code{data.table} package is
-attached in the active session.}
+\item{return_datatable}{\emph{(optional)} Logical indicating whether or not a data.table should be
+returned. Default can be set globally with \code{options("tidynhl.data.table")}.}
 }
 \description{
-The function \code{tidy_players_meta()} is meant to be a user-friendly way of getting metadata about the selected players.
+The function \code{tidy_players_meta()} is meant to be a user-friendly way of getting metadata about
+the selected players.
 }
 \examples{
-# Load the data.table package to easily manipulate the data
-library(data.table)
+# Allowing large outputs for the pkgdown website
+options(width = 1000L)
 
-# Get metadata about Vincent Lecavalier
-metadata_lecavalier <- tidy_players_meta(8467329L)
-
-# Print the column names
-colnames(metadata_lecavalier)
-
-# Get metadata about Carey Price using the external API
-metadata_price <- tidy_players_meta(8471679L, internal=FALSE)
-
-# Print the column names
-colnames(metadata_price)
-
-# Print an excerpt of the data
-metadata_price[, .(player_name, player_number, player_active, team_abbreviation)]
+# Get metadata of every players in the NHL database
+tidy_players_meta()
 
 # Get metadata about both Vincent Lecavalier and Carey Price, keeping the IDs
-metadata_lecavalier_price <- tidy_players_meta(
-  players_id = c(8467329L, 8471679L),
-  keep_id    = TRUE
-)
-
-# Print the column names
-colnames(metadata_lecavalier_price)
-
-# Print an excerpt of the data
-metadata_lecavalier_price[, .(player_id, player_name, player_inches, player_pounds, player_position)]
+tidy_players_meta(players_id = c(8467329L, 8471679L), keep_id = TRUE)
 
 }

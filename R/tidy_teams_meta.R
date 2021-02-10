@@ -8,7 +8,7 @@
 #' @param keep_id *(optional)* Logical indicating if the IDs of different dimensions should be
 #'   returned. Default to `FALSE`.
 #' @param return_datatable *(optional)* Logical indicating whether or not a data.table should be
-#'   returned. Default can be set globally with options("tidynhl.data.table").
+#'   returned. Default can be set globally with `options("tidynhl.data.table")`.
 #'
 #' @examples
 #' # Allowing large outputs for the pkgdown website
@@ -39,6 +39,33 @@ tidy_teams_meta <- function(
     stop("argument 'return_datatable' should be one of 'TRUE' or 'FALSE'")
   }
 
+  if (!exists("teams_meta", envir = data)) {
+    load_teams_meta()
+  }
+  teams_meta <- copy(get("teams_meta", envir = data))
+
+  if (!keep_id) {
+    drop_ids(teams_meta)
+  }
+
+  if (active_only) {
+    drop_columns <- c("team_active", "season_last_id", "season_last_years")
+    drop_columns <- drop_columns[which(drop_columns %in% colnames(teams_meta))]
+    teams_meta <- teams_meta[team_active == TRUE, .SD, .SDcols = !drop_columns]
+  }
+
+  add_copyright(teams_meta)
+
+  if (return_datatable) {
+    teams_meta[]
+  } else {
+    as.data.frame(teams_meta)
+  }
+
+}
+
+load_teams_meta <- function() {
+
   includes <- paste0("include=", paste0("teams.", c(
     "id", "active", "commonName", "fullName", "logos", "placeName", "triCode",
     paste0("conference.", c(
@@ -54,11 +81,11 @@ tidy_teams_meta <- function(
 
   franchise <- create_data_table(get_records_api(paste0("franchise?", includes))[[1]][["data"]])
 
-  teams <- franchise[, rbindlist(mapply(function(franchise_id, teams) {
+  teams_meta <- franchise[, rbindlist(mapply(function(franchise_id, teams) {
 
-    franchiseTeam <- teams[, rbindlist(franchiseTeam, fill=TRUE)]
+    franchiseTeam <- teams[, rbindlist(franchiseTeam, fill = TRUE)]
     if (!("lastSeason.id" %in% colnames(franchiseTeam))) {
-      franchiseTeam[, lastSeason.id:=NA_character_]
+      franchiseTeam[, lastSeason.id := NA_character_]
     }
 
     teams[, shortName := placeName]
@@ -88,9 +115,9 @@ tidy_teams_meta <- function(
       team_fullname = teams[, fullName],
       team_shortname = teams[, shortName],
       season_first_id = franchiseTeam[, firstSeason.id],
-      season_first_label = franchiseTeam[, season_years(firstSeason.id)],
+      season_first_years = franchiseTeam[, season_years(firstSeason.id)],
       season_last_id = franchiseTeam[, lastSeason.id],
-      season_last_label = franchiseTeam[, season_years(lastSeason.id)],
+      season_last_years = franchiseTeam[, season_years(lastSeason.id)],
       conference_active_id = teams[, conference.id],
       conference_active_abbreviation = teams[, conference.abbreviation],
       conference_active_name = teams[, conference.name],
@@ -416,25 +443,11 @@ tidy_teams_meta <- function(
   ))
 
   cols <- setdiff(colnames(venues_active), "team_id")
-  teams[venues_active, (cols):=mget(cols), on=.(team_id)]
+  teams_meta[venues_active, (cols) := mget(cols), on = .(team_id)]
 
-  setcolorder(teams, c(setdiff(colnames(teams), "logo_last_url"), "logo_last_url"))
-  setorder(teams, season_last_id, team_abbreviation)
+  setcolorder(teams_meta, c(setdiff(colnames(teams_meta), "logo_last_url"), "logo_last_url"))
+  setorder(teams_meta, season_last_id, team_abbreviation)
 
-  if (!keep_id) {
-    drop_ids(teams)
-  }
-
-  if (active_only) {
-    drop_columns <- c("team_active", "season_last_id", "season_last_label")
-    drop_columns <- drop_columns[which(drop_columns %in% colnames(teams))]
-    teams <- teams[team_active == TRUE, .SD, .SDcols = !drop_columns]
-  }
-
-  if (!return_datatable) {
-    teams <- as.data.frame(teams)
-  }
-
-  add_copyright(teams)
+  assign("teams_meta", teams_meta, data)
 
 }
