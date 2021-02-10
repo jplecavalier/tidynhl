@@ -110,12 +110,15 @@ tidy_schedules <- function(
 
     season_games <- create_data_table(rbindlist(api_return$dates$games, fill = TRUE))
 
+    season_games[substr(gamePk, 5L, 6L) == "02", season_type := "regular"]
+    season_games[substr(gamePk, 5L, 6L) == "03", season_type := "playoffs"]
+
     if (regular & playoffs) {
-      season_games[gameType %in% c("R", "P")]
+      season_games[!is.na(season_type)]
     } else if (regular & !playoffs) {
-      season_games[gameType == "R"]
+      season_games[season_type == "regular"]
     } else {
-      season_games[gameType == "P"]
+      season_games[season_type == "playoffs"]
     }
 
   }), fill = TRUE)]
@@ -123,6 +126,7 @@ tidy_schedules <- function(
   validate_columns(schedules, list(
     season = NA_character_,
     gamePk = NA_integer_,
+    season_type = NA_character_,
     gameType = NA_character_,
     gameDate = NA_character_,
     status.detailedState = NA_character_,
@@ -138,7 +142,7 @@ tidy_schedules <- function(
   schedules <- schedules[, .(
     season_id = season,
     season_years = season_years(season),
-    season_type = ifelse(substr(gamePk, 5L, 6L) == "02", "regular", "playoffs"),
+    season_type = season_type,
     game_id = gamePk,
     game_datetime = suppressMessages(lubridate::as_datetime(gameDate, tz = tz)),
     game_status = tolower(status.detailedState),
