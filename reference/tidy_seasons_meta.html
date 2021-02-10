@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • tidynhl</title>
+<title>Get a tidy dataset of NHL seasons metadata — tidy_seasons_meta • tidynhl</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,9 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Get a tidy dataset of NHL seasons metadata — tidy_seasons_meta" />
+<meta property="og:description" content="The function tidy_seasons_meta() is meant to be a user-friendly way of getting metadata about
+NHL seasons." />
 <meta property="og:image" content="https://jplecavalier.github.io/tidynhl/logo.png" />
 
 
@@ -76,7 +78,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -126,109 +128,59 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Get a tidy dataset of NHL seasons metadata</h1>
+    <small class="dont-index">Source: <a href='https://github.com/jplecavalier/tidynhl/blob/master/R/tidy_seasons_meta.R'><code>R/tidy_seasons_meta.R</code></a></small>
+    <div class="hidden name"><code>tidy_seasons_meta.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>The function <code>tidy_seasons_meta()</code> is meant to be a user-friendly way of getting metadata about
+NHL seasons.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>tidy_seasons_meta</span><span class='op'>(</span>
+  keep_id <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  return_datatable <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"tidynhl.data.table"</span>, <span class='cn'>TRUE</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-tidy-datasets" class="hasAnchor"><a href="#section-tidy-datasets" class="anchor"></a>Tidy datasets</h2>
-          <p class="section-desc"><p>All <code>tidynhl</code> functions that will return a ready-to-use dataset.</p></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="tidy_drafts.html">tidy_drafts()</a></code> </p>
-        </td>
-        <td><p>Get a tidy dataset of NHL entry drafts</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tidy_goalies_gamelogs.html">tidy_goalies_gamelogs()</a></code> </p>
-        </td>
-        <td><p>Get a tidy dataset of NHL goalies game logs</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tidy_goalies_stats.html">tidy_goalies_stats()</a></code> </p>
-        </td>
-        <td><p>Get a tidy dataset of NHL goalies statistics</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tidy_players_meta.html">tidy_players_meta()</a></code> </p>
-        </td>
-        <td><p>Get a tidy dataset of NHL players metadata</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tidy_schedules.html">tidy_schedules()</a></code> </p>
-        </td>
-        <td><p>Get a tidy dataset of NHL schedules</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tidy_seasons_meta.html">tidy_seasons_meta()</a></code> </p>
-        </td>
-        <td><p>Get a tidy dataset of NHL seasons metadata</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tidy_skaters_gamelogs.html">tidy_skaters_gamelogs()</a></code> </p>
-        </td>
-        <td><p>Get a tidy dataset of NHL skaters game logs</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tidy_skaters_stats.html">tidy_skaters_stats()</a></code> </p>
-        </td>
-        <td><p>Get a tidy dataset of NHL skaters statistics</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tidy_teams_meta.html">tidy_teams_meta()</a></code> </p>
-        </td>
-        <td><p>Get a tidy dataset of NHL teams metadata</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-get-functions" class="hasAnchor"><a href="#section-get-functions" class="anchor"></a>Get functions</h2>
-          <p class="section-desc"><p>All <code>tidynhl</code> functions that will return a vector having the same length as its parameters.</p></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="get_players_id.html">get_players_id()</a></code> </p>
-        </td>
-        <td><p>Get NHL players ID</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>keep_id</th>
+      <td><p><em>(optional)</em> Logical indicating if the IDs of different dimensions should be
+returned. Default to <code>FALSE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>return_datatable</th>
+      <td><p><em>(optional)</em> Logical indicating whether or not a data.table should be
+returned. Default can be set globally with <code><a href='https://rdrr.io/r/base/options.html'>options("tidynhl.data.table")</a></code>.</p></td>
+    </tr>
     </table>
-  </div>
 
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># Allowing large outputs for the pkgdown website</span>
+<span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span><span class='op'>(</span>width <span class='op'>=</span> <span class='fl'>1000L</span><span class='op'>)</span>
+
+<span class='co'># Get metadata of NHL seasons</span>
+<span class='fu'>tidy_seasons_meta</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;      season_regular_start season_regular_end season_playoffs_end season_teams_nb season_games_nb season_ties season_olympics season_conferences season_divisions season_wildcards
+#&gt;   1:           1917-12-19         1918-03-06          1918-03-30               4              22        TRUE           FALSE              FALSE            FALSE            FALSE
+#&gt;   2:           1918-12-21         1919-02-20          1919-03-29               3              18        TRUE           FALSE              FALSE            FALSE            FALSE
+#&gt;   3:           1919-12-23         1920-03-13          1920-04-01               4              24        TRUE           FALSE              FALSE            FALSE            FALSE
+#&gt;   4:           1920-12-22         1921-03-07          1921-04-04               4              24        TRUE           FALSE              FALSE            FALSE            FALSE
+#&gt;   5:           1921-12-17         1922-03-08          1922-03-28               4              24        TRUE           FALSE              FALSE            FALSE            FALSE
+#&gt;  ---                                                                                                                                                                             
+#&gt;  99:           2016-10-12         2017-04-09          2017-06-11              30              82       FALSE           FALSE               TRUE             TRUE             TRUE
+#&gt; 100:           2017-10-04         2018-04-08          2018-06-07              31              82       FALSE           FALSE               TRUE             TRUE             TRUE
+#&gt; 101:           2018-10-03         2019-04-06          2019-06-15              31              82       FALSE           FALSE               TRUE             TRUE             TRUE
+#&gt; 102:           2019-10-02         2020-03-11          2020-09-29              31              82       FALSE           FALSE               TRUE             TRUE             TRUE
+#&gt; 103:           2021-01-13         2021-05-10          2021-07-15              31              56       FALSE           FALSE              FALSE             TRUE             TRUE</div><div class='input'>
+</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>

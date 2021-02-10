@@ -47,7 +47,8 @@
 
 
 <meta property="og:title" content="Get a tidy dataset of NHL players metadata — tidy_players_meta" />
-<meta property="og:description" content="The function tidy_players_meta() is meant to be a user-friendly way of getting metadata about the selected players." />
+<meta property="og:description" content="The function tidy_players_meta() is meant to be a user-friendly way of getting metadata about
+the selected players." />
 <meta property="og:image" content="https://jplecavalier.github.io/tidynhl/logo.png" />
 
 
@@ -135,14 +136,14 @@
     </div>
 
     <div class="ref-description">
-    <p>The function <code>tidy_players_meta()</code> is meant to be a user-friendly way of getting metadata about the selected players.</p>
+    <p>The function <code>tidy_players_meta()</code> is meant to be a user-friendly way of getting metadata about
+the selected players.</p>
     </div>
 
     <pre class="usage"><span class='fu'>tidy_players_meta</span><span class='op'>(</span>
-  <span class='va'>players_id</span>,
-  internal <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  players_id <span class='op'>=</span> <span class='cn'>NULL</span>,
   keep_id <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  return_datatable <span class='op'>=</span> <span class='cn'>NULL</span>
+  return_datatable <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"tidynhl.data.table"</span>, <span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -150,59 +151,46 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>players_id</th>
-      <td><p>Integer vector indicating the NHL ID of players for whom the game logs will be returned.</p></td>
-    </tr>
-    <tr>
-      <th>internal</th>
-      <td><p>Logical indicating whether to use the internal database or the external API. When using the external API, additional columns are available.
-Default to <code>TRUE</code>.</p></td>
+      <td><p><em>(optional)</em> Integer vector indicating the NHL ID of players for whom the
+metadata will be returned. Default to <code>NULL</code> which will return every players in the NHL
+database.</p></td>
     </tr>
     <tr>
       <th>keep_id</th>
-      <td><p><em>(optional)</em> Logical indicating if the IDs of different dimensions should be returned. Default to <code>FALSE</code>.</p></td>
+      <td><p><em>(optional)</em> Logical indicating if the IDs of different dimensions should be
+returned. Default to <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>return_datatable</th>
-      <td><p><em>(optional)</em> Logical indicating whether or not a data.table should be returned. Default to <code>TRUE</code> if the <code>data.table</code> package is
-attached in the active session.</p></td>
+      <td><p><em>(optional)</em> Logical indicating whether or not a data.table should be
+returned. Default can be set globally with <code><a href='https://rdrr.io/r/base/options.html'>options("tidynhl.data.table")</a></code>.</p></td>
     </tr>
     </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Load the data.table package to easily manipulate the data</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://Rdatatable.gitlab.io/data.table'>data.table</a></span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='co'># Allowing large outputs for the pkgdown website</span>
+<span class='fu'><a href='https://rdrr.io/r/base/options.html'>options</a></span><span class='op'>(</span>width <span class='op'>=</span> <span class='fl'>1000L</span><span class='op'>)</span>
 
-<span class='co'># Get metadata about Vincent Lecavalier</span>
-<span class='va'>metadata_lecavalier</span> <span class='op'>&lt;-</span> <span class='fu'>tidy_players_meta</span><span class='op'>(</span><span class='fl'>8467329L</span><span class='op'>)</span>
-
-<span class='co'># Print the column names</span>
-<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>metadata_lecavalier</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] "player_name"                "player_birth_date"          "player_birth_city"          "player_birth_stateprovince" "player_birth_country"       "player_nationality"         "player_inches"              "player_pounds"              "player_hand"                "player_position"            "player_position_type"      </div><div class='input'>
-<span class='co'># Get metadata about Carey Price using the external API</span>
-<span class='va'>metadata_price</span> <span class='op'>&lt;-</span> <span class='fu'>tidy_players_meta</span><span class='op'>(</span><span class='fl'>8471679L</span>, internal<span class='op'>=</span><span class='cn'>FALSE</span><span class='op'>)</span>
-
-<span class='co'># Print the column names</span>
-<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>metadata_price</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] "player_name"                "team_abbreviation"          "player_number"              "player_birth_date"          "player_birth_city"          "player_birth_stateprovince" "player_birth_country"       "player_nationality"         "player_inches"              "player_pounds"              "player_active"              "player_alt_captain"         "player_captain"             "player_rookie"              "player_hand"                "player_roster_status"       "player_position"            "player_position_type"      </div><div class='input'>
-<span class='co'># Print an excerpt of the data</span>
-<span class='va'>metadata_price</span><span class='op'>[</span>, <span class='fu'>.</span><span class='op'>(</span><span class='va'>player_name</span>, <span class='va'>player_number</span>, <span class='va'>player_active</span>, <span class='va'>team_abbreviation</span><span class='op'>)</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;    player_name player_number player_active team_abbreviation
-#&gt; 1: Carey Price            31          TRUE               MTL</div><div class='input'>
+<span class='co'># Get metadata of every players in the NHL database</span>
+<span class='fu'>tidy_players_meta</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;            player_name player_active player_roster_status player_number player_position player_position_type player_nationality player_birth_country player_birth_stateprovince player_birth_city player_birth_date player_dead player_death_date player_inches player_pounds player_hand player_rookie player_hof player_hof_year player_nhl_100 team_abbreviation
+#&gt;     1:    Henry Harris         FALSE                    N            12               R                    F                CAN                  CAN                         ON            Kenora        1906-04-28        TRUE              &lt;NA&gt;            71           185           L         FALSE      FALSE              NA          FALSE              &lt;NA&gt;
+#&gt;     2:   Gordon Spence         FALSE                    N            12               L                    F                CAN                  CAN                         ON        Haileybury        1897-07-25        TRUE              &lt;NA&gt;            67           150           L         FALSE      FALSE              NA          FALSE              &lt;NA&gt;
+#&gt;     3:      Ron Hudson         FALSE                    N            15               C                    F                CAN                  CAN                         AB           Calgary        1911-07-14        TRUE        1984-10-11            68           148           L         FALSE      FALSE              NA          FALSE              &lt;NA&gt;
+#&gt;     4:    Norm Johnson         FALSE                    N             6               C                    F                CAN                  CAN                         SK         Moose Jaw        1932-11-27        TRUE              &lt;NA&gt;            70           170           L         FALSE      FALSE              NA          FALSE              &lt;NA&gt;
+#&gt;     5:      Reg Abbott         FALSE                    N             4               C                    F                CAN                  CAN                         MB          Winnipeg        1930-02-04       FALSE              &lt;NA&gt;            71           164           L         FALSE      FALSE              NA          FALSE              &lt;NA&gt;
+#&gt;    ---                                                                                                                                                                                                                                                                                                                                                             
+#&gt; 20591:    Tyler Irvine         FALSE                    N            NA               R                    F                USA                  USA                         MI           LIVONIA        1996-05-15       FALSE              &lt;NA&gt;            71           170           R         FALSE         NA              NA          FALSE              &lt;NA&gt;
+#&gt; 20592:   John Lethemon         FALSE                    N            NA               G                    G                USA                 &lt;NA&gt;                       &lt;NA&gt;              &lt;NA&gt;        1996-08-15       FALSE              &lt;NA&gt;            NA            NA        &lt;NA&gt;         FALSE         NA              NA          FALSE              &lt;NA&gt;
+#&gt; 20593:     Nick Rivera         FALSE                    N            NA               R                    F                USA                  USA                         CA PACIFIC PALISADES        1996-05-03       FALSE              &lt;NA&gt;            70           190           L         FALSE         NA              NA          FALSE              &lt;NA&gt;
+#&gt; 20594:    Brett Brochu         FALSE                    N            NA               G                    G                CAN                  CAN                         ON           WINDSOR        2002-09-09       FALSE              &lt;NA&gt;            71           161           L         FALSE         NA              NA          FALSE              &lt;NA&gt;
+#&gt; 20595: Matthew Jurusik         FALSE                    N            NA               G                    G                USA                  USA                         IL         LA GRANGE        1997-05-01       FALSE              &lt;NA&gt;            74           194           L         FALSE         NA              NA          FALSE              &lt;NA&gt;</div><div class='input'>
 <span class='co'># Get metadata about both Vincent Lecavalier and Carey Price, keeping the IDs</span>
-<span class='va'>metadata_lecavalier_price</span> <span class='op'>&lt;-</span> <span class='fu'>tidy_players_meta</span><span class='op'>(</span>
-  players_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>8467329L</span>, <span class='fl'>8471679L</span><span class='op'>)</span>,
-  keep_id    <span class='op'>=</span> <span class='cn'>TRUE</span>
-<span class='op'>)</span>
-
-<span class='co'># Print the column names</span>
-<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>metadata_lecavalier_price</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] "player_id"                  "player_name"                "player_birth_date"          "player_birth_city"          "player_birth_stateprovince" "player_birth_country"       "player_nationality"         "player_inches"              "player_pounds"              "player_hand"                "player_position"            "player_position_type"      </div><div class='input'>
-<span class='co'># Print an excerpt of the data</span>
-<span class='va'>metadata_lecavalier_price</span><span class='op'>[</span>, <span class='fu'>.</span><span class='op'>(</span><span class='va'>player_id</span>, <span class='va'>player_name</span>, <span class='va'>player_inches</span>, <span class='va'>player_pounds</span>, <span class='va'>player_position</span><span class='op'>)</span><span class='op'>]</span>
-</div><div class='output co'>#&gt;    player_id        player_name player_inches player_pounds player_position
-#&gt; 1:   8467329 Vincent Lecavalier            76           215               C
-#&gt; 2:   8471679        Carey Price            75           217               G</div><div class='input'>
+<span class='fu'>tidy_players_meta</span><span class='op'>(</span>players_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>8467329L</span>, <span class='fl'>8471679L</span><span class='op'>)</span>, keep_id <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    player_id        player_name player_active player_roster_status player_number player_position player_position_type player_nationality player_birth_country player_birth_stateprovince player_birth_city player_birth_date player_dead player_death_date player_inches player_pounds player_hand player_rookie player_hof player_hof_year player_nhl_100 team_id team_abbreviation
+#&gt; 1:   8467329 Vincent Lecavalier         FALSE                    N            44               C                    F                CAN                  CAN                         QC        Ile Bizard        1980-04-21       FALSE              &lt;NA&gt;            76           215           L         FALSE      FALSE              NA          FALSE      NA              &lt;NA&gt;
+#&gt; 2:   8471679        Carey Price          TRUE                    Y            31               G                    G                CAN                  CAN                         BC       Anahim Lake        1987-08-16       FALSE              &lt;NA&gt;            75           220           L         FALSE      FALSE              NA          FALSE       8               MTL</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

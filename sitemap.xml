@@ -7,19 +7,28 @@
     <loc>https://jplecavalier.github.io/tidynhl/reference/get_players_id.html</loc>
   </url>
   <url>
-    <loc>https://jplecavalier.github.io/tidynhl/reference/tidy_draft.html</loc>
+    <loc>https://jplecavalier.github.io/tidynhl/reference/tidy_drafts.html</loc>
   </url>
   <url>
-    <loc>https://jplecavalier.github.io/tidynhl/reference/tidy_players_gamelogs.html</loc>
+    <loc>https://jplecavalier.github.io/tidynhl/reference/tidy_goalies_gamelogs.html</loc>
+  </url>
+  <url>
+    <loc>https://jplecavalier.github.io/tidynhl/reference/tidy_goalies_stats.html</loc>
   </url>
   <url>
     <loc>https://jplecavalier.github.io/tidynhl/reference/tidy_players_meta.html</loc>
   </url>
   <url>
-    <loc>https://jplecavalier.github.io/tidynhl/reference/tidy_players_stats.html</loc>
+    <loc>https://jplecavalier.github.io/tidynhl/reference/tidy_schedules.html</loc>
   </url>
   <url>
-    <loc>https://jplecavalier.github.io/tidynhl/reference/tidy_schedule.html</loc>
+    <loc>https://jplecavalier.github.io/tidynhl/reference/tidy_seasons_meta.html</loc>
+  </url>
+  <url>
+    <loc>https://jplecavalier.github.io/tidynhl/reference/tidy_skaters_gamelogs.html</loc>
+  </url>
+  <url>
+    <loc>https://jplecavalier.github.io/tidynhl/reference/tidy_skaters_stats.html</loc>
   </url>
   <url>
     <loc>https://jplecavalier.github.io/tidynhl/reference/tidy_teams_meta.html</loc>
