@@ -34,56 +34,24 @@ tidy_goalies_stats <- function(
   return_datatable = getOption("tidynhl.data.table", TRUE)
 ) {
 
-  players_meta <- tidy_players_meta(keep_id = TRUE, return_datatable = TRUE)
+  players_id <- assert_goalies_id(players_id)
 
-  error <- FALSE
-  if (!is.numeric(players_id) | sum(is.na(players_id)) > 0L | length(players_id) == 0L) {
-    error <- TRUE
+  assert_regular_playoffs(regular, playoffs)
+  assert_keep_id(keep_id)
+  assert_return_datatable(return_datatable)
+
+  if (length(players_id) == 0L) {
+    goalies_stats <- data.table(
+      player_id = integer(),
+      season_type = character()
+    )
   } else {
-    if (sum(as.integer(players_id) != players_id) > 0L) {
-      error <- TRUE
-    } else {
-      players_id <- as.integer(players_id)
-    }
+    goalies_stats <- data.table(
+      player_id = rep(players_id, each = 2L),
+      season_type = c(ifelse(regular, "regular", NA_character_),
+                      ifelse(playoffs, "playoffs", NA_character_))
+    )[!is.na(season_type)]
   }
-  if (error) {
-    stop("argument 'players_id' should be a vector of integers")
-  }
-
-  non_goalies_id <- players_meta[player_id %in% players_id & player_position_type != "G", player_id]
-  if (length(non_goalies_id) > 0L) {
-    stop(paste(
-      "every elements of the argument 'players_id' should be identified as goalies,",
-      "the following are not:",
-      paste(non_goalies_id, collapse = ", ")
-    ))
-  }
-
-  if (!is.logical(regular) | is.na(regular) | length(regular) != 1L) {
-    stop("argument 'regular' should be one of 'TRUE' or 'FALSE'")
-  }
-
-  if (!is.logical(playoffs) | is.na(playoffs) | length(playoffs) != 1L) {
-    stop("argument 'playoffs' should be one of 'TRUE' or 'FALSE'")
-  }
-
-  if (!regular & !playoffs) {
-    stop("at least one of arguments 'regular' or 'playoffs' should be 'TRUE'")
-  }
-
-  if (!is.logical(keep_id) | is.na(keep_id) | length(keep_id) != 1L) {
-    stop("argument 'keep_id' should be one of 'TRUE' or 'FALSE'")
-  }
-
-  if (!is.logical(return_datatable) | is.na(return_datatable) | length(return_datatable) != 1L) {
-    stop("argument 'return_datatable' should be one of 'TRUE' or 'FALSE'")
-  }
-
-  goalies_stats <- data.table(
-    player_id = rep(players_id, each = 2L),
-    season_type = c(ifelse(regular, "regular", NA_character_),
-                    ifelse(playoffs, "playoffs", NA_character_))
-  )[!is.na(season_type)]
 
   goalies_stats[, url := paste0(
     "people/", player_id,
@@ -113,6 +81,7 @@ tidy_goalies_stats <- function(
   validate_columns(goalies_stats, list(
     player_id = NA_integer_,
     season_type = NA_character_,
+    league.id = NA_integer_,
     season = NA_character_,
     sequenceNumber = NA_integer_,
     team.id = NA_integer_,
@@ -167,9 +136,10 @@ tidy_goalies_stats <- function(
   goalies_stats[is.na(goalie_ties), goalie_ties := 0L]
   goalies_stats[is.na(goalie_ot), goalie_ot := 0L]
 
-  teams_meta <- tidy_teams_meta(active_only = FALSE, keep_id = TRUE, return_datatable = TRUE)
+  teams_meta <- get("teams_meta", envir = data)
   goalies_stats[teams_meta, team_abbreviation := team_abbreviation, on = .(team_id)]
 
+  players_meta <- get("players_meta", envir = data)
   goalies_stats[players_meta, player_name := player_name, on = .(player_id)]
 
   setcolorder(goalies_stats, c("player_id", "player_name", "season_id", "season_years",

@@ -21,13 +21,8 @@ tidy_seasons_meta <- function(
   return_datatable = getOption("tidynhl.data.table", TRUE)
 ) {
 
-  if (!is.logical(keep_id) | is.na(keep_id) | length(keep_id) != 1L) {
-    stop("argument 'keep_id' should be one of 'TRUE' or 'FALSE'")
-  }
-
-  if (!is.logical(return_datatable) | is.na(return_datatable) | length(return_datatable) != 1L) {
-    stop("argument 'return_datatable' should be one of 'TRUE' or 'FALSE'")
-  }
+  assert_keep_id(keep_id)
+  assert_return_datatable(return_datatable)
 
   if (!exists("seasons_meta", envir = data)) {
     load_seasons_meta()
@@ -78,7 +73,10 @@ load_seasons_meta <- function() {
     season_wildcards = wildCardInUse
   )]
 
-  teams_meta <- tidy_teams_meta(active_only = FALSE, keep_id = TRUE, return_datatable = TRUE)
+  if (!exists("teams_meta", envir = data)) {
+    load_teams_meta()
+  }
+  teams_meta <- copy(get("teams_meta", envir = data))
   season_active_id <- seasons_meta[, max(season_id)]
   teams_meta[team_active == TRUE, season_last_id := season_active_id]
 

@@ -29,28 +29,11 @@ tidy_players_meta <- function(
 ) {
 
   if (!is.null(players_id)) {
-    error <- FALSE
-    if (!is.numeric(players_id) | sum(is.na(players_id)) > 0L | length(players_id) == 0L) {
-      error <- TRUE
-    } else {
-      if (sum(as.integer(players_id) != players_id) > 0L) {
-        error <- TRUE
-      } else {
-        players_id <- as.integer(players_id)
-      }
-    }
-    if (error) {
-      stop("argument 'players_id' should be a vector of integers")
-    }
+    players_id <- assert_players_id(players_id)
   }
 
-  if (!is.logical(keep_id) | is.na(keep_id) | length(keep_id) != 1L) {
-    stop("argument 'keep_id' should be one of 'TRUE' or 'FALSE'")
-  }
-
-  if (!is.logical(return_datatable) | is.na(return_datatable) | length(return_datatable) != 1L) {
-    stop("argument 'return_datatable' should be one of 'TRUE' or 'FALSE'")
-  }
+  assert_keep_id(keep_id)
+  assert_return_datatable(return_datatable)
 
   if (!exists("players_meta", envir = data)) {
     load_players_meta()
@@ -59,16 +42,6 @@ tidy_players_meta <- function(
 
   if (!is.null(players_id)) {
     players_meta <- players_meta[player_id %in% players_id]
-  }
-
-  missing_ids <- setdiff(players_id, players_meta[, player_id])
-  if (length(missing_ids) > 0L) {
-
-    warning(paste0(
-      "the following IDs are unknown: ",
-      paste(missing_ids, collapse = ", ")
-    ))
-
   }
 
   if (!keep_id) {

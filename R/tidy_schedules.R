@@ -42,51 +42,18 @@ tidy_schedules <- function(
   return_datatable = getOption("tidynhl.data.table", TRUE)
 ) {
 
-  seasons_meta <- tidy_seasons_meta(keep_id = TRUE, return_datatable = TRUE)
+  seasons_id <- assert_seasons_id(seasons_id)
 
-  seasons_id <- unique(seasons_id)
-  missing_seasons <- setdiff(seasons_id, seasons_meta[, season_id])
-  if (length(missing_seasons) > 0L) {
-    stop(paste(
-      "every elements of the argument 'seasons_id' should be a valid NHL season ID,",
-      "the following are not:",
-      paste(missing_seasons, collapse = ", ")
-    ))
-  }
-
-  if (!is.logical(regular) | is.na(regular) | length(regular) != 1L) {
-    stop("argument 'regular' should be one of 'TRUE' or 'FALSE'")
-  }
-
-  if (!is.logical(playoffs) | is.na(playoffs) | length(playoffs) != 1L) {
-    stop("argument 'playoffs' should be one of 'TRUE' or 'FALSE'")
-  }
-
-  if (!regular & !playoffs) {
-    stop("at least one of arguments 'regular' or 'playoffs' should be 'TRUE'")
-  }
-
-  if (!is.character(tz) | is.na(tz) | length(tz) != 1L) {
-    stop("argument 'tz' should be a character of length 1")
-  } else {
-    if (!(tz %in% OlsonNames())) {
-      warning("argument 'tz' is not recognized as a valid time zone, using 'UTC' instead")
-      tz <- "UTC"
-    }
-  }
-
-  if (!is.logical(keep_id) | is.na(keep_id) | length(keep_id) != 1L) {
-    stop("argument 'keep_id' should be one of 'TRUE' or 'FALSE'")
-  }
-
-  if (!is.logical(return_datatable) | is.na(return_datatable) | length(return_datatable) != 1L) {
-    stop("argument 'return_datatable' should be one of 'TRUE' or 'FALSE'")
-  }
+  assert_regular_playoffs(regular, playoffs)
+  assert_tz(tz)
+  assert_keep_id(keep_id)
+  assert_return_datatable(return_datatable)
 
   schedules <- data.table(
     season_id = seasons_id
   )
 
+  seasons_meta <- get("seasons_meta", envir = data)
   schedules[seasons_meta, `:=` (
     start_date = season_regular_start,
     end_date = season_playoffs_end
@@ -102,9 +69,11 @@ tidy_schedules <- function(
   )]
 
   schedules[, api_return := get_stats_api(url_season)]
-  schedules[which(sapply(api_return, function(api_return) {
-    !is.null(api_return$messageNumber)
-  })), api_return := get_stats_api(url_dates)]
+  if (schedules[, .N] > 0L) {
+    schedules[which(sapply(api_return, function(api_return) {
+      !is.null(api_return$messageNumber)
+    })), api_return := get_stats_api(url_dates)]
+  }
 
   schedules <- schedules[, rbindlist(lapply(api_return, function(api_return) {
 

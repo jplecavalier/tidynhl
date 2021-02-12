@@ -46,72 +46,15 @@ tidy_goalies_gamelogs <- function(
   return_datatable = getOption("tidynhl.data.table", TRUE)
 ) {
 
-  seasons_meta <- tidy_seasons_meta(keep_id = TRUE, return_datatable = TRUE)
-  players_meta <- tidy_players_meta(keep_id = TRUE, return_datatable = TRUE)
-
-  error <- FALSE
-  if (!is.numeric(players_id) | sum(is.na(players_id)) > 0L | length(players_id) == 0L) {
-    error <- TRUE
-  } else {
-    if (sum(as.integer(players_id) != players_id) > 0L) {
-      error <- TRUE
-    } else {
-      players_id <- as.integer(players_id)
-    }
-  }
-  if (error) {
-    stop("argument 'players_id' should be a vector of integers")
-  }
-
-  non_goalies_id <- players_meta[player_id %in% players_id & player_position_type != "G", player_id]
-  if (length(non_goalies_id) > 0L) {
-    stop(paste(
-      "every elements of the argument 'players_id' should be identified as goalies,",
-      "the following are not:",
-      paste(non_goalies_id, collapse = ", ")
-    ))
-  }
-
+  players_id <- assert_goalies_id(players_id)
   if (!is.null(seasons_id)) {
-    seasons_id <- unique(seasons_id)
-    missing_seasons <- setdiff(seasons_id, seasons_meta[, season_id])
-    if (length(missing_seasons) > 0L) {
-      stop(paste(
-        "every elements of the argument 'seasons_id' should be a valid NHL season ID,",
-        "the following are not:",
-        paste(missing_seasons, collapse = ", ")
-      ))
-    }
+    seasons_id <- assert_seasons_id(seasons_id)
   }
 
-  if (!is.logical(regular) | is.na(regular) | length(regular) != 1L) {
-    stop("argument 'regular' should be one of 'TRUE' or 'FALSE'")
-  }
-
-  if (!is.logical(playoffs) | is.na(playoffs) | length(playoffs) != 1L) {
-    stop("argument 'playoffs' should be one of 'TRUE' or 'FALSE'")
-  }
-
-  if (!regular & !playoffs) {
-    stop("at least one of arguments 'regular' or 'playoffs' should be 'TRUE'")
-  }
-
-  if (!is.character(tz) | is.na(tz) | length(tz) != 1L) {
-    stop("argument 'tz' should be a character of length 1")
-  } else {
-    if (!(tz %in% OlsonNames())) {
-      warning("argument 'tz' is not recognized as a valid time zone, using 'UTC' instead")
-      tz <- "UTC"
-    }
-  }
-
-  if (!is.logical(keep_id) | is.na(keep_id) | length(keep_id) != 1L) {
-    stop("argument 'keep_id' should be one of 'TRUE' or 'FALSE'")
-  }
-
-  if (!is.logical(return_datatable) | is.na(return_datatable) | length(return_datatable) != 1L) {
-    stop("argument 'return_datatable' should be one of 'TRUE' or 'FALSE'")
-  }
+  assert_regular_playoffs(regular, playoffs)
+  assert_tz(tz)
+  assert_keep_id(keep_id)
+  assert_return_datatable(return_datatable)
 
   goalies_stats <- tidy_goalies_stats(
     players_id = players_id,
@@ -250,6 +193,7 @@ tidy_goalies_gamelogs <- function(
                    (cols) := mget(cols),
                    on = .(season_id, season_type, game_id, team_id, opponent_id)]
 
+  players_meta <- get("players_meta", envir = data)
   goalies_gamelogs[players_meta, player_name := player_name, on = .(player_id)]
 
   setcolorder(goalies_gamelogs, c(

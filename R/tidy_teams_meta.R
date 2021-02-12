@@ -27,17 +27,9 @@ tidy_teams_meta <- function(
   return_datatable = getOption("tidynhl.data.table", TRUE)
 ) {
 
-  if (!is.logical(active_only) | is.na(active_only) | length(active_only) != 1L) {
-    stop("argument 'active_only' should be one of 'TRUE' or 'FALSE'")
-  }
-
-  if (!is.logical(keep_id) | is.na(keep_id) | length(keep_id) != 1L) {
-    stop("argument 'keep_id' should be one of 'TRUE' or 'FALSE'")
-  }
-
-  if (!is.logical(return_datatable) | is.na(return_datatable) | length(return_datatable) != 1L) {
-    stop("argument 'return_datatable' should be one of 'TRUE' or 'FALSE'")
-  }
+  assert_active_only(active_only)
+  assert_keep_id(keep_id)
+  assert_return_datatable(return_datatable)
 
   if (!exists("teams_meta", envir = data)) {
     load_teams_meta()

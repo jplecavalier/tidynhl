@@ -25,36 +25,16 @@ get_players_id <- function(
   players_position_type = NULL
 ) {
 
-  if (!is.character(players_name) | sum(is.na(players_name)) > 0L | length(players_name) == 0L) {
-    stop("argument 'players_name' should be a vector of characters")
-  }
-
+  assert_players_name(players_name)
   if (!is.null(players_dob)) {
-    if (class(players_dob) != "Date" | sum(is.na(players_dob)) > 0L |
-        length(players_dob) != length(players_name)) {
-      stop(paste(
-        "argument 'players_dob' should be a vector of dates having the same length as parameter",
-        "'players_name'"
-      ))
-    }
+    assert_players_dob(players_dob, length(players_name))
+  }
+  if (!is.null(players_position_type)) {
+    assert_players_position_type(players_position_type, length(players_name))
   }
 
-  if (!is.null(players_position_type)) {
-    error <- FALSE
-    if (!is.character(players_position_type) | sum(is.na(players_position_type)) > 0L |
-        length(players_position_type) != length(players_name)) {
-      error <- TRUE
-    } else {
-      if (!(sum(players_position_type %in% c("F", "D", "G"))) > 0L) {
-        error <- TRUE
-      }
-    }
-    if (error) {
-      stop(paste(
-        "argument 'players_position_type' should be a vector of characters (F, D, or G) having the",
-        "same length as parameter 'players_name'"
-      ))
-    }
+  if (length(players_name) == 0L) {
+    return(integer())
   }
 
   players <- data.table(
@@ -74,31 +54,22 @@ get_players_id <- function(
     load_players_keys()
   }
   players_keys <- get("players_keys", envir = data)
-  players_keys <- copy(players_keys[, .(ids = list(id)), mget(key_cols)])
-
+  players_keys <- players_keys[, .(ids = list(id)), mget(key_cols)]
   players[players_keys, ids := ids, on = key_cols]
-  players[, id := mapply(function(ids, name) {
+
+  players[, mapply(function(ids, name) {
 
     if (length(ids) == 0L) {
 
-      warning(paste0(
-        "no ID matching for ",
-        name,
-        ", NA returned"
-      ))
-
+      warning(paste0("no ID matching for ", name, ", NA returned"))
       NA_integer_
 
     } else if (length(ids) > 1L) {
 
       warning(paste0(
-        "multiple IDs matching for ",
-        name,
-        " (",
-        paste(ids, collapse = ", "),
-        "), highest (most recent) was returned"
+        "multiple IDs matching for ", name,
+        " (", paste(ids, collapse = ","), "), highest (most recent) was returned"
       ))
-
       max(ids)
 
     } else {
@@ -109,21 +80,22 @@ get_players_id <- function(
 
   }, ids = ids, name = name)]
 
-  players[, id]
-
 }
 
 load_players_keys <- function() {
 
-  players_meta <- tidy_players_meta(keep_id = TRUE, return_datatable = TRUE)
+  if (!exists("players_meta", envir = data)) {
+    load_players_meta()
+  }
+  players_meta <- get("players_meta", envir = data)
 
-  players_keys <- copy(players_meta[, .(
+  players_keys <- players_meta[, .(
     id = player_id,
     key_name = tolower(gsub("[^a-zA-Z]", "",
                             stringi::stri_trans_general(player_name, "Latin-ASCII"))),
     key_dob = gsub("-", "", as.character(player_birth_date)),
     key_position = player_position_type
-  )])
+  )]
 
   assign("players_keys", players_keys, data)
 

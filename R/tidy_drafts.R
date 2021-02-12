@@ -29,33 +29,11 @@ tidy_drafts <- function(
 ) {
 
   if (!is.null(drafts_year)) {
-    error <- FALSE
-    if (!is.numeric(drafts_year) | sum(is.na(drafts_year)) > 0L | length(drafts_year) == 0L) {
-      error <- TRUE
-    } else {
-      if (sum(as.integer(drafts_year) != drafts_year) > 0L) {
-        error <- TRUE
-      } else {
-        drafts_year <- as.integer(drafts_year)
-        if (sum(drafts_year < 1963L) > 0L) {
-          error <- TRUE
-        }
-      }
-    }
-    if (error) {
-      stop("argument 'drafts_year' should be a vector of integers greater than or equal to 1963")
-    }
+    drafts_year <- assert_drafts_year(drafts_year)
   }
 
-  if (!is.logical(keep_id) | is.na(keep_id) | length(keep_id) != 1L) {
-    stop("argument 'keep_id' should be one of 'TRUE' or 'FALSE'")
-  }
-
-  if (!is.logical(return_datatable) | is.na(return_datatable) | length(return_datatable) != 1L) {
-    stop("argument 'return_datatable' should be one of 'TRUE' or 'FALSE'")
-  }
-
-  drafts_year <- unique(drafts_year)
+  assert_keep_id(keep_id)
+  assert_return_datatable(return_datatable)
 
   if (!exists("drafts", envir = data)) {
     load_drafts()
@@ -64,16 +42,6 @@ tidy_drafts <- function(
 
   if (!is.null(drafts_year)) {
     drafts <- drafts[draft_year %in% drafts_year]
-  }
-
-  missing_draft <- setdiff(drafts_year, drafts[, unique(draft_year)])
-  if (length(missing_draft) > 0L) {
-
-    warning(paste0(
-      "no draft found for the following years: ",
-      paste(missing_draft, collapse = ", ")
-    ))
-
   }
 
   if (!keep_id) {
