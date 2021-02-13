@@ -68,7 +68,7 @@ get_players_id <- function(
 
       warning(paste0(
         "multiple IDs matching for ", name,
-        " (", paste(ids, collapse = ","), "), highest (most recent) was returned"
+        " (", paste(ids, collapse = ", "), "), highest (most recent) was returned"
       ))
       max(ids)
 
