@@ -252,7 +252,8 @@ assert_players_dob <- function(players_dob, length) {
 
 assert_players_position_type <- function(players_position_type, length) {
 
-  if (is.character(players_name) & !anyNA(players_name) & length(players_name) == length) {
+  if (is.character(players_position_type) & !anyNA(players_position_type) &
+      length(players_position_type) == length) {
     if (all(players_position_type %in% c("F", "D", "G"))) {
       return(NULL)
     }
