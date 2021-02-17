@@ -164,8 +164,7 @@ tidy_schedules <- function(
       game_id = game_id,
       period_number = num,
       period_label = ordinalNum,
-      period_ot = periodType == "OVERTIME",
-      period_so = rep(FALSE, .N),
+      period_type = tolower(periodType),
       away_score = away.goals,
       home_score = home.goals,
       away_shots = away.shotsOnGoal,
@@ -176,8 +175,7 @@ tidy_schedules <- function(
       game_id = gamePk,
       period_number = linescore.currentPeriod,
       period_label = rep("SO", .N),
-      period_ot = rep(FALSE, .N),
-      period_so = rep(TRUE, .N),
+      period_type = rep("shootout", .N),
       away_score = linescore.shootoutInfo.away.scores,
       home_score = linescore.shootoutInfo.home.scores,
       away_shots = linescore.shootoutInfo.away.attempts,
@@ -188,8 +186,7 @@ tidy_schedules <- function(
       game_id = gamePk,
       period_number = rep(NA_integer_, .N),
       period_label = rep(NA_character_, .N),
-      period_ot = rep(NA, .N),
-      period_so = rep(NA, .N),
+      period_type = rep(NA_character_, .N),
       away_score = rep(NA_integer_, .N),
       home_score = rep(NA_integer_, .N),
       away_shots = rep(NA_integer_, .N),
@@ -203,7 +200,7 @@ tidy_schedules <- function(
 
     setcolorder(periods, c("season_id", "season_years", "season_type", "game_id", "game_datetime",
                            "game_status", "venue_name", "period_number", "period_label",
-                           "period_ot", "period_so", "away_id", "away_abbreviation", "away_shots",
+                           "period_type", "away_id", "away_abbreviation", "away_shots",
                            "away_score", "home_score", "home_shots", "home_abbreviation",
                            "home_id"))
     setorder(periods, game_datetime, game_id, period_number)
