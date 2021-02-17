@@ -173,6 +173,7 @@ tidy_skaters_gamelogs <- function(
 
   schedules_home <- tidy_schedules(
     seasons_id = skaters_seasons[, unique(season_id)],
+    expand_periods = FALSE,
     regular = regular,
     playoffs = playoffs,
     tz = tz,
@@ -181,9 +182,10 @@ tidy_skaters_gamelogs <- function(
   )
   schedules_away <- copy(schedules_home)
 
-  old <- c(outer(c("home", "away"), c("score", "abbreviation", "id"), paste, sep = "_"))
-  new_home <- c(outer(c("team", "opponent"), c("score", "abbreviation", "id"), paste, sep = "_"))
-  new_away <- c(outer(c("opponent", "team"), c("score", "abbreviation", "id"), paste, sep = "_"))
+  team_cols <- c("id", "abbreviation", "score", "shots")
+  old <- c(outer(c("home", "away"), team_cols, paste, sep = "_"))
+  new_home <- c(outer(c("team", "opponent"), team_cols, paste, sep = "_"))
+  new_away <- c(outer(c("opponent", "team"), team_cols, paste, sep = "_"))
 
   setnames(schedules_home, old, new_home)
   setnames(schedules_away, old, new_away)
@@ -202,9 +204,9 @@ tidy_skaters_gamelogs <- function(
 
   setcolorder(skaters_gamelogs, c(
     "player_id", "player_name", "season_id", "season_years", "season_type", "game_id",
-    "game_datetime", "venue_name", "team_status", "team_id", "team_abbreviation", "team_score",
-    "opponent_score", "opponent_abbreviation", "opponent_id", "game_status", "game_nbot",
-    "game_shootout"))
+    "game_datetime", "venue_name", "team_status", "team_id", "team_abbreviation", "team_shots",
+    "team_score", "opponent_score", "opponent_shots", "opponent_abbreviation", "opponent_id",
+    "game_status", "game_nbot", "game_shootout"))
   setorder(skaters_gamelogs, player_id, game_datetime)
 
   if (!keep_id) {
