@@ -158,6 +158,16 @@ assert_active_only <- function(active_only) {
 
 }
 
+assert_expand_periods <- function(expand_periods) {
+
+  if (is.logical(expand_periods) & !anyNA(expand_periods) & length(expand_periods) == 1L) {
+    return(NULL)
+  }
+
+  stop("argument 'expand_periods' should be one of 'TRUE' or 'FALSE'")
+
+}
+
 assert_regular <- function(regular) {
 
   if (is.logical(regular) & !anyNA(regular) & length(regular) == 1L) {
