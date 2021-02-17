@@ -3,7 +3,7 @@ pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   tidynhl: tidynhl.html
-last_built: 2021-02-13T02:34Z
+last_built: 2021-02-17T05:23Z
 urls:
   reference: https://jplecavalier.github.io/tidynhl/reference
   article: https://jplecavalier.github.io/tidynhl/articles
