@@ -1,10 +1,12 @@
 #' Get a tidy dataset of NHL schedules
 #'
 #' The function `tidy_schedules()` is meant to be a user-friendly way of getting NHL schedules,
-#' including the final score of completed games.
+#' including the final score and shot counts of completed games.
 #'
 #' @param seasons_id Character vector of the seasons ID for which the schedule will be returned. The
 #'   required format is 'xxxxyyyy'.
+#' @param expand_periods *(optional)* Logical indicating if data should be expanded at the period
+#'   level. Default to `FALSE`.
 #' @param regular *(optional)* Logical indicating if the regular season schedules should be
 #'   returned. Default to `TRUE`.
 #' @param playoffs *(optional)* Logical indicating if the playoffs schedules should be returned.
@@ -23,10 +25,11 @@
 #' # Get the schedule of the 2019-2020 regular season and playoffs
 #' tidy_schedules("20192020")
 #'
-#' # Get the regular season schedule of both the 2018-2019 and 2019-2020 seasons, keeping the IDs
+#' # Get the regular season periods of both the 2018-2019 and 2019-2020 seasons, keeping the IDs
 #' # and indicating game datetime with Los Angeles local time
 #' tidy_schedules(
 #'   seasons_id = c("20182019", "20192020"),
+#'   expand_periods = TRUE,
 #'   playoffs = FALSE,
 #'   tz = "America/Los_Angeles",
 #'   keep_id = TRUE
@@ -35,6 +38,7 @@
 #' @export
 tidy_schedules <- function(
   seasons_id,
+  expand_periods = FALSE,
   regular = TRUE,
   playoffs = TRUE,
   tz = Sys.timezone(),
@@ -44,6 +48,7 @@ tidy_schedules <- function(
 
   seasons_id <- assert_seasons_id(seasons_id)
 
+  assert_expand_periods(expand_periods)
   assert_regular_playoffs(regular, playoffs)
   assert_tz(tz)
   assert_keep_id(keep_id)
@@ -104,11 +109,18 @@ tidy_schedules <- function(
     teams.home.team.id = NA_integer_,
     linescore.teams.away.goals = NA_integer_,
     linescore.teams.home.goals = NA_integer_,
+    linescore.teams.away.shotsOnGoal = NA_integer_,
+    linescore.teams.home.shotsOnGoal = NA_integer_,
     linescore.currentPeriod = NA_integer_,
-    linescore.hasShootout = NA
+    linescore.hasShootout = NA,
+    linescore.periods = list(),
+    linescore.shootoutInfo.home.scores = NA_integer_,
+    linescore.shootoutInfo.away.scores = NA_integer_,
+    linescore.shootoutInfo.home.attempts = NA_integer_,
+    linescore.shootoutInfo.away.attempts = NA_integer_
   ))
 
-  schedules <- schedules[, .(
+  games <- schedules[, .(
     season_id = season,
     season_years = season_years(season),
     season_type = season_type,
@@ -120,25 +132,104 @@ tidy_schedules <- function(
     home_id = teams.home.team.id,
     away_score = linescore.teams.away.goals,
     home_score = linescore.teams.home.goals,
+    away_shots = linescore.teams.away.shotsOnGoal,
+    home_shots = linescore.teams.home.shotsOnGoal,
     game_nbot = linescore.currentPeriod - linescore.hasShootout - 3L,
     game_shootout = linescore.hasShootout
   )]
 
   teams_meta <- tidy_teams_meta(active_only = FALSE, keep_id = TRUE, return_datatable = TRUE)
-  schedules[teams_meta, away_abbreviation := team_abbreviation, on = c(away_id = "team_id")]
-  schedules[teams_meta, home_abbreviation := team_abbreviation, on = c(home_id = "team_id")]
+  games[teams_meta, away_abbreviation := team_abbreviation, on = c(away_id = "team_id")]
+  games[teams_meta, home_abbreviation := team_abbreviation, on = c(home_id = "team_id")]
 
-  schedules[game_status != "final", `:=`(
-    away_score = NA_integer_,
-    home_score = NA_integer_,
-    game_nbot = NA_integer_,
-    game_shootout = NA
-  )]
+  if (expand_periods) {
 
-  setcolorder(schedules, c("season_id", "season_years", "season_type", "game_id", "game_datetime",
-                           "game_status", "venue_name", "away_id", "away_abbreviation",
-                           "away_score", "home_score", "home_abbreviation", "home_id", "game_nbot",
-                           "game_shootout"))
+    schedules_complete <- schedules[tolower(status.detailedState) == "final"]
+
+    periods <- schedules_complete[, rbindlist(linescore.periods, fill = TRUE)]
+    periods[, game_id := schedules_complete[, rep(gamePk, sapply(linescore.periods, nrow))]]
+
+    validate_columns(periods, list(
+      game_id = NA_integer_,
+      num = NA_integer_,
+      ordinalNum = NA_character_,
+      periodType = NA_character_,
+      away.goals = NA_integer_,
+      home.goals = NA_integer_,
+      away.shotsOnGoal = NA_integer_,
+      home.shotsOnGoal = NA_integer_
+    ))
+
+    periods <- periods[, .(
+      game_id = game_id,
+      period_number = num,
+      period_label = ordinalNum,
+      period_ot = periodType == "OVERTIME",
+      period_so = rep(FALSE, .N),
+      away_score = away.goals,
+      home_score = home.goals,
+      away_shots = away.shotsOnGoal,
+      home_shots = home.shotsOnGoal
+    )]
+
+    shootouts <- schedules[linescore.hasShootout == TRUE][, .(
+      game_id = gamePk,
+      period_number = linescore.currentPeriod,
+      period_label = rep("SO", .N),
+      period_ot = rep(FALSE, .N),
+      period_so = rep(TRUE, .N),
+      away_score = linescore.shootoutInfo.away.scores,
+      home_score = linescore.shootoutInfo.home.scores,
+      away_shots = linescore.shootoutInfo.away.attempts,
+      home_shots = linescore.shootoutInfo.home.attempts
+    )]
+
+    games_incomplete <- schedules[tolower(status.detailedState) != "final"][, .(
+      game_id = gamePk,
+      period_number = rep(NA_integer_, .N),
+      period_label = rep(NA_character_, .N),
+      period_ot = rep(NA, .N),
+      period_so = rep(NA, .N),
+      away_score = rep(NA_integer_, .N),
+      home_score = rep(NA_integer_, .N),
+      away_shots = rep(NA_integer_, .N),
+      home_shots = rep(NA_integer_, .N)
+    )]
+
+    periods <- rbindlist(list(periods, shootouts, games_incomplete))
+
+    cols <- setdiff(setdiff(colnames(games), c("game_nbot", "game_shootout")), colnames(periods))
+    periods[games, (cols) := mget(cols), on = .(game_id)]
+
+    setcolorder(periods, c("season_id", "season_years", "season_type", "game_id", "game_datetime",
+                           "game_status", "venue_name", "period_number", "period_label",
+                           "period_ot", "period_so", "away_id", "away_abbreviation", "away_shots",
+                           "away_score", "home_score", "home_shots", "home_abbreviation",
+                           "home_id"))
+    setorder(periods, game_datetime, game_id, period_number)
+
+    schedules <- periods
+
+  } else {
+
+    setcolorder(games, c("season_id", "season_years", "season_type", "game_id", "game_datetime",
+                         "game_status", "venue_name", "away_id", "away_abbreviation", "away_shots",
+                         "away_score", "home_score", "home_shots", "home_abbreviation", "home_id",
+                         "game_nbot", "game_shootout"))
+    setorder(games, game_datetime, game_id)
+
+    games[game_status != "final", `:=`(
+      away_score = NA_integer_,
+      home_score = NA_integer_,
+      away_shots = NA_integer_,
+      home_shots = NA_integer_,
+      game_nbot = NA_integer_,
+      game_shootout = NA
+    )]
+
+    schedules <- games
+
+  }
 
   if (!keep_id) {
     drop_ids(schedules)

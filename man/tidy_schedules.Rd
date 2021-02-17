@@ -6,6 +6,7 @@
 \usage{
 tidy_schedules(
   seasons_id,
+  expand_periods = FALSE,
   regular = TRUE,
   playoffs = TRUE,
   tz = Sys.timezone(),
@@ -16,6 +17,9 @@ tidy_schedules(
 \arguments{
 \item{seasons_id}{Character vector of the seasons ID for which the schedule will be returned. The
 required format is 'xxxxyyyy'.}
+
+\item{expand_periods}{\emph{(optional)} Logical indicating if data should be expanded at the period
+level. Default to \code{FALSE}.}
 
 \item{regular}{\emph{(optional)} Logical indicating if the regular season schedules should be
 returned. Default to \code{TRUE}.}
@@ -34,7 +38,7 @@ returned. Default can be set globally with \code{options("tidynhl.data.table")}.
 }
 \description{
 The function \code{tidy_schedules()} is meant to be a user-friendly way of getting NHL schedules,
-including the final score of completed games.
+including the final score and shot counts of completed games.
 }
 \examples{
 # Allowing large outputs for the pkgdown website
@@ -43,10 +47,11 @@ options(width = 1000L)
 # Get the schedule of the 2019-2020 regular season and playoffs
 tidy_schedules("20192020")
 
-# Get the regular season schedule of both the 2018-2019 and 2019-2020 seasons, keeping the IDs
+# Get the regular season periods of both the 2018-2019 and 2019-2020 seasons, keeping the IDs
 # and indicating game datetime with Los Angeles local time
 tidy_schedules(
   seasons_id = c("20182019", "20192020"),
+  expand_periods = TRUE,
   playoffs = FALSE,
   tz = "America/Los_Angeles",
   keep_id = TRUE
