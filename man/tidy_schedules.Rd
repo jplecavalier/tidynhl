@@ -38,7 +38,7 @@ returned. Default can be set globally with \code{options("tidynhl.data.table")}.
 }
 \description{
 The function \code{tidy_schedules()} is meant to be a user-friendly way of getting NHL schedules,
-including the final score of completed games.
+including the final score and shot counts of completed games.
 }
 \examples{
 # Allowing large outputs for the pkgdown website

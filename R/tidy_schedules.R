@@ -1,7 +1,7 @@
 #' Get a tidy dataset of NHL schedules
 #'
 #' The function `tidy_schedules()` is meant to be a user-friendly way of getting NHL schedules,
-#' including the final score of completed games.
+#' including the final score and shot counts of completed games.
 #'
 #' @param seasons_id Character vector of the seasons ID for which the schedule will be returned. The
 #'   required format is 'xxxxyyyy'.
