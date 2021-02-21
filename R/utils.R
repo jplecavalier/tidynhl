@@ -138,9 +138,10 @@ get_stats_api <- function(paths) {
 
 }
 
-drop_ids <- function(data) {
+drop_ids <- function(data, keeps = NULL) {
 
-  data[, colnames(data)[grep("_id$", colnames(data))]:=NULL]
+  drops <- setdiff(colnames(data)[grep("_id$", colnames(data))], keeps)
+  data[, (drops) := NULL]
 
 }
 
