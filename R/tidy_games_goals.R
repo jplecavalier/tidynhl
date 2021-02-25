@@ -8,6 +8,8 @@
 #'   - 'xxxx' is the first 4 digits of a valid NHL season ID,
 #'   - 'yy' is one of "02" (regular) or "03" (playoffs),
 #'   - 'zzzz' is a 4-digit number attributed to a single game.
+#' @param include_shootout *(optional)* Logical indicating if shootout goals should be returned in
+#'   the data. Default to `FALSE`.
 #' @param time_elapsed *(optional)* Logical indicating if the time sould be indicated as elapsed
 #'   (`TRUE`) or remaining (`FALSE`). Default to `TRUE`.
 #' @param standardized_coordinates *(optional)* Logical indicating if the ice coordinates should be
@@ -24,10 +26,12 @@
 #' # Get goal data of the 2021-01-13 MTL @ TOR game
 #' tidy_games_goals(2020020003L)
 #'
-#' # Get goal data of both the 2021-01-13 MTL @ TOR and PIT @ PHI games with time remaining instead
-#' # of time elapsed, as is coordinates instead of normalized, and keeping the IDs
+#' # Get goal data of both the 2021-01-13 MTL @ TOR and 2021-01-14 BOS @ NJD games with time
+#' # remaining instead of time elapsed, as is coordinates instead of normalized, including shootout
+#' # goals, and keeping the IDs
 #' tidy_games_goals(
-#'   games_id = c(2020020003L, 2020020001L),
+#'   games_id = c(2020020003L, 2020020007L),
+#'   include_shootout = TRUE,
 #'   time_elapsed = FALSE,
 #'   standardized_coordinates = FALSE,
 #'   keep_id = TRUE
@@ -36,6 +40,7 @@
 #' @export
 tidy_games_goals <- function(
   games_id,
+  include_shootout = FALSE,
   time_elapsed = TRUE,
   standardized_coordinates = TRUE,
   keep_id = FALSE,
@@ -44,6 +49,7 @@ tidy_games_goals <- function(
 
   games_id <- assert_games_id(games_id)
 
+  assert_include_shootout(include_shootout)
   assert_time_elapsed(time_elapsed)
   assert_standardized_coordinates(standardized_coordinates)
   assert_keep_id(keep_id)
@@ -131,6 +137,25 @@ tidy_games_goals <- function(
   goals[teams_meta, against_team_abbreviation := team_abbreviation,
         on = c(against_team_id = "team_id")]
 
+  if (include_shootout) {
+
+    goals[about.periodType == "SHOOTOUT", `:=`(
+      result.gameWinningGoal = FALSE,
+      result.emptyNet = FALSE,
+      result.strength.code = "SO",
+      about.periodTime = "00:00",
+      about.periodTimeRemaining = "00:00"
+    )]
+
+    goals[about.periodType == "SHOOTOUT" & for_team_id == away_id, mirror := coordinates.x < 0]
+    goals[about.periodType == "SHOOTOUT" & for_team_id == home_id, mirror := coordinates.x > 0]
+
+  } else {
+
+    goals <- goals[about.periodType != "SHOOTOUT"]
+
+  }
+
   goals <- goals[, .(
     game_id = game_id,
     event_id = about.eventIdx,
@@ -144,7 +169,7 @@ tidy_games_goals <- function(
     shot_type = result.secondaryType,
     goal_gwg = result.gameWinningGoal,
     goal_en = result.emptyNet,
-    goal_strength = result.strength.code,
+    goal_strength = tolower(result.strength.code),
     for_team_id = for_team_id,
     for_team_abbreviation = for_team_abbreviation,
     for_goal_id = for_goal_id,

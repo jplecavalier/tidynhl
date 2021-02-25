@@ -300,6 +300,16 @@ assert_tz <- function(tz) {
 
 }
 
+assert_include_shootout <- function(include_shootout) {
+
+  if (is.logical(include_shootout) & !anyNA(include_shootout) & length(include_shootout) == 1L) {
+    return(NULL)
+  }
+
+  stop("argument 'include_shootout' should be one of 'TRUE' or 'FALSE'")
+
+}
+
 assert_time_elapsed <- function(time_elapsed) {
 
   if (is.logical(time_elapsed) & !anyNA(time_elapsed) & length(time_elapsed) == 1L) {

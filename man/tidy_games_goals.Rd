@@ -6,6 +6,7 @@
 \usage{
 tidy_games_goals(
   games_id,
+  include_shootout = FALSE,
   time_elapsed = TRUE,
   standardized_coordinates = TRUE,
   keep_id = FALSE,
@@ -20,6 +21,9 @@ will be returned. The required format is 'xxxxyyzzzz' where
 \item 'yy' is one of "02" (regular) or "03" (playoffs),
 \item 'zzzz' is a 4-digit number attributed to a single game.
 }}
+
+\item{include_shootout}{\emph{(optional)} Logical indicating if shootout goals should be returned in
+the data. Default to \code{FALSE}.}
 
 \item{time_elapsed}{\emph{(optional)} Logical indicating if the time sould be indicated as elapsed
 (\code{TRUE}) or remaining (\code{FALSE}). Default to \code{TRUE}.}
@@ -44,10 +48,12 @@ options(width = 1000L)
 # Get goal data of the 2021-01-13 MTL @ TOR game
 tidy_games_goals(2020020003L)
 
-# Get goal data of both the 2021-01-13 MTL @ TOR and PIT @ PHI games with time remaining instead
-# of time elapsed, as is coordinates instead of normalized, and keeping the IDs
+# Get goal data of both the 2021-01-13 MTL @ TOR and 2021-01-14 BOS @ NJD games with time
+# remaining instead of time elapsed, as is coordinates instead of normalized, including shootout
+# goals, and keeping the IDs
 tidy_games_goals(
-  games_id = c(2020020003L, 2020020001L),
+  games_id = c(2020020003L, 2020020007L),
+  include_shootout = TRUE,
   time_elapsed = FALSE,
   standardized_coordinates = FALSE,
   keep_id = TRUE
