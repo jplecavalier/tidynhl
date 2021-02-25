@@ -2,6 +2,7 @@
 
 export(get_players_id)
 export(tidy_drafts)
+export(tidy_games_events)
 export(tidy_games_faceoffs)
 export(tidy_games_goals)
 export(tidy_goalies_gamelogs)
