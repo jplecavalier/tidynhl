@@ -1,4 +1,4 @@
-#' Get a tidy dataset of NHL goals
+#' Get a tidy dataset of NHL games goals
 #'
 #' The function `tidy_games_goals()` is meant to be a user-friendly way of getting data about goals
 #' in selected NHL games.

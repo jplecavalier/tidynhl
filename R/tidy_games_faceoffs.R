@@ -1,4 +1,4 @@
-#' Get a tidy dataset of NHL faceoffs
+#' Get a tidy dataset of NHL games faceoffs
 #'
 #' The function `tidy_games_faceoffs()` is meant to be a user-friendly way of getting data about
 #' faceoffs in selected NHL games.

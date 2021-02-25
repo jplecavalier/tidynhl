@@ -2,7 +2,7 @@
 % Please edit documentation in R/tidy_games_goals.R
 \name{tidy_games_goals}
 \alias{tidy_games_goals}
-\title{Get a tidy dataset of NHL goals}
+\title{Get a tidy dataset of NHL games goals}
 \usage{
 tidy_games_goals(
   games_id,

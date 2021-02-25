@@ -2,7 +2,7 @@
 % Please edit documentation in R/tidy_games_faceoffs.R
 \name{tidy_games_faceoffs}
 \alias{tidy_games_faceoffs}
-\title{Get a tidy dataset of NHL faceoffs}
+\title{Get a tidy dataset of NHL games faceoffs}
 \usage{
 tidy_games_faceoffs(
   games_id,
