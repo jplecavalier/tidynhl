@@ -134,7 +134,22 @@ get_records_api <- function(paths) {
 
 get_stats_api <- function(paths) {
 
-  get_nhl_api("https://statsapi.web.nhl.com/api/v1/", paths)
+  stats_data <- data.table(
+    paths = paths
+  )
+  stats_data[, object := paste0("stats/", paths)]
+
+  stats_data[, exist := sapply(object, exists, envir = data, USE.NAMES = FALSE)]
+
+  stats_data[exist == TRUE, return := mget(object, envir = data)]
+  stats_data[exist == FALSE, return := get_nhl_api("https://statsapi.web.nhl.com/api/v1/", paths)]
+
+  stats_data[exist == FALSE, mapply(function(x, value) {
+    assign(x, value, envir = data)
+    NULL
+  }, x = object, value = return)]
+
+  stats_data[, return]
 
 }
 
@@ -145,4 +160,4 @@ drop_ids <- function(data, keeps = NULL) {
 
 }
 
-data <- new.env()
+data <- new.env(parent = emptyenv())
