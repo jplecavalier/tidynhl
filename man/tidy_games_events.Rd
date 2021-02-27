@@ -7,7 +7,6 @@
 tidy_games_events(
   games_id,
   time_elapsed = TRUE,
-  standardized_coordinates = TRUE,
   keep_id = FALSE,
   return_datatable = getOption("tidynhl.data.table", TRUE)
 )
@@ -23,9 +22,6 @@ be returned. The required format is 'xxxxyyzzzz' where
 
 \item{time_elapsed}{\emph{(optional)} Logical indicating if the time sould be indicated as elapsed
 (\code{TRUE}) or remaining (\code{FALSE}). Default to \code{TRUE}.}
-
-\item{standardized_coordinates}{\emph{(optional)} Logical indicating if the ice coordinates should be
-standardized (away team zone negative on the x-axis) or kept as is. Default to \code{TRUE}.}
 
 \item{keep_id}{\emph{(optional)} Logical indicating if the IDs of different dimensions should be
 returned. However, note that \code{game_id} will always be returned. Default to \code{FALSE}.}
@@ -45,11 +41,10 @@ options(width = 1000L)
 tidy_games_events(2020020003L)
 
 # Get events of both the 2021-01-13 MTL @ TOR and 2021-01-14 BOS @ NJD games with time remaining
-# instead of time elapsed, as is coordinates instead of normalized, and keeping the IDs
+# instead of time elapsed, and keeping the IDs
 tidy_games_events(
   games_id = c(2020020003L, 2020020007L),
   time_elapsed = FALSE,
-  standardized_coordinates = FALSE,
   keep_id = TRUE
 )
 

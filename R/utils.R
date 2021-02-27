@@ -1,7 +1,5 @@
 create_data_table <- function(data) {
 
-  return_dt <- is.data.frame(data)
-
   data <- lapply(data, function(col){
     if (is.list(col)) {
       lapply(col, function(obs) {
@@ -16,11 +14,7 @@ create_data_table <- function(data) {
     }
   })
 
-  if (return_dt) {
-    setDT(data)[]
-  } else {
-    data
-  }
+  setDT(data)[]
 
 }
 
@@ -134,22 +128,7 @@ get_records_api <- function(paths) {
 
 get_stats_api <- function(paths) {
 
-  stats_data <- data.table(
-    paths = paths
-  )
-  stats_data[, object := paste0("stats/", paths)]
-
-  stats_data[, exist := sapply(object, exists, envir = data, USE.NAMES = FALSE)]
-
-  stats_data[exist == TRUE, return := mget(object, envir = data)]
-  stats_data[exist == FALSE, return := get_nhl_api("https://statsapi.web.nhl.com/api/v1/", paths)]
-
-  stats_data[exist == FALSE, mapply(function(x, value) {
-    assign(x, value, envir = data)
-    NULL
-  }, x = object, value = return)]
-
-  stats_data[, return]
+  get_nhl_api("https://statsapi.web.nhl.com/api/v1/", paths)
 
 }
 
