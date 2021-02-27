@@ -55,69 +55,10 @@ tidy_games_goals <- function(
   assert_keep_id(keep_id)
   assert_return_datatable(return_datatable)
 
-  games <- data.table(game_id = games_id)
-  games[, url := paste0("game/", game_id, "/feed/live")]
-  games[, api_return := get_stats_api(url)]
+  to_load <- !sapply(paste0("game-events-", games_id), exists, envir = data, USE.NAMES = FALSE)
+  load_games_events(games_id[which(to_load)])
 
-  goals <- games[, rbindlist(lapply(api_return, function(api_return) {
-
-    plays <- create_data_table(api_return$liveData$plays$allPlays)
-    plays[, game_id := api_return$gameData$game$pk]
-    plays[, away_id := api_return$gameData$teams$away$id]
-    plays[, home_id := api_return$gameData$teams$home$id]
-
-    periods <- create_data_table(api_return$liveData$linescore$periods)
-    asis_periods <- periods[away.rinkSide == "left" & home.rinkSide == "right", num]
-    mirror_periods <- periods[away.rinkSide == "right" & home.rinkSide == "left", num]
-
-    plays[, mirror := NA]
-    plays[about.period %in% asis_periods, mirror := FALSE]
-    plays[about.period %in% mirror_periods, mirror := TRUE]
-
-    plays[result.eventTypeId %in% c("GOAL")]
-
-  }), fill = TRUE)]
-
-  validate_columns(goals, list(
-    players = list(),
-    game_id = NA_integer_,
-    away_id = NA_integer_,
-    home_id = NA_integer_,
-    mirror = NA,
-    team.id = NA_integer_,
-    about.eventIdx = NA_integer_,
-    about.period = NA_integer_,
-    about.ordinalNum = NA_character_,
-    about.periodType = NA_character_,
-    about.periodTime = NA_character_,
-    about.periodTimeRemaining = NA_character_,
-    coordinates.x = NA_real_,
-    coordinates.y = NA_real_,
-    result.secondaryType = NA_character_,
-    result.gameWinningGoal = NA,
-    result.emptyNet = NA,
-    result.strength.code = NA_character_
-  ))
-
-  players_bind <- goals[, rbindlist(players, fill = TRUE)]
-  validate_columns(players_bind, list(
-    playerType = NA_character_,
-    player.id = NA_integer_
-  ))
-  players_bind[, game_id := goals[, rep(game_id, sapply(players, nrow))]]
-  players_bind[, about.eventIdx := goals[, rep(about.eventIdx, sapply(players, nrow))]]
-  goals_summary <- players_bind[, .(
-    for_goal_id = .SD[playerType == "Scorer", player.id],
-    for_assist_1_id = .SD[playerType == "Assist", player.id[1L]],
-    for_assist_2_id = .SD[playerType == "Assist", player.id[2L]],
-    against_goalie_id = .SD[playerType == "Goalie", player.id]
-  ), .(game_id, about.eventIdx)]
-
-  cols <- c("for_goal_id", "for_assist_1_id", "for_assist_2_id", "against_goalie_id")
-  goals[goals_summary, (cols) := mget(cols), on = .(game_id, about.eventIdx)]
-  goals[, for_team_id := team.id]
-  goals[team.id == home_id, against_team_id := away_id]
-  goals[team.id == away_id, against_team_id := home_id]
+  goals <- rbindlist(mget(paste0("game-goals-", games_id), envir = data))
 
   if (!exists("players_meta", envir = data)) {
     load_players_meta()
@@ -137,53 +78,9 @@ tidy_games_goals <- function(
   goals[teams_meta, against_team_abbreviation := team_abbreviation,
         on = c(against_team_id = "team_id")]
 
-  if (include_shootout) {
-
-    goals[about.periodType == "SHOOTOUT", `:=`(
-      result.gameWinningGoal = FALSE,
-      result.emptyNet = FALSE,
-      result.strength.code = "SO",
-      about.periodTime = "00:00",
-      about.periodTimeRemaining = "00:00"
-    )]
-
-    goals[about.periodType == "SHOOTOUT" & for_team_id == away_id, mirror := coordinates.x < 0]
-    goals[about.periodType == "SHOOTOUT" & for_team_id == home_id, mirror := coordinates.x > 0]
-
-  } else {
-
-    goals <- goals[about.periodType != "SHOOTOUT"]
-
+  if (!include_shootout) {
+    goals <- goals[period_type != "shootout"]
   }
-
-  goals <- goals[, .(
-    game_id = game_id,
-    event_id = about.eventIdx,
-    period_id = about.period,
-    period_label = about.ordinalNum,
-    period_type = tolower(about.periodType),
-    period_time_elapsed = about.periodTime,
-    period_time_remaining = about.periodTimeRemaining,
-    shot_x = coordinates.x,
-    shot_y = coordinates.y,
-    shot_type = result.secondaryType,
-    goal_gwg = result.gameWinningGoal,
-    goal_en = result.emptyNet,
-    goal_strength = tolower(result.strength.code),
-    for_team_id = for_team_id,
-    for_team_abbreviation = for_team_abbreviation,
-    for_goal_id = for_goal_id,
-    for_goal_name = for_goal_name,
-    for_assist_1_id = for_assist_1_id,
-    for_assist_1_name = for_assist_1_name,
-    for_assist_2_id = for_assist_2_id,
-    for_assist_2_name = for_assist_2_name,
-    against_goalie_id = against_goalie_id,
-    against_goalie_name = against_goalie_name,
-    against_team_abbreviation = against_team_abbreviation,
-    against_team_id = against_team_id,
-    mirror = mirror
-  )]
 
   if (standardized_coordinates) {
 
@@ -207,6 +104,13 @@ tidy_games_goals <- function(
   }
 
   setorder(goals, game_id, event_id)
+  setcolorder(goals, c(
+    "game_id", "event_id", "period_id", "period_label", "period_type", "period_time_elapsed",
+    "period_time_remaining", "shot_x", "shot_y", "shot_type", "goal_gwg", "goal_en",
+    "goal_strength", "for_team_id", "for_team_abbreviation", "for_goal_id", "for_goal_name",
+    "for_assist_1_id", "for_assist_1_name", "for_assist_2_id", "for_assist_2_name",
+    "against_goalie_id", "against_goalie_name", "against_team_abbreviation", "against_team_id"
+  ))
 
   if (time_elapsed) {
     goals[, period_time_remaining := NULL]

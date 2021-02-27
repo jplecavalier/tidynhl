@@ -16,3 +16,21 @@ factor_period_types <- function(characters) {
   )
 
 }
+
+factor_goal_strengths <- function(characters) {
+
+  factor(
+    x = characters,
+    levels = c("even", "ppg", "shg", "so")
+  )
+
+}
+
+factor_shot_types <- function(characters) {
+
+  factor(
+    x = characters,
+    levels = c("Backhand", "Deflected", "Slap Shot", "Snap Shot", "Tip-In", "Wrist Shot")
+  )
+
+}
