@@ -24,10 +24,10 @@
 #' # Get faceoffs data of the 2021-01-13 MTL @ TOR game
 #' tidy_games_faceoffs(2020020003L)
 #'
-#' # Get faceoffs data of both the 2021-01-13 MTL @ TOR and PIT @ PHI games with time remaining
-#' # instead of time elapsed, as is coordinates instead of normalized, and keeping the IDs
+#' # Get faceoffs data of both the 2021-01-13 MTL @ TOR and 2021-01-14 BOS @ NJD games with time
+#' # remaining instead of time elapsed, as is coordinates instead of normalized, and keeping the IDs
 #' tidy_games_faceoffs(
-#'   games_id = c(2020020003L, 2020020001L),
+#'   games_id = c(2020020003L, 2020020007L),
 #'   time_elapsed = FALSE,
 #'   standardized_coordinates = FALSE,
 #'   keep_id = TRUE
@@ -49,57 +49,10 @@ tidy_games_faceoffs <- function(
   assert_keep_id(keep_id)
   assert_return_datatable(return_datatable)
 
-  games <- data.table(game_id = games_id)
-  games[, url := paste0("game/", game_id, "/feed/live")]
-  games[, api_return := get_stats_api(url)]
+  to_load <- !sapply(paste0("game-events-", games_id), exists, envir = data, USE.NAMES = FALSE)
+  load_games_events(games_id[which(to_load)])
 
-  faceoffs <- games[, rbindlist(lapply(api_return, function(api_return) {
-
-    plays <- create_data_table(api_return$liveData$plays$allPlays)
-    plays[, game_id := api_return$gameData$game$pk]
-    plays[, away_id := api_return$gameData$teams$away$id]
-    plays[, home_id := api_return$gameData$teams$home$id]
-
-    periods <- create_data_table(api_return$liveData$linescore$periods)
-    asis_periods <- periods[away.rinkSide == "left" & home.rinkSide == "right", num]
-    mirror_periods <- periods[away.rinkSide == "right" & home.rinkSide == "left", num]
-
-    plays[, mirror := NA]
-    plays[about.period %in% asis_periods, mirror := FALSE]
-    plays[about.period %in% mirror_periods, mirror := TRUE]
-
-    plays[result.eventTypeId %in% c("FACEOFF")]
-
-  }), fill = TRUE)]
-
-  validate_columns(faceoffs, list(
-    players = list(),
-    game_id = NA_integer_,
-    away_id = NA_integer_,
-    home_id = NA_integer_,
-    mirror = NA,
-    team.id = NA_integer_,
-    about.eventIdx = NA_integer_,
-    about.period = NA_integer_,
-    about.ordinalNum = NA_character_,
-    about.periodType = NA_character_,
-    about.periodTime = NA_character_,
-    about.periodTimeRemaining = NA_character_,
-    coordinates.x = NA_real_,
-    coordinates.y = NA_real_
-  ))
-
-  players_bind <- faceoffs[, rbindlist(players, fill = TRUE)]
-  validate_columns(players_bind, list(
-    playerType = NA_character_,
-    player.id = NA_integer_
-  ))
-
-  faceoffs[, winner_player_id := players_bind[playerType == "Winner", player.id]]
-  faceoffs[, loser_player_id := players_bind[playerType == "Loser", player.id]]
-  faceoffs[, winner_team_id := team.id]
-  faceoffs[team.id == home_id, loser_team_id := away_id]
-  faceoffs[team.id == away_id, loser_team_id := home_id]
+  faceoffs <- rbindlist(mget(paste0("game-faceoffs-", games_id), envir = data))
 
   if (!exists("players_meta", envir = data)) {
     load_players_meta()
@@ -117,30 +70,10 @@ tidy_games_faceoffs <- function(
   faceoffs[teams_meta, loser_team_abbreviation := team_abbreviation,
            on = c(loser_team_id = "team_id")]
 
-  faceoffs <- faceoffs[, .(
-    game_id = game_id,
-    event_id = about.eventIdx,
-    period_id = about.period,
-    period_label = about.ordinalNum,
-    period_type = tolower(about.periodType),
-    period_time_elapsed = about.periodTime,
-    period_time_remaining = about.periodTimeRemaining,
+  if (standardized_coordinates) {
+
     # TODO: Create a patch for outdoor games, standardized coordinates are not straightforward
     #       For more informations: https://en.wikipedia.org/wiki/NHL_Winter_Classic
-    faceoff_x = coordinates.x,
-    faceoff_y = coordinates.y,
-    winner_team_id = winner_team_id,
-    winner_team_abbreviation = winner_team_abbreviation,
-    winner_player_id = winner_player_id,
-    winner_player_name = winner_player_name,
-    loser_player_name = loser_player_name,
-    loser_player_id = loser_player_id,
-    loser_team_abbreviation = loser_team_abbreviation,
-    loser_team_id = loser_team_id,
-    mirror = mirror
-  )]
-
-  if (standardized_coordinates) {
 
     games_sides_na <- faceoffs[is.na(mirror), unique(game_id)]
     if (length(games_sides_na) > 0L) {
@@ -159,6 +92,12 @@ tidy_games_faceoffs <- function(
   }
 
   setorder(faceoffs, game_id, event_id)
+  setcolorder(faceoffs, c(
+    "game_id", "event_id", "period_id", "period_label", "period_type", "period_time_elapsed",
+    "period_time_remaining", "faceoff_x", "faceoff_y", "winner_team_id", "winner_team_abbreviation",
+    "winner_player_id", "winner_player_name", "loser_player_name", "loser_player_id",
+    "loser_team_abbreviation", "loser_team_id"
+  ))
 
   if (time_elapsed) {
     faceoffs[, period_time_remaining := NULL]

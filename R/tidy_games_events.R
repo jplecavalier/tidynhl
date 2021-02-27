@@ -189,8 +189,50 @@ load_games_events <- function(games_id) {
       players = NULL
     )]
 
+    faceoffs <- plays[result.eventTypeId == "FACEOFF", .(
+      game_id = game_id,
+      event_id = about.eventIdx,
+      team_id = team.id,
+      away_id = away_id,
+      home_id = home_id,
+      players = players,
+      period_id = about.period,
+      period_label = about.ordinalNum,
+      period_type = factor_period_types(tolower(about.periodType)),
+      period_time_elapsed = about.periodTime,
+      period_time_remaining = about.periodTimeRemaining,
+      faceoff_x = coordinates.x,
+      faceoff_y = coordinates.y,
+      mirror = mirror
+    )]
+
+    players_bind <- faceoffs[, rbindlist(players, fill = TRUE)]
+    validate_columns(players_bind, list(
+      playerType = NA_character_,
+      player.id = NA_integer_
+    ))
+    players_bind[, event_id := faceoffs[, rep(event_id, sapply(players, nrow))]]
+    faceoffs_summary <- players_bind[, .(
+      winner_player_id = .SD[playerType == "Winner", player.id],
+      loser_player_id = .SD[playerType == "Loser", player.id]
+    ), .(event_id)]
+
+    cols <- c("winner_player_id", "loser_player_id")
+    faceoffs[faceoffs_summary, (cols) := mget(cols), on = .(event_id)]
+    faceoffs[, winner_team_id := team_id]
+    faceoffs[team_id == home_id, loser_team_id := away_id]
+    faceoffs[team_id == away_id, loser_team_id := home_id]
+
+    faceoffs[, `:=`(
+      team_id = NULL,
+      home_id = NULL,
+      away_id = NULL,
+      players = NULL
+    )]
+
     assign(paste0("game-events-", game_id), events, data)
     assign(paste0("game-goals-", game_id), goals, data)
+    assign(paste0("game-faceoffs-", game_id), faceoffs, data)
 
     NULL
 

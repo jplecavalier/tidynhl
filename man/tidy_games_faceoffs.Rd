@@ -44,10 +44,10 @@ options(width = 1000L)
 # Get faceoffs data of the 2021-01-13 MTL @ TOR game
 tidy_games_faceoffs(2020020003L)
 
-# Get faceoffs data of both the 2021-01-13 MTL @ TOR and PIT @ PHI games with time remaining
-# instead of time elapsed, as is coordinates instead of normalized, and keeping the IDs
+# Get faceoffs data of both the 2021-01-13 MTL @ TOR and 2021-01-14 BOS @ NJD games with time
+# remaining instead of time elapsed, as is coordinates instead of normalized, and keeping the IDs
 tidy_games_faceoffs(
-  games_id = c(2020020003L, 2020020001L),
+  games_id = c(2020020003L, 2020020007L),
   time_elapsed = FALSE,
   standardized_coordinates = FALSE,
   keep_id = TRUE
