@@ -59,6 +59,8 @@ tidy_games_goals <- function(
   load_games_events(games_id[which(to_load)])
 
   goals <- rbindlist(mget(paste0("game-goals-", games_id), envir = data))
+  facs <- colnames(goals)[which(sapply(goals, is.factor))]
+  goals[, (facs) := lapply(mget(facs), as.character)]
 
   if (!exists("players_meta", envir = data)) {
     load_players_meta()

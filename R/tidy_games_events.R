@@ -48,6 +48,8 @@ tidy_games_events <- function(
   load_games_events(games_id[which(to_load)])
 
   events <- rbindlist(mget(paste0("game-events-", games_id), envir = data))
+  facs <- colnames(events)[which(sapply(events, is.factor))]
+  events[, (facs) := lapply(mget(facs), as.character)]
 
   setorder(events, game_id, event_id)
 

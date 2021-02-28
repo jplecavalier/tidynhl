@@ -53,6 +53,8 @@ tidy_games_faceoffs <- function(
   load_games_events(games_id[which(to_load)])
 
   faceoffs <- rbindlist(mget(paste0("game-faceoffs-", games_id), envir = data))
+  facs <- colnames(faceoffs)[which(sapply(faceoffs, is.factor))]
+  faceoffs[, (facs) := lapply(mget(facs), as.character)]
 
   if (!exists("players_meta", envir = data)) {
     load_players_meta()
