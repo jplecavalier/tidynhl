@@ -46,3 +46,22 @@ factor_shot_types <- function(characters) {
   )
 
 }
+
+factor_shot_results <- function(characters) {
+
+  lookup <- rbindlist(list(
+    list(old = "GOAL", new = "goal"),
+    list(old = "SHOT", new = "shot"),
+    list(old = "BLOCKED_SHOT", new = "blocked"),
+    list(old = "MISSED_SHOT", new = "missed")
+  ))
+
+  characters <- data.table(old = characters)
+  characters[lookup, new := new, on = .(old)]
+
+  factor(
+    x = characters[, new],
+    levels = lookup[, new]
+  )
+
+}

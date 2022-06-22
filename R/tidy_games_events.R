@@ -75,6 +75,8 @@ tidy_games_events <- function(
 
 load_games_events <- function(games_id) {
 
+  # TODO: Cache all games in same data.tables
+
   games <- data.table(game_id = games_id)
   games[, url := paste0("game/", game_id, "/feed/live")]
   games[, api_return := get_stats_api(url)]
@@ -106,17 +108,17 @@ load_games_events <- function(games_id) {
       result.strength.code = NA_character_
     ))
 
-    periods <- create_data_table(api_return$liveData$linescore$periods)
-    validate_columns(periods, list(
-      away.rinkSide = NA_character_,
-      home.rinkSide = NA_character_
-    ))
-    asis_periods <- periods[away.rinkSide == "left" & home.rinkSide == "right", num]
-    mirror_periods <- periods[away.rinkSide == "right" & home.rinkSide == "left", num]
-
-    plays[, mirror := NA]
-    plays[about.period %in% asis_periods, mirror := FALSE]
-    plays[about.period %in% mirror_periods, mirror := TRUE]
+    # periods <- create_data_table(api_return$liveData$linescore$periods)
+    # validate_columns(periods, list(
+    #   away.rinkSide = NA_character_,
+    #   home.rinkSide = NA_character_
+    # ))
+    # asis_periods <- periods[away.rinkSide == "left" & home.rinkSide == "right", num]
+    # mirror_periods <- periods[away.rinkSide == "right" & home.rinkSide == "left", num]
+    #
+    # plays[, mirror := NA]
+    # plays[about.period %in% asis_periods, mirror := FALSE]
+    # plays[about.period %in% mirror_periods, mirror := TRUE]
 
     events <- plays[
       result.eventTypeId %in% c("BLOCKED_SHOT", "FACEOFF", "GIVEAWAY", "GOAL", "HIT", "MISSED_SHOT",
@@ -132,6 +134,93 @@ load_games_events <- function(games_id) {
         period_time_remaining = about.periodTimeRemaining
       )
     ]
+
+    shots <- plays[result.eventTypeId %in% c("MISSED_SHOT", "BLOCKED_SHOT", "SHOT", "GOAL"), .(
+      game_id = game_id,
+      event_id = about.eventIdx,
+      team_id = team.id,
+      away_id = away_id,
+      home_id = home_id,
+      players = players,
+      period_id = about.period,
+      period_label = about.ordinalNum,
+      period_type = factor_period_types(tolower(about.periodType)),
+      period_time_elapsed = about.periodTime,
+      period_time_remaining = about.periodTimeRemaining,
+      shot_x = coordinates.x,
+      shot_y = coordinates.y,
+      shot_type = factor_shot_types(result.secondaryType),
+      shot_result = factor_shot_results(result.eventTypeId),
+      block_x = coordinates.x,
+      block_y = coordinates.y
+    )]
+
+    players_bind <- shots[, rbindlist(players, fill = TRUE)]
+    validate_columns(players_bind, list(
+      playerType = NA_character_,
+      player.id = NA_integer_
+    ))
+    players_bind[, event_id := shots[, rep(event_id, sapply(players, nrow))]]
+    shots_summary <- players_bind[, .(
+      shooter_player_id = .SD[playerType %in% c("Scorer", "Shooter"), player.id],
+      blocker_player_id = .SD[playerType == "Blocker", player.id],
+      goalie_player_id = .SD[playerType %in% c("Goalie", "Unknown"), player.id]
+    ), .(event_id)]
+
+    cols <- c("shooter_player_id", "blocker_player_id", "goalie_player_id")
+    shots[shots_summary, (cols) := mget(cols), on = .(event_id)]
+    shots[shot_result != "blocked", shooter_team_id := team_id]
+    shots[shot_result == "blocked", blocker_team_id := team_id]
+    shots[team_id == home_id & shot_result == "blocked", shooter_team_id := away_id]
+    shots[team_id == away_id & shot_result == "blocked", shooter_team_id := home_id]
+    shots[team_id == home_id & shot_result %in% c("goal", "shot", "missed"),
+          goalie_team_id := away_id]
+    shots[team_id == away_id & shot_result %in% c("goal", "shot", "missed"),
+          goalie_team_id := home_id]
+    shots[is.na(goalie_player_id), goalie_team_id := NA_integer_]
+
+    shots[period_type != "shootout", mirror := FALSE]
+    plays[about.periodType != "SHOOTOUT", mirror := FALSE]
+
+    if (shots[, .N > 0L]) {
+
+      ratio <- shots[period_type != "shootout" & shooter_team_id == home_id,
+                     sum(((1L - 2L * period_id %% 2L) * shot_x) > 0L, na.rm = TRUE) / .N]
+      mirror_id <- shots[period_type != "shootout", seq(1L + (ratio > 0.5), max(period_id), 2L)]
+
+      shots[period_id %in% mirror_id, mirror := TRUE]
+      plays[about.period %in% mirror_id, mirror := TRUE]
+
+      shots[as.integer(substr(game_id, 1L, 4L)) < 2014L & substr(game_id, 5L, 6L) == "02" &
+              period_type == "overtime",
+            mirror := !mirror]
+      plays[as.integer(substr(game_id, 1L, 4L)) < 2014L & substr(game_id, 5L, 6L) == "02" &
+              about.periodType == "OVERTIME",
+            mirror := !mirror]
+
+    }
+
+    shots[period_type == "shootout" & shooter_team_id == away_id, mirror := shot_x < 0]
+    shots[period_type == "shootout" & shooter_team_id == home_id, mirror := shot_x > 0]
+
+    plays[about.periodType == "SHOOTOUT" & team.id == away_id, mirror := coordinates.x < 0]
+    plays[about.periodType == "SHOOTOUT" & team.id == home_id, mirror := coordinates.x > 0]
+
+    shots[shot_result != "blocked", `:=`(
+      block_x = NA_real_,
+      block_y = NA_real_
+    )]
+    shots[shot_result == "blocked", `:=`(
+      shot_x = NA_real_,
+      shot_y = NA_real_
+    )]
+
+    shots[, `:=`(
+      team_id = NULL,
+      home_id = NULL,
+      away_id = NULL,
+      players = NULL
+    )]
 
     goals <- plays[result.eventTypeId == "GOAL", .(
       game_id = game_id,
@@ -233,6 +322,7 @@ load_games_events <- function(games_id) {
     )]
 
     assign(paste0("game-events-", game_id), events, data)
+    assign(paste0("game-shots-", game_id), shots, data)
     assign(paste0("game-goals-", game_id), goals, data)
     assign(paste0("game-faceoffs-", game_id), faceoffs, data)
 

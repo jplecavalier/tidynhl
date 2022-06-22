@@ -89,15 +89,6 @@ tidy_games_goals <- function(
     # TODO: Create a patch for outdoor games, standardized coordinates are not straightforward
     #       For more informations: https://en.wikipedia.org/wiki/NHL_Winter_Classic
 
-    games_sides_na <- goals[is.na(mirror), unique(game_id)]
-    if (length(games_sides_na) > 0L) {
-      warning(paste(
-        "the coordinates of the following games were not standardized since the rink side",
-        "information was unavailable:",
-        paste(sort(games_sides_na), collapse = ", ")
-      ))
-    }
-
     goals[mirror == TRUE, `:=`(
       shot_x = -shot_x,
       shot_y = -shot_y
