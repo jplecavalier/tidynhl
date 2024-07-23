@@ -6,7 +6,7 @@
 \alias{tidynhl-package}
 \title{tidynhl: An Easy Way to Extract NHL Data in a Tidy Format}
 \description{
-\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
 A user-friendly package which aims at facilitating data extraction through the NHL API in a ready-to-use format.
 }
