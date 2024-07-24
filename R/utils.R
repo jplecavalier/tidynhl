@@ -1,7 +1,5 @@
 create_data_table <- function(data) {
 
-  return_dt <- is.data.frame(data)
-
   data <- lapply(data, function(col){
     if (is.list(col)) {
       lapply(col, function(obs) {
@@ -16,11 +14,7 @@ create_data_table <- function(data) {
     }
   })
 
-  if (return_dt) {
-    setDT(data)[]
-  } else {
-    data
-  }
+  setDT(data)[]
 
 }
 
@@ -138,10 +132,11 @@ get_stats_api <- function(paths) {
 
 }
 
-drop_ids <- function(data) {
+drop_ids <- function(data, keeps = NULL) {
 
-  data[, colnames(data)[grep("_id$", colnames(data))]:=NULL]
+  drops <- setdiff(colnames(data)[grep("_id$", colnames(data))], keeps)
+  data[, (drops) := NULL]
 
 }
 
-data <- new.env()
+data <- new.env(parent = emptyenv())

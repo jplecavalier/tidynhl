@@ -71,6 +71,89 @@ assert_seasons_id <- function(seasons_id) {
 
 }
 
+assert_games_id <- function(games_id, min_season = "19171918") {
+
+  if (is.numeric(games_id)) {
+
+    games_id <- unique(games_id)
+
+    if (all(as.integer(games_id) == games_id, na.rm = TRUE)) {
+
+      games_id_na <- which(is.na(games_id))
+      if (length(games_id_na) > 0L) {
+        warning("NAs were detected and dropped in the 'games_id' argument")
+        games_id <- games_id[-games_id_na]
+      }
+
+      if (!exists("seasons_meta", envir = data)) {
+        load_seasons_meta()
+      }
+      seasons_meta <- get("seasons_meta", envir = data)
+
+      missing_games <- games_id[which(nchar(games_id) != 10L)]
+      games_id <- setdiff(games_id, missing_games)
+
+      missing_games <- unique(c(
+        missing_games,
+        games_id[which(!(substr(games_id, 1L, 4L) %in% seasons_meta[, substr(season_id, 1L, 4L)]))],
+        games_id[which(!(substr(games_id, 5L, 6L) %in% c("02", "03")))]
+      ))
+      games_id <- setdiff(games_id, missing_games)
+
+      seasons_id <- unique(substr(games_id, 1L, 4L))
+      seasons_id <- paste0(seasons_id, as.character(as.integer(seasons_id) + 1L))
+
+      schedules <- tidy_schedules(
+        seasons_id = seasons_id,
+        expand_periods = FALSE,
+        regular = TRUE,
+        playoffs = TRUE,
+        tz = Sys.timezone(),
+        keep_id = TRUE,
+        return_datatable = TRUE
+      )
+
+      missing_games <- c(missing_games, schedules[, setdiff(games_id, game_id)])
+      games_id <- setdiff(games_id, missing_games)
+      if (length(missing_games) > 0L) {
+        warning(paste(
+          "the following elements of the argument 'games_id' were dropped since not identified",
+          "as valid NHL game IDs:",
+          paste(sort(missing_games), collapse = ", ")
+        ))
+      }
+
+      unavailable_games <- schedules[as.integer(season_id) >= as.integer(min_season),
+                                     setdiff(games_id, game_id)]
+      games_id <- setdiff(games_id, unavailable_games)
+      if (length(unavailable_games) > 0L) {
+        warning(paste(
+          "the following elements of the argument 'games_id' were dropped since this particular",
+          "data is unavailable for those games:",
+          paste(sort(unavailable_games), collapse = ", ")
+        ))
+      }
+
+      incomplete_games <- schedules[game_status == "final", setdiff(games_id, game_id)]
+      games_id <- setdiff(games_id, incomplete_games)
+      if (length(incomplete_games) > 0L) {
+        warning(paste(
+          "the following elements of the argument 'games_id' were dropped since those games are",
+          "not completed yet:",
+          paste(sort(incomplete_games), collapse = ", ")
+        ))
+      }
+
+      return(as.integer(games_id))
+
+    }
+
+  }
+
+  stop("argument 'games_id' should be a vector of integers")
+
+}
+
 assert_players_id <- function(players_id) {
 
   if (is.numeric(players_id)) {
@@ -214,6 +297,37 @@ assert_tz <- function(tz) {
   }
 
   stop("argument 'tz' should be a character of length 1")
+
+}
+
+assert_include_shootout <- function(include_shootout) {
+
+  if (is.logical(include_shootout) & !anyNA(include_shootout) & length(include_shootout) == 1L) {
+    return(NULL)
+  }
+
+  stop("argument 'include_shootout' should be one of 'TRUE' or 'FALSE'")
+
+}
+
+assert_time_elapsed <- function(time_elapsed) {
+
+  if (is.logical(time_elapsed) & !anyNA(time_elapsed) & length(time_elapsed) == 1L) {
+    return(NULL)
+  }
+
+  stop("argument 'time_elapsed' should be one of 'TRUE' or 'FALSE'")
+
+}
+
+assert_standardized_coordinates <- function(standardized_coordinates) {
+
+  if (is.logical(standardized_coordinates) & !anyNA(standardized_coordinates) &
+      length(standardized_coordinates) == 1L) {
+    return(NULL)
+  }
+
+  stop("argument 'standardized_coordinates' should be one of 'TRUE' or 'FALSE'")
 
 }
 
